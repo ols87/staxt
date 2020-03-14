@@ -32,4 +32,6 @@ function removePage(filePath = argv.path) {
   });
 }
 
+if (require.main === module) removePage();
+
 module.exports = removePage;

@@ -41,4 +41,6 @@ function cleanDirectory(dir = argv.dir) {
   });
 }
 
-module.exports = cleanDirectory();
+if (require.main === module) cleanDirectory();
+
+module.exports = cleanDirectory;

@@ -37,7 +37,7 @@ function addPage(filePath = argv.path) {
 
       if (notLast && notFolder) {
         logger(`Making folder: ${folder}`);
-        fs.mkdirSync(`${folder}`);
+        fs.mkdirSync(`${paths.json}/${folder}`);
       } else {
         logger(`Writing json file: ${filePath}`);
         fs.writeFileSync(`${paths.json}/${filePath}.json`, contents);
@@ -45,5 +45,7 @@ function addPage(filePath = argv.path) {
     });
   });
 }
+
+if (require.main === module) addPage();
 
 module.exports = addPage;

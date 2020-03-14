@@ -6,10 +6,10 @@ const paths = require('../config/paths');
 const logger = require('../helpers/logger');
 
 function writeData(dir, file) {
-  if (!dir || !file) process.exit("Need to provide durectory and file");
+  if (!dir || !file) process.exit("Need to provide directory and file");
 
   return new Promise((resolve) => {
-    logger("Write Data");
+    logger(`Write Data: ${`${dir}/${file}`}`);
     const filePath = `${dir}/${file}`;
 
     if (fs.lstatSync(filePath).isDirectory()) {
@@ -29,5 +29,7 @@ function writeData(dir, file) {
     });
   });
 }
+
+if (require.main === module) writeData();
 
 module.exports = writeData;

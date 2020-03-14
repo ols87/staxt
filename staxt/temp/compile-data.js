@@ -36,4 +36,6 @@ function compileData() {
   });
 }
 
-module.exports = compileData();
+if (require.main === module) compileData();
+
+module.exports = compileData;
