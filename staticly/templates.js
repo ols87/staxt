@@ -63,7 +63,7 @@ module.exports = new class {
           insertLine(hbs).appendSync(`data: ${fileName}`);
           insertLine(hbs).appendSync(`permalink: ${data.slug}`);
           insertLine(hbs).appendSync('---');
-          insertLine(hbs).appendSync(`{{> ${data.template} data=${fileName}}}`)
+          insertLine(hbs).appendSync(`{{> ${data.template || 'index'} data=${fileName}}}`)
         });
       }
     });

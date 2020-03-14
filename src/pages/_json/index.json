@@ -1,8 +1,6 @@
 {
-  "template": "index",
+  "template": "",
   "slug": "/",
-  "meta": {
-    "title": "Saticaly Index"
-  },
+  "meta": {},
   "content": {}
 }
