@@ -1,4 +1,4 @@
-var fs = require('fs');
+const fs = require('fs-extra');
 const argv = require('yargs').argv;
 const dir = require('./dir');
 module.exports = new class {
@@ -42,5 +42,24 @@ module.exports = new class {
         });
       });
     }
+  }
+
+  removePage(file = '') {
+    file = file.replace('.json', '');
+    const path = `${dir.dist}/${file}`;
+
+    if (!fs.existsSync(path)) return;
+
+    if (fs.lstatSync(path).isDirectory()) {
+      return fs.rmdir(path, {
+        recursive: true
+      }, (err) => {
+        if (err) process.exit("Could not delete dir ")
+      });
+    }
+
+    fs.unlink(path, (err) => {
+      if (err) process.exit("Could not delete file ")
+    });
   }
 }
