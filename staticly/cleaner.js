@@ -3,7 +3,7 @@ const argv = require('yargs').argv;
 const dir = require('./dir');
 module.exports = new class {
   init() {
-    this.clean(dir.src);
+    this.clean(dir.pages);
 
     if (!argv.src) {
       this.clean(dir.dist);

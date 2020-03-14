@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "staticly": "./staticly.js"
+  },
   "scripts": {
     "dev": "nps run",
     "start": "nps start",

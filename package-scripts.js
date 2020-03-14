@@ -3,6 +3,10 @@ const current = npsUtils.concurrent.nps;
 const change = 'onchange src/';
 
 const scripts = {
+  // INIT
+  init: "staticly --run=init",
+
+
   // SERVER
   server: {
     sync: 'browser-sync reload',
@@ -13,18 +17,18 @@ const scripts = {
 
   // ElEVENTY & HANDLEBARS
   eleventy: "npx @11ty/eleventy",
-  hbs: "node staticly --module=templates",
+  hbs: "staticly --run=templates",
 
   // CLEANING
   clean: {
     src: "nps 'clean --src'",
-    default: "node staticly --module=cleaner"
+    default: "staticly --run=cleaner"
   },
 
   // BUILD
   build: {
     html: `nps hbs eleventy`,
-    images: "node staticly --module=images",
+    images: "staticly --run=images",
     js: `babel src/**/**.js -o dist/assets/main.js`,
     css: `node-sass --output-style compressed -o dist/assets src/scss`,
     default: "nps clean build.js build.css build.html build.images clean.src",

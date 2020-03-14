@@ -22,6 +22,18 @@ module.exports = new class {
     fs.writeFileSync(`${dir.layouts}/default.hbs`, '{{{content}}}');
   }
 
+  all(directory = dir.data) {
+    // Read data directory
+    fs.readdir(directory, (err, files) => {
+      if (err) process.exit("Could not list the directory.");
+
+      // Loop files and generate single
+      files.forEach((file) => {
+        this.single(directory, file);
+      });
+    });
+  }
+
   single(directory = dir.json, filePath = this.file) {
     // Get file contents
     fs.readFile(`${directory}/${filePath}`, 'utf8', (err, contents) => {
@@ -33,7 +45,7 @@ module.exports = new class {
 
       if (contents) {
         const data = JSON.parse(contents);
-        const hbs = `${dir.src}/${fileName}.hbs`;
+        const hbs = `${dir.pages}/${fileName}.hbs`;
 
         console.log(fileName);
 
@@ -47,18 +59,6 @@ module.exports = new class {
           insertLine(hbs).appendSync(`{{> ${data.template} data=${fileName}}}`)
         });
       }
-    });
-  }
-
-  all(directory = dir.data) {
-    // Read data directory
-    fs.readdir(directory, (err, files) => {
-      if (err) process.exit("Could not list the directory.");
-
-      // Loop files and generate single
-      files.forEach((file) => {
-        this.single(directory, file);
-      });
     });
   }
 }

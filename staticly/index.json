@@ -1,8 +1,6 @@
 {
   "template": "index",
   "slug": "/",
-  "meta": {
-    "title": "yooooo"
-  },
+  "meta": {},
   "content": {}
 }
