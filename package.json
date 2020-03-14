@@ -14,7 +14,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@11ty/eleventy": "^0.10.0",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
@@ -26,6 +26,7 @@
     "nps": "^5.9.12",
     "nps-utils": "^1.7.0",
     "onchange": "^6.1.0",
-    "yargs": "^15.3.0"
+    "yargs": "^15.3.0",
+    "app-root-path": "^3.0.0"
   }
 }
