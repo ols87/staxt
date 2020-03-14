@@ -1,0 +1,10 @@
+{
+  "template": "index",
+  "slug": "/",
+  "meta": {
+    "title": "Testing"
+  },
+  "content": {
+    "text": "123"
+  }
+}

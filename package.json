@@ -1,0 +1,28 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nps run",
+    "start": "nps start",
+    "build": "nps build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^0.10.0",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "browser-sync": "^2.26.7",
+    "fs-extra": "^8.1.0",
+    "insert-line": "^1.1.0",
+    "node-sass": "^4.13.1",
+    "nps": "^5.9.12",
+    "nps-utils": "^1.7.0",
+    "onchange": "^6.1.0",
+    "yargs": "^15.3.0"
+  }
+}
