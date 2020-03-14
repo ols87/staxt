@@ -36,7 +36,7 @@ const scripts = {
     css: `${change}scss -- nps build.css server.sync`,
     img: `${change}images -- nps build.images server.sync`,
     html: `${change}pages/_templates -- nps build.html server.sync clean.src`,
-    json: `${change}pages/_json -- nps 'hbs --f={{changed}}' eleventy server.sync clean.src`,
+    json: `${change}pages/_json -- nps 'hbs --e{{event}} --f={{changed}}' eleventy server.sync clean.src`,
     default: current("watch.css", "watch.html", "watch.js", "watch.json", "watch.img"),
   },
 

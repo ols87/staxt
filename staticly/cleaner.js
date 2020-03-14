@@ -41,13 +41,6 @@ module.exports = new class {
           }
         });
       });
-
-      // Remove data directory
-      fs.rmdir(dir.data, {
-        recursive: true
-      }, (err) => {
-        if (err) process.exit("Could not delete dir ");
-      });
     }
   }
 }
