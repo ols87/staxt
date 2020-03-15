@@ -1,6 +1,6 @@
 {
   "name": "staxt",
-  "version": "0.2.2",
+  "version": "0.3.2",
   "description": "",
   "bin": {
     "staxt": "./staxt/staxt.js",

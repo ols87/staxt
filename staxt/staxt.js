@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const fs = require('fs-extra');
+const shell = require('shelljs');
 const paths = require('./config/paths');
 const cleanDirectory = require('./cleaner/clean-directory');
+
 
 const assets = [
   `${paths.js}/main.js`,
@@ -30,6 +32,7 @@ fs.copy(`${__dirname}/templates/page-data.json`, json, err => {
 
 fs.copy(`${__dirname}/files`, process.cwd(), err => {
   if (err) return console.error(err);
+  shell.echo('npm init');
 });
 
 cleanDirectory('src');
