@@ -11,7 +11,6 @@ function writeData(filePath, callback) {
   if (!fs.existsSync(paths.data)) fs.mkdirSync(paths.data);
 
   if (argv.file) filePath = argv.file;
-  console.log(filePath);
 
   fs.readFile(filePath, 'utf8', (err, contents) => {
     const newName = filePath.split('_json/')[1].replace(/\//g, '-');
