@@ -1,8 +1,6 @@
 {
-  "template": "",
+  "template": "index",
   "slug": "/",
-  "meta": {
-    "title": "test"
-  },
+  "meta": {},
   "content": {}
 }

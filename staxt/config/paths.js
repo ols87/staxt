@@ -1,8 +1,6 @@
-const root = require('app-root-path');
-
 module.exports = new class {
   constructor() {
-    this.src = root.resolve('/src');
+    this.src = 'src';
     this.pages = `${this.src}/pages`;
     this.js = `${this.src}/js`;
     this.img = `${this.src}/images`;
