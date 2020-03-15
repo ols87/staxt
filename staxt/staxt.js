@@ -21,11 +21,15 @@ assets.forEach((file) => {
 });
 
 fs.copy(`${__dirname}/templates/page-template.hbs`, hbs, err => {
-  if (err) return console.error(err)
+  if (err) return console.error(err);
 });
 
 fs.copy(`${__dirname}/templates/page-data.json`, json, err => {
-  if (err) return console.error(err)
+  if (err) return console.error(err);
+});
+
+fs.copy(`${__dirname}/files`, process.cwd(), err => {
+  if (err) return console.error(err);
 });
 
 cleanDirectory('src');
