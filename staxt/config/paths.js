@@ -11,8 +11,4 @@ module.exports = new class {
     this.data = `${this.pages}/data`
     this.dist = 'dist';
   }
-
-  relative(dir) {
-    return this[dir].replace(`${root.path}/`, '');
-  }
 }
