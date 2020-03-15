@@ -16,12 +16,8 @@
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "browser-sync": "^2.26.7",
-    "fs-extra": "^8.1.0",
-    "insert-line": "^1.1.0",
     "node-sass": "^4.13.1",
     "nps": "^5.9.12",
-    "nps-utils": "^1.7.0",
-    "onchange": "^6.1.0",
-    "yargs": "^15.3.0"
+    "nps-utils": "^1.7.0"
   }
 }

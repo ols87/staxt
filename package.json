@@ -1,6 +1,6 @@
 {
   "name": "staxt",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "",
   "bin": {
     "staxt": "./staxt/staxt.js",
@@ -23,17 +23,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@11ty/eleventy": "^0.10.0",
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "browser-sync": "^2.26.7",
     "fs-extra": "^8.1.0",
     "insert-line": "^1.1.0",
-    "node-sass": "^4.13.1",
-    "nps": "^5.9.12",
-    "nps-utils": "^1.7.0",
-    "onchange": "^6.1.0",
     "shelljs": "^0.8.3",
     "yargs": "^15.3.0"
   }

@@ -11,7 +11,6 @@ let fileCount = 0;
 
 function compileData() {
   logger('Create _data folder if none exists');
-  if (!fs.existsSync(paths.data)) fs.mkdirSync(paths.data);
 
   return new Promise((resolve) => {
     logger('Compile Data');

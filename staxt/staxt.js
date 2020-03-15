@@ -5,7 +5,6 @@ const shell = require('shelljs');
 const paths = require('./config/paths');
 const cleanDirectory = require('./cleaner/clean-directory');
 
-
 const assets = [
   `${paths.js}/main.js`,
   `${paths.css}/main.scss`,

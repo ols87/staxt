@@ -8,6 +8,8 @@ const logger = require('../helpers/logger');
 function writeData(dir, file) {
   if (!dir || !file) process.exit("Need to provide directory and file");
 
+  if (!fs.existsSync(paths.data)) fs.mkdirSync(paths.data);
+
   return new Promise((resolve) => {
     logger(`Write Data: ${`${dir}/${file}`}`);
     const filePath = `${dir}/${file}`;
