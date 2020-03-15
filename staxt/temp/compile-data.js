@@ -9,27 +9,30 @@ const writeData = require('./write-data');
 const fileList = [];
 let fileCount = 0;
 
-function compileData() {
-  logger('Create _data folder if none exists');
+function compileData(dir = paths.json, callback) {
+  logger('Compile Data');
 
-  return new Promise((resolve) => {
-    logger('Compile Data');
+  fs.readdir(dir, (err, files) => {
+    if (err) return;
 
-    fs.readdir(paths.json, (err, files) => {
-      if (err) return;
+    logger('Looping directory');
+    files.forEach((file) => {
+      if (file.indexOf('.json') > -1) {
+        logger(`is file, add to cue: ${file}`);
+        fileList.push(file);
+      }
 
-      logger('Looping directory');
-      files.forEach((file) => {
-        if (file.indexOf('.json') > -1) {
-          logger(`is file, add to cue: ${file}`);
-          fileList.push(file);
-        }
+      const filePath = `${dir}/${file}`;
 
-        writeData(paths.json, file).then(() => {
-          logger('Last file, resolving Promise');
-          fileCount++;
-          if (fileCount === fileList.length) return resolve();
-        });
+      if (fs.lstatSync(filePath).isDirectory()) {
+        logger("Is dir, going recursive");
+        compileData(filePath, callback);
+      }
+
+      writeData(filePath, () => {
+        logger('Last file, resolving Promise');
+        fileCount++;
+        if (fileCount === fileList.length) callback();
       });
     });
   });

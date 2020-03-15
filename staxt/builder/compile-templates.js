@@ -9,13 +9,15 @@ const writeView = require('./write-view');
 
 
 function compileTemplates() {
-  compileData().then(() => {
+  compileData(paths.json, () => {
     fs.readdir(paths.data, (err, files) => {
       logger("Reading data directory");
       if (err) return;
 
       logger("Building Singles");
-      files.forEach(file => writeView(paths.json, file))
+      files.forEach(file => {
+        writeView(paths.json, file)
+      });
     });
   });
 }
