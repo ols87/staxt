@@ -2,13 +2,15 @@ module.exports = new class {
   constructor() {}
 
   fetch(args) {
-    this.args = args;
-    this.module = this.args[0];
-    this.methods = this.getMethods();
+    return {
+      args: args,
+      module: args[0],
+      methods: this.getMethods(args)
+    }
   }
 
-  getMethods() {
-    return this.args.filter((arg, index) => {
+  getMethods(args = []) {
+    return args.filter((arg, index) => {
       return index !== 0 && arg.indexOf('-') !== 0;
     });
   }

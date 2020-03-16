@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const handlebars = require('handlebars');
 
 module.exports = function () {
-  this.fileParser();
+  this.fileParser('compile');
   const paths = this.paths;
   const template = `${paths.templates}/default.hbs`;
   const output = `${paths.dist}/${this.page}`;
@@ -12,6 +12,6 @@ module.exports = function () {
     const compile = handlebars.compile(contents);
     const html = compile(data);
 
-    fs.outputFileSync(`${output}/index.html`, html);
+    fs.outputFile(`${output}/index.html`, html);
   });
 }

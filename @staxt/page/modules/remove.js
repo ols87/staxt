@@ -4,6 +4,6 @@ module.exports = function () {
   this.fileParser();
   const paths = this.paths;
 
-  fs.removeSync(`${paths.pages}/${this.page}`);
-  fs.removeSync(`${paths.dist}/${this.page}`);
+  fs.remove(`${paths.pages}/${this.page}`);
+  fs.remove(`${paths.dist}/${this.page}`);
 }

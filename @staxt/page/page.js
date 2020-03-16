@@ -5,11 +5,18 @@ var modules = require('./page.modules');
 module.exports = class extends staxt {
   constructor() {
     super();
-    this.loadModules(this, modules);
+    this.loadModules(modules);
   }
 
-  fileParser() {
+  fileParser(action = '') {
     this.page = this.args.p;
+
+    if (!this.page) {
+      this.log('red', `Missing a file path`);
+      this.log('magenta', `Hint: staxt page ${action} -p=some/file/path`);
+      process.exit();
+    }
+
     this.fileName = this.page.split("/").pop();
     this.filePath = `${this.paths.pages}/${this.page}/${this.fileName}`;
   }

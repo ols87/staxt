@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const yargs = require('yargs').argv;
-
+const log = require('./@staxt/helpers/log');
 const cli = require('./@staxt/helpers/cli');
 const modules = require('./@staxt/staxt.modules');
 
@@ -10,11 +9,18 @@ process.on('unhandledRejection', (r) => console.error(r));
 
 new class {
   constructor() {
-    cli.fetch(process.argv.slice(2));
+    const scripts = cli.fetch(process.argv.slice(2));
+    const moduleNames = modules.map(mod => mod.name);
+
+    if (!scripts.module) {
+      log('red', 'No staxt module supplied');
+      log('magenta', `Available modules: ${moduleNames.join(', ')}`);
+      process.exit();
+    }
 
     modules.forEach((mod) => {
-      if (mod.name === cli.module) {
-        this[mod.name] = new mod.fn().init(cli.methods, yargs);
+      if (mod.name === scripts.module) {
+        this[mod.name] = new mod.fn();
       }
     });
   }

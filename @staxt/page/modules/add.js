@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
 module.exports = function () {
-  this.fileParser();
+  this.fileParser('add');
 
   let data = JSON.stringify({
     template: 'default'
@@ -11,11 +11,11 @@ module.exports = function () {
 
   const dataFile = `${this.filePath}.js`;
   const dataContent = `const data = ${data};\r\n\r\nmodule.exports = data;`;
-  fs.outputFileSync(dataFile, dataContent);
+  fs.outputFile(dataFile, dataContent);
 
   const scssFile = `${this.filePath}.scss`;
   const scssContent = `.${this.page}-page{}`;
-  fs.outputFileSync(scssFile, scssContent);
+  fs.outputFile(scssFile, scssContent);
 
   this.compile();
 }
