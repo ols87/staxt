@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-const log = require('./@staxt/helpers/log');
-const cli = require('./@staxt/helpers/cli');
+const logger = require('./@staxt/helpers/logger');
+const cli = require('./@staxt/helpers/cli-parser');
 const modules = require('./@staxt/staxt.modules');
 
 process.title = 'staxt';
-process.on('unhandledRejection', r => log('red', r));
+process.on('unhandledRejection', r => logger('red', r));
 
 const scripts = cli.fetch(process.argv.slice(2));
 const moduleNames = modules.map(mod => mod.name);
 
 if (!scripts.module) {
-  log('red', 'No staxt module supplied');
-  log('magenta', `Available modules: ${moduleNames.join(', ')}`);
+  logger('red', 'No staxt module supplied');
+  logger('magenta', `Available modules: ${moduleNames.join(', ')}`);
   process.exit();
 }
 
@@ -21,3 +21,9 @@ modules.forEach((mod) => {
     this[mod.name] = mod.fn();
   }
 });
+
+if (!this[scripts.module]) {
+  logger('red', `Incorrect staxt module: [${scripts.module}]`);
+  logger('magenta', `Available modules: ${moduleNames.join(', ')}`);
+  process.exit();
+}

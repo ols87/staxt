@@ -2,27 +2,13 @@
   "name": "staxt",
   "version": "0.5.2",
   "description": "",
-  "bin": {
-    "staxt": "./staxt/staxt.js",
-    "staxt.compile": "./staxt/builder/compile-templates.js",
-    "staxt.images": "./staxt/builder/images.js",
-    "staxt.add-page": "./staxt/builder/add-page.js",
-    "staxt.write-view": "./staxt/builder/write-view.js",
-    "staxt.clean-directory": "./staxt/cleaner/clean-directory.js",
-    "staxt.remove-page": "./staxt/cleaner/remove-page.js",
-    "staxt.compile-data": "./staxt/temp/compile-data.js",
-    "staxt.layout-entry": "./staxt/temp/layout-entry.js",
-    "staxt.write-data": "./staxt/temp/write-data.js"
-  },
-  "scripts": {
-    "dev": "nps run",
-    "start": "nps start",
-    "build": "nps build"
-  },
+  "bin": {},
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browsersync": "0.0.1-security",
     "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.7.3",

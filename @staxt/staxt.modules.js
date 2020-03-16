@@ -4,4 +4,7 @@ module.exports = [{
 }, {
   name: 'compiler',
   fn: require('./compiler/compiler')
+}, {
+  name: 'server',
+  fn: require('./server/server')
 }];

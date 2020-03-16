@@ -1,6 +1,5 @@
 const staxt = require('../staxt');
-var modules = require('./page.modules');
-
+const modules = require('./page.modules');
 
 const pages = class extends staxt {
   constructor() {
@@ -12,8 +11,8 @@ const pages = class extends staxt {
     this.page = this.args.p;
 
     if (!this.page) {
-      this.log('red', `Missing a file path`);
-      this.log('magenta', `Hint: staxt page ${action} -p=some/file/path`);
+      this.logger('red', `Missing a file path`);
+      this.logger('magenta', `Hint: staxt page ${action} -p=some/file/path`);
       process.exit();
     }
 
