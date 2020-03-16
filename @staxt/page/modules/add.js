@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 module.exports = function () {
   this.fileParser('add');
 
+  // TODO: dynamic templates
   let data = JSON.stringify({
     template: 'default'
   });

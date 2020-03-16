@@ -3,6 +3,7 @@ const handlebars = require('handlebars');
 
 module.exports = function () {
   this.fileParser('compile');
+
   const paths = this.paths;
   const template = `${paths.templates}/default.hbs`;
   const output = `${paths.dist}/${this.page}`;
