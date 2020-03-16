@@ -9,7 +9,7 @@ module.exports = new class {
 
   getMethods() {
     return this.args.filter((arg, index) => {
-      return index !== 0 && arg.indexOf('--') < 0;
+      return index !== 0 && arg.indexOf('-') !== 0;
     });
   }
 }
