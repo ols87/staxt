@@ -3,9 +3,8 @@ const fs = require('fs-extra');
 module.exports = function () {
   this.parser('add');
 
-  // TODO: dynamic templates
   let data = JSON.stringify({
-    template: 'default'
+    template: this.template
   });
 
   data = data.replace(/"([^"]+)":/g, '$1:');

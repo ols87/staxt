@@ -1,7 +1,6 @@
-const fs = require('fs-extra');
-
 module.exports = function () {
   this.page = this.args.p;
+  this.template = this.args.t || 'default';
 
   if (!this.page) {
     this.logger('red', `Missing a file path`);
@@ -16,6 +15,4 @@ module.exports = function () {
     this.isIndex = true;
     this.filePath = this.filePath.replace('/index', '');
   }
-
-  console.log(this.filePath);
 }

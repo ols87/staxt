@@ -5,7 +5,7 @@ module.exports = function () {
   this.parser('compile');
 
   const paths = this.paths;
-  const template = `${paths.templates}/default.hbs`;
+  const template = `${paths.templates}/${this.template}.hbs`;
   const output = this.isIndex ? paths.dist : `${paths.dist}/${this.page}`;
 
   fs.readFile(template, 'utf8', (err, contents) => {
