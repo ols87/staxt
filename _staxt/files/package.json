@@ -1,17 +1,12 @@
 {
-  "name": "staxt",
-  "version": "0.1.1",
+  "name": "staxt-project",
+  "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "dev": "nps run",
-    "start": "nps start",
-    "build": "nps build"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@11ty/eleventy": "^0.10.0",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
