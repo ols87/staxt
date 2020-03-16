@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browsersync": "0.0.1-security",
+    "browsersync": "2.26.7",
     "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.7.3",

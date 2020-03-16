@@ -1,4 +1,7 @@
 module.exports = [{
+    name: 'parser',
+    fn: require('./modules/parser')
+  }, {
     name: 'add',
     fn: require('./modules/add')
   }, {

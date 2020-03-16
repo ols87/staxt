@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
 module.exports = function () {
-  this.fileParser();
+  this.parser();
   const paths = this.paths;
 
   fs.remove(`${paths.pages}/${this.page}`);
