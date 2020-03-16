@@ -7,4 +7,10 @@ module.exports = class extends staxt {
     super();
     this.loadModules(this, modules);
   }
+
+  fileParser() {
+    this.page = this.args.p;
+    this.fileName = this.page.split("/").pop();
+    this.filePath = `${this.paths.pages}/${this.page}/${this.fileName}`;
+  }
 }
