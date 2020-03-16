@@ -2,7 +2,7 @@ const staxt = require('../staxt');
 var modules = require('./page.modules');
 
 
-module.exports = class extends staxt {
+const pages = class extends staxt {
   constructor() {
     super();
     this.loadModules(modules);
@@ -20,4 +20,8 @@ module.exports = class extends staxt {
     this.fileName = this.page.split("/").pop();
     this.filePath = `${this.paths.pages}/${this.page}/${this.fileName}`;
   }
+}
+
+module.exports = () => {
+  return new pages();
 }

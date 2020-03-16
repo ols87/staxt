@@ -1,7 +1,11 @@
 const staxt = require('../staxt');
 
-module.exports = class extends staxt {
+const compiler = class extends staxt {
   constructor() {
     super();
   }
+}
+
+module.exports = () => {
+  return new compiler();
 }

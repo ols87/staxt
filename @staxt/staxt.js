@@ -8,8 +8,13 @@ module.exports = class {
     this.log = log;
     this.paths = paths;
     this.args = yargs || {};
+    this.scripts();
+  }
+
+  scripts() {
     const scripts = cli.fetch(process.argv.slice(2));
     this.module = scripts.module;
+
     if (scripts.methods) {
       this.methods = scripts.methods;
     }
