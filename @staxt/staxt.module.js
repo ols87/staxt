@@ -1,8 +1,8 @@
 const yargs = require('yargs').argv;
 
-const logger = require('./helpers/logger.helper');
-const cliParser = require('./helpers/cli-parser.helper');
-const paths = require('./helpers/paths.helper');
+const logger = require('./services/logger.service');
+const cliParser = require('./services/cli.service');
+const paths = require('./services/paths.service');
 
 module.exports = class {
   constructor() {

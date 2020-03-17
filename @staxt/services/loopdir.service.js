@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filewalker = (dir) => {
+const loopDir = (dir) => {
   return new Promise(resolve => {
     let results = [];
 
@@ -17,7 +17,7 @@ const filewalker = (dir) => {
           if (stat && stat.isDirectory()) {
             results.push(file);
 
-            return filewalker(file, (err, res) => {
+            return loopDir(file, (err, res) => {
               results = results.concat(res);
               if (!--pending) return resolve(results);
             });
@@ -31,4 +31,4 @@ const filewalker = (dir) => {
   });
 };
 
-module.exports = filewalker;
+module.exports = loopDir;

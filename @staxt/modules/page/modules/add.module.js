@@ -7,7 +7,9 @@ module.exports = function () {
   const templateService = service(this.template);
   const templatePath = `${this.paths.templates}/${this.template}.hbs`;
 
-  const addFiles = () => {
+  const addFiles = (templateName = '') => {
+    this.template = templateName.toLowerCase();
+
     let data = JSON.stringify({
       template: this.template
     });
@@ -16,44 +18,37 @@ module.exports = function () {
 
     const dataFile = `${this.filePath}.js`;
     const dataContent = `const data = ${data};\r\n\r\nmodule.exports = data;`;
-    fs.outputFile(dataFile, dataContent);
+    fs.outputFileSync(dataFile, dataContent);
 
     const scssFile = `${this.filePath}.scss`;
     const scssContent = `.${this.page}-page{}`;
-    fs.outputFile(scssFile, scssContent);
+    fs.outputFileSync(scssFile, scssContent);
 
     this.logger('green', `${this.page} src files created`);
-
     this.compile();
   }
 
   if (!this.args.t) {
-    templateService.noArgs().then(res => {
-      const choice = res.choice;
-      if (choice === 'Create New Template') {
-        templateService.create().then(res => {
+    return templateService.noArgs().then(res => {
+      if (res.choice === 'Create New Template') {
+        return templateService.create().then(res => {
           if (res.name !== '') {
             const newPath = this.templatePath.replace(this.template, res.name);
             fs.ensureFileSync(newPath);
-            this.template = res.name.toLowerCase();
-            addFiles();
-          } else {
-            this.logger('red', `Please enter a template name`);
+            addFiles(res.name);
           }
+          this.logger('red', `Please enter a template name`);
         });
-      } else {
-        this.template = res.choice.toLowerCase();
-        addFiles();
       }
+      addFiles(res.choice);
     });
   }
 
   if (!fs.existsSync(templatePath)) {
-    templateService.noFile().then(res => {
+    return templateService.noFile().then(res => {
       if (res.create) return fs.ensureFileSync(templatePath);
-      this.template = 'default';
       this.logger('blue', `skipping template. using default`);
-      addFiles();
+      addFiles('default');
     });
   }
 }

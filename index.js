@@ -2,8 +2,8 @@
 
 global.__staxt = `${__dirname}/@staxt`;
 
-const logger = require('./@staxt/helpers/logger.helper');
-const cli = require('./@staxt/helpers/cli-parser.helper');
+const logger = require('./@staxt/services/logger.service');
+const cli = require('./@staxt/services/cli.service');
 const modules = require('./@staxt/staxt.imports');
 
 process.title = 'staxt';

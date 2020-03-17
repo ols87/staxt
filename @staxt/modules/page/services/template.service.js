@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
-const walker = require(`${__staxt}/helpers/flie-walker.helper`);
-const paths = require(`${__staxt}/helpers/paths.helper`);
+const loopDir = require(`${__staxt}/services/loopdir.service`);
+const paths = require(`${__staxt}/services/paths.service`);
 
 const templateService = class {
   constructor(template = '') {
@@ -8,10 +8,12 @@ const templateService = class {
   }
 
   noArgs() {
-    return walker(paths.templates).then(data => {
+    return loopDir(paths.templates).then(data => {
       data = data.map(path => {
         path = path.replace(`${paths.templates}/`, '');
-        return (path.charAt(0).toUpperCase() + path.slice(1)).replace('.hbs', '');
+        path = path.charAt(0).toUpperCase() + path.slice(1);
+        path = path.replace('.hbs', '');
+        return (path.indexOf('_') !== 0 ? path : null);
       });
 
       const choices = ['Create New Template'].concat(data);
@@ -19,17 +21,17 @@ const templateService = class {
       return inquirer.prompt([{
         type: 'list',
         name: 'choice',
-        message: `No template given`,
+        message: `Choose a template`,
         choices: choices
       }])
     });
   }
 
-  noFile() {
+  noFile(template = '') {
     return inquirer.prompt([{
       type: 'confirm',
       name: 'create',
-      message: `${this.template} does not exist. Create it?`,
+      message: `${template} does not exist. Create it?`,
       default: true,
     }]);
   }
