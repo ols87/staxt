@@ -28,7 +28,7 @@ module.exports = class {
       this[mod.name] = mod.fn;
     });
 
-    this.validateModules(cli, modules)
+    this.validateModules(cli, modules);
     this[cli.module]();
   }
 

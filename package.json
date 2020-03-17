@@ -2,18 +2,24 @@
   "name": "staxt",
   "version": "0.5.2",
   "description": "",
-  "bin": {},
+  "bin": {
+    "staxt": "."
+  },
   "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browsersync": "2.26.7",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "babel-preset-minify": "^0.5.1",
+    "browser-sync": "^2.26.7",
     "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.7.3",
     "inquirer": "^7.1.0",
     "insert-line": "^1.1.0",
+    "sass": "^1.26.3",
     "shelljs": "^0.8.3",
     "yargs": "^15.3.0"
   }
