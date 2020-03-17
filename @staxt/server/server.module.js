@@ -1,4 +1,4 @@
-const staxt = require('../staxt');
+const staxt = require('../staxt.module');
 
 const server = class extends staxt {
   constructor() {

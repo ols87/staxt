@@ -17,7 +17,7 @@ module.exports = function () {
         name: 'createTemplate',
         message: `${this.template} does not exist. Create it?`,
         default: true,
-      }, ])
+      }])
       .then(answers => {
         if (answers.createTemplate) {
           fs.ensureFileSync(template);

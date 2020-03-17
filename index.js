@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const logger = require('./@staxt/helpers/logger');
-const cli = require('./@staxt/helpers/cli-parser');
-const modules = require('./@staxt/staxt.modules');
+const logger = require('./@staxt/helpers/logger.helper');
+const cli = require('./@staxt/helpers/cli-parser.helper');
+const modules = require('./@staxt/staxt.imports');
 
 process.title = 'staxt';
 process.on('unhandledRejection', r => logger('red', r));

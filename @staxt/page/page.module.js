@@ -1,5 +1,5 @@
-const staxt = require('../staxt');
-const modules = require('./page.modules');
+const staxt = require('../staxt.module');
+const modules = require('./page.imports');
 
 const pages = class extends staxt {
   constructor() {
