@@ -1,10 +1,10 @@
 const fs = require('fs-extra');
-const service = require('../services/template.service');
+const _templateService = require(`${__staxt}/services/template.service`);
 
 module.exports = function () {
   this.parser('add');
 
-  const templateService = service(this.template);
+  const templateService = _templateService(this.template);
   const templatePath = `${this.paths.templates}/${this.template}.hbs`;
 
   const addFiles = (templateName = '') => {
@@ -29,7 +29,7 @@ module.exports = function () {
   }
 
   if (!this.args.t) {
-    return templateService.noArgs().then(res => {
+    return templateService.invalid(true).then(res => {
       if (res.choice === 'Create New Template') {
         return templateService.create().then(res => {
           if (res.name !== '') {
