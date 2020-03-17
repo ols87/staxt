@@ -1,6 +1,6 @@
 module.exports = function () {
   this.page = this.args.p;
-  this.template = this.args.t || 'default';
+  this.template = this.template || this.args.t;
 
   if (!this.page) {
     this.logger('red', `Missing a file path`);

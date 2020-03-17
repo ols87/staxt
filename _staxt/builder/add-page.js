@@ -3,8 +3,8 @@
 const fs = require('fs-extra');
 const argv = require('yargs').argv;
 
-const paths = require('../config/paths');
-const logger = require('../helpers/logger');
+const paths = require(`${__staxt}/config/paths`);
+const logger = require(`${__staxt}/helpers/logger`);
 
 const placeholder = `${__dirname}/../templates/page-data.json`;
 

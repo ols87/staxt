@@ -1,10 +1,10 @@
 module.exports = [{
   name: 'page',
-  fn: require('./page/page.module')
+  fn: require('./modules/page/page.module')
 }, {
   name: 'compiler',
-  fn: require('./compiler/compiler.module')
+  fn: require('./modules/compiler/compiler.module')
 }, {
   name: 'server',
-  fn: require('./server/server.module')
+  fn: require('./modules/server/server.module')
 }];

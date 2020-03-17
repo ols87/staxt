@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+global.__staxt = `${__dirname}/@staxt`;
+
 const logger = require('./@staxt/helpers/logger.helper');
 const cli = require('./@staxt/helpers/cli-parser.helper');
 const modules = require('./@staxt/staxt.imports');
