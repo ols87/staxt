@@ -1,18 +1,32 @@
 const fs = require('fs-extra');
 const glob = require("glob");
-// const _templateService = require(`${__staxt}/services/template.service`);
-const shell = require('shelljs');
+const handlebars = require('handlebars');
 
 module.exports = function () {
   const pages = glob.sync(`${this.paths.pages}/**/**.js`);
+  let startTime, endTime;
 
-  pages.forEach((path) => {
+  const startTimer = () => {
+    startTime = new Date().getTime();
+  };
+
+  const endTimer = () => {
+    endTime = new Date().getTime() - startTime;
+    const seconds = endTime /= 1000;
+    this.logger('green', `Compiled all templates in ${seconds} seconds`);
+  }
+
+  startTimer();
+
+  pages.forEach((path, index) => {
     const data = require(path);
-
     let page = path.split("pages/").pop();
-    page = page.replace(/\/\w+/, '');
+    const isIndex = page === 'index.js';
+
+    page = page === 'index.js' ? page : page.substr(0, page.lastIndexOf('/'));
     page = page.replace('.js', '');
 
+    const output = isIndex ? this.paths.dist : `${this.paths.dist}/${page}`;
     const template = `${this.paths.templates}/${data.template}.hbs`;
 
     fs.readFile(template, 'utf8', (err, contents) => {
@@ -23,7 +37,13 @@ module.exports = function () {
         this.logger('magenta', `${templateRel} does not exist`);
         process.exit();
       }
-      shell.exec(`staxt page compile -p=${page}`)
+
+      const compile = handlebars.compile(contents);
+      const html = compile(data);
+
+      fs.outputFile(`${output}/index.html`, html);
+
+      if (index === pages.length - 1) endTimer();
     });
   });
 }

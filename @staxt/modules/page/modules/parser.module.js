@@ -1,5 +1,5 @@
 module.exports = function () {
-  this.page = this.args.p;
+  this.page = this.page || this.args.p;
   this.template = this.template || this.args.t;
   this.isIndex = false;
 
