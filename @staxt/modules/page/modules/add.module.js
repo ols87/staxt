@@ -37,9 +37,8 @@ module.exports = function () {
 
   if (!this.args.t) {
     return templateService.noArg().then(res => {
-      if (res.choice === 'Create New Template') {
+      if (res.choice === 'Create new') {
         return templateService.create().then(res => {
-          console.log(res)
           if (res.name !== '') {
             const placeholder = `${__staxt}/modules/init/files/default.hbs`;
             const newPath = `${this.paths.templates}/${res.name}.hbs`;
