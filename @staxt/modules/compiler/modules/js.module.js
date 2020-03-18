@@ -3,6 +3,6 @@ const babel = require("@babel/core");
 
 module.exports = function () {
   const js = babel.transformFileSync(`${this.paths.js}/main.js`);
-  fs.ensureFileSync(`${this.paths.dist}/assets/main.js`);
-  fs.writeFileSync(`${this.paths.dist}/assets/main.js`, js.code);
+  fs.ensureFileSync(`${this.paths.distAssets}/main.js`);
+  fs.writeFileSync(`${this.paths.distAssets}/main.js`, js.code);
 }

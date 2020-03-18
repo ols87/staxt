@@ -25,14 +25,12 @@ const init = class extends staxt {
       fs.ensureFile(file);
     });
 
-    fs.outputFileSync(`${this.paths.templates}/default.hbs`, 'Staxt static site generator');
+    fs.copySync(`${__dirname}/files/default.hbs`, `${this.paths.templates}/default.hbs`);
+    fs.copySync(`${__dirname}/files/header.hbs`, `${this.paths.templates}/includes/header.hbs`);
+    fs.copySync(`${__dirname}/files/footer.hbs`, `${this.paths.templates}/includes/footer.hbs`);
+    fs.copySync(`${__dirname}/files/index.js`, `${this.paths.pages}/index.js`);
 
-    const index = `${this.paths.pages}/index.js`;
-    const content = `const data = {template: "default"};\r\n\r\nmodule.exports = data;`;
-
-    fs.outputFile(index, content, () => {
-      shell.exec('staxt page compile -p=index');
-    });
+    shell.exec('staxt page compile -p=index');
   }
 }
 

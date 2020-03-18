@@ -5,10 +5,10 @@ module.exports = function () {
   sass.render({
     file: `${this.paths.scss}/main.scss`,
     outputStyle: 'compressed',
-    outFile: `${this.paths.dist}/assets/main.css`
+    outFile: `${this.paths.distAssets}/assets/main.css`
   }, (error, result) => {
     if (error) return;
-    fs.ensureFileSync(`${this.paths.dist}/assets/main.css`);
-    fs.writeFileSync(`${this.paths.dist}/assets/main.css`, result.css);
+    fs.ensureFileSync(`${this.paths.distAssets}/main.css`);
+    fs.writeFileSync(`${this.paths.distAssets}/main.css`, result.css);
   });
 }
