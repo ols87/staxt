@@ -1,4 +1,7 @@
 module.exports = [{
+  name: 'init',
+  fn: require('./modules/init/init.module')
+}, {
   name: 'page',
   fn: require('./modules/page/page.module')
 }, {

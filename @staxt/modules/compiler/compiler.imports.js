@@ -7,4 +7,7 @@ module.exports = [{
 }, {
   name: 'html',
   fn: require('./modules/html.module')
+}, {
+  name: 'images',
+  fn: require('./modules/images.module')
 }];

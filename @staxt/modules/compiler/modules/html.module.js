@@ -1,29 +1,16 @@
 const fs = require('fs-extra');
 const glob = require("glob");
-const handlebars = require('handlebars');
+
+const handlebars = require(`${__staxt}/services/handlebars`);
 
 module.exports = function () {
   const pages = glob.sync(`${this.paths.pages}/**/**.js`);
-  let startTime, endTime;
-
-  const startTimer = () => {
-    startTime = new Date().getTime();
-  };
-
-  const endTimer = () => {
-    endTime = new Date().getTime() - startTime;
-    const seconds = endTime /= 1000;
-    this.logger('green', `Compiled all templates in ${seconds} seconds`);
-  }
-
-  startTimer();
 
   pages.forEach((path, index) => {
     const data = require(path);
     let page = path.split("pages/").pop();
     const isIndex = page === 'index.js';
-
-    page = page === 'index.js' ? page : page.substr(0, page.lastIndexOf('/'));
+    page = isIndex ? page : page.substr(0, page.lastIndexOf('/'));
     page = page.replace('.js', '');
 
     const output = isIndex ? this.paths.dist : `${this.paths.dist}/${page}`;
@@ -42,8 +29,6 @@ module.exports = function () {
       const html = compile(data);
 
       fs.outputFile(`${output}/index.html`, html);
-
-      if (index === pages.length - 1) endTimer();
     });
   });
 }
