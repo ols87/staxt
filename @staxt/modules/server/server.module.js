@@ -98,7 +98,6 @@ const server = class extends staxt {
     } = options;
 
     const timer = _timer();
-
     timer.start();
 
     shell.exec(script);

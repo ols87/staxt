@@ -8,9 +8,9 @@ const templateService = class {
     this.template = template;
   }
 
-  invalid(create = false) {
+  noArg() {
     const choices = this.list();
-    if (create) choices.unshift('Create New Template');
+    choices.unshift('Create new');
 
     return inquirer.prompt([{
       type: 'list',
@@ -46,9 +46,8 @@ const templateService = class {
 
     templates.forEach(path => {
       path = path.replace(`${paths.templates}/`, '');
-      path = path.charAt(0).toUpperCase() + path.slice(1);
       path = path.replace('.hbs', '');
-      if (path.indexOf('_') !== 0) list.push(path);
+      if (path.indexOf('includes') !== 0) list.push(path);
     });
 
     return list;

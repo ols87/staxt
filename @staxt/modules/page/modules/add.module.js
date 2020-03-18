@@ -1,5 +1,7 @@
 const fs = require('fs-extra');
+
 const _templateService = require(`${__staxt}/services/template.service`);
+const _timer = require(`${__staxt}/services/timer.service`);
 
 module.exports = function () {
   this.parser('add');
@@ -24,18 +26,26 @@ module.exports = function () {
     const scssContent = `.${this.page}-page{}`;
     fs.outputFileSync(scssFile, scssContent);
 
-    this.logger('green', `${this.page} src files created`);
+    const timer = _timer();
+    timer.start();
     this.compile();
+
+    timer.end().then(seconds => {
+      this.logger('green', `${this.page} files created`);
+    });
   }
 
   if (!this.args.t) {
-    return templateService.invalid(true).then(res => {
+    return templateService.noArg().then(res => {
       if (res.choice === 'Create New Template') {
         return templateService.create().then(res => {
+          console.log(res)
           if (res.name !== '') {
-            const newPath = this.templatePath.replace(this.template, res.name);
-            fs.ensureFileSync(newPath);
-            addFiles(res.name);
+            const placeholder = `${__staxt}/modules/init/files/default.hbs`;
+            const newPath = `${this.paths.templates}/${res.name}.hbs`;
+            this.template = res.name;
+            fs.copySync(placeholder, newPath);
+            return addFiles(res.name);
           }
           this.logger('red', `Please enter a template name`);
         });
