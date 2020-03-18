@@ -1,5 +1,8 @@
 const chalk = require('chalk');
 const fs = require('fs-extra');
+const chalker = new chalk.Instance({
+  level: 1
+});
 
 const logFile = process.cwd();
 
@@ -21,5 +24,5 @@ module.exports = (color = 'white', message = '') => {
     fs.ensureFileSync(`${logFile}/.staxt.log`);
     fs.appendFileSync(`${logFile}/.staxt.log`, `\n${message} [${dateTime()}]`);
   }
-  console.log(chalk[color](message));
+  console.log(chalker[color](message));
 }
