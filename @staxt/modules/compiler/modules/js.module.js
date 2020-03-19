@@ -23,8 +23,6 @@ module.exports = function () {
       .replace(`import('${file}');`, `${contents}\r\n\r\n`);
   });
 
-  console.log(main);
-
   fs.writeFileSync(`${this.paths.js}/bundle.js`, main);
   const js = babel.transformFileSync(`${this.paths.js}/bundle.js`);
 
