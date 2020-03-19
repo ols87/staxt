@@ -10,4 +10,7 @@ module.exports = [{
 }, {
   name: 'images',
   fn: require('./modules/images.module')
+}, {
+  name: 'all',
+  fn: require('./modules/all.module')
 }];
