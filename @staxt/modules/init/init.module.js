@@ -25,6 +25,13 @@ const init = class extends staxt {
       fs.ensureFile(file);
     });
 
+    fs.copySync(`${__dirname}/files/.babelrc`, `${process.cwd()}/.babelrc`);
+    fs.copySync(`${__dirname}/files/package.json`, `${process.cwd()}/package.json`);
+
+    this.logger('green', 'Setting up local project, please wait a moment');
+    shell.exec('npm install');
+    shell.exec('npm audit fix');
+
     fs.copySync(`${__dirname}/files/default.hbs`, `${this.paths.templates}/default.hbs`);
     fs.copySync(`${__dirname}/files/header.hbs`, `${this.paths.templates}/includes/header.hbs`);
     fs.copySync(`${__dirname}/files/footer.hbs`, `${this.paths.templates}/includes/footer.hbs`);
