@@ -8,7 +8,7 @@ module.exports = function () {
 
   pages.forEach((path, index) => {
     const data = require(path);
-    let page = path.split("pages/").pop();
+    let page = path.split(this.paths.pages).pop();
     const isIndex = page === 'index.js';
     page = isIndex ? page : page.substr(0, page.lastIndexOf('/'));
     page = page.replace('.js', '');
@@ -16,18 +16,17 @@ module.exports = function () {
     const output = isIndex ? this.paths.dist : `${this.paths.dist}/${page}`;
     const template = `${this.paths.templates}/${data.template}.hbs`;
 
-    fs.readFile(template, 'utf8', (err, contents) => {
-      if (!contents) {
-        const pageRel = this.paths.relative(path);
-        const templateRel = this.paths.relative(template);
-        this.logger('red', `Invalid Template: ${pageRel}`);
-        this.logger('magenta', `${templateRel} does not exist`);
-        process.exit();
-      }
+    if (!fs.existsSync(template)) {
+      const pageRel = this.paths.relative(path);
+      const templateRel = this.paths.relative(template);
+      this.logger('red', `Invalid Template: ${pageRel}`);
+      this.logger('magenta', `${templateRel} does not exist`);
+      process.exit();
+    }
 
+    fs.readFile(template, 'utf8', (err, contents) => {
       const compile = handlebars.compile(contents);
       const html = compile(data);
-
       fs.outputFile(`${output}/index.html`, html);
     });
   });

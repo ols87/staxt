@@ -40,7 +40,7 @@ const server = class extends staxt {
   }
 
   page(path = '') {
-    let page = path.split("pages/").pop();
+    let page = path.split(this.paths.pages).pop();
     const isIndex = page === 'index.js';
     page = isIndex ? page : page.substr(0, page.lastIndexOf('/'));
     page = page.replace('.js', '');

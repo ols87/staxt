@@ -3,6 +3,8 @@ module.exports = function () {
   this.template = this.template || this.args.t;
   this.isIndex = false;
 
+  console.log(this.args)
+
   if (!this.page) {
     this.logger('red', `Missing a file path`);
     this.logger('magenta', `Hint: staxt page ${this.page} -p=some/file/path`);
