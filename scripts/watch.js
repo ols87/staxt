@@ -1,6 +1,10 @@
 const chokidar = require('chokidar');
 
 const compile = require('./compile');
+const scss = require('./scss');
+const js = require('./js');
+const images = require('./images');
+
 const paths = require('../helpers/paths');
 
 const watch = {
@@ -19,7 +23,7 @@ const watch = {
         type = type.split('.').pop();
 
         if (isPage && type === 'js') return this.page(path);
-        if (isImg) return this.images();
+        if (isImg) return this.images(type);
 
         this[type]();
       }
@@ -35,8 +39,18 @@ const watch = {
     compile();
     this.server.reload('**/**.html');
   },
-  scss: function () {},
-  images: function () {}
+  js: function () {
+    js();
+    this.server.reload('**/**.js');
+  },
+  scss: function () {
+    scss();
+    this.server.reload('**/**.css');
+  },
+  images: function (type = '') {
+    images();
+    this.server.reload(`**/**.${type}`);
+  }
 }
 
 if (require.main === module) {

@@ -17,8 +17,8 @@ module.exports = {
       base: 'dist',
       assets: {
         base: 'assets',
-        js: 'js',
-        scss: 'scss',
+        js: '',
+        css: '',
         images: 'images'
       }
     }

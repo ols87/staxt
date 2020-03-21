@@ -1,4 +1,4 @@
-const staxtConfig = require('../files/staxt.config');
+const staxtConfig = require('../staxt.config');
 
 const config = staxtConfig;
 
@@ -37,7 +37,7 @@ module.exports = {
     assets: {
       base: assets.dist,
       js: `${assets.dist}/${dist.assets.js}`,
-      assets: `${assets.dist}/${dist.assets.scss}`,
+      css: `${assets.dist}/${dist.assets.css}`,
       images: `${assets.dist}/${dist.assets.images}`,
     }
   }

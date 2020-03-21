@@ -4,5 +4,8 @@ module.exports = {
   watch: require('./scripts/watch'),
   add: require('./scripts/add'),
   remove: require('./scripts/remove'),
-  compile: require('./scripts/compile')
+  compile: require('./scripts/compile'),
+  scss: require('./scripts/scss'),
+  js: require('./scripts/js'),
+  images: require('./scripts/images')
 }
