@@ -24,7 +24,6 @@ module.exports = function () {
   dirs.forEach(dir => fs.ensureDir(dir));
   files.forEach(file => fs.ensureFile(file));
 
-  fs.copySync(`${__staxt}/files/.babelrc`, `${paths.base}/.babelrc`);
   fs.copySync(`${__staxt}/staxt.config.js`, `${paths.base}/staxt.config.js`);
   fs.copySync(`${__staxt}/files/default.hbs`, `${paths.src.templates}/default.hbs`);
   fs.copySync(`${__staxt}/files/header.hbs`, `${paths.src.includes}/header.hbs`);

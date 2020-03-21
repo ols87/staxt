@@ -9,6 +9,8 @@ module.exports = function () {
   const src = paths.src.assets.js;
   const dist = paths.dist.assets.js;
 
+  console.log(dist);
+
   let main = fs.readFileSync(`${src}/main.js`, 'utf8');
 
   if (main === '') return;
@@ -42,6 +44,7 @@ module.exports = function () {
   fs.writeFileSync(`${src}/bundle.js`, main);
 
   const js = babel.transformFileSync(`${src}/bundle.js`, {
+    cwd: __staxt,
     presets: ["minify"]
   });
 
