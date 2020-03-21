@@ -11,8 +11,6 @@ module.exports = function () {
 
   let main = fs.readFileSync(`${src}/main.js`, 'utf8');
 
-  if (main === '') return;
-
   const test = /import\('\w+'\);/g;
   let match, imports = [];
 

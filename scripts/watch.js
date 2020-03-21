@@ -23,9 +23,11 @@ const watch = {
         type = type.split('.').pop();
 
         if (isPage && type === 'js') return this.page(path);
-        if (isImg) return this.images(type);
+        if (isImg) return this.images();
 
         this[type]();
+
+        this.server.reload();
       }
     });
   },
@@ -33,23 +35,18 @@ const watch = {
     path = path.replace(`${paths.src.pages}/`, '');
     path = path.split('.')[0];
     compile(path);
-    this.server.reload('**/**.html');
   },
   hbs: function () {
     compile();
-    this.server.reload('**/**.html');
   },
   js: function () {
     js();
-    this.server.reload('**/**.js');
   },
   scss: function () {
     scss();
-    this.server.reload('**/**.css');
   },
-  images: function (type = '') {
+  images: function () {
     images();
-    this.server.reload(`**/**.${type}`);
   }
 }
 

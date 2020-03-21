@@ -7,5 +7,6 @@ module.exports = {
   compile: require('./scripts/compile'),
   scss: require('./scripts/scss'),
   js: require('./scripts/js'),
-  images: require('./scripts/images')
+  images: require('./scripts/images'),
+  bundle: require('./scripts/bundle')
 }

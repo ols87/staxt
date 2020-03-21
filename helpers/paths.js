@@ -1,7 +1,13 @@
+const fs = require('fs-extra');
 const staxtConfig = require('../staxt.config');
-const projectConfig = require(`${process.cwd()}/staxt.config`);
 
-const config = projectConfig || staxtConfig;
+const projectConf = `${process.cwd()}/staxt.config`;
+
+let config = staxtConfig;
+
+if (fs.existsSync(projectConf)) {
+  config = require(projectConf);
+}
 
 const paths = config.paths
 const base = paths.base;

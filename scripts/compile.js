@@ -8,7 +8,9 @@ const timer = require('../helpers/timer')();
 const logger = require('../helpers/logger');
 
 function compile(path = args.p) {
-  const data = require(`${paths.src.pages}/${path}.js`);
+  const dataPath = `${paths.src.pages}/${path}.js`;
+
+  const data = require(dataPath);
 
   const template = `${paths.src.templates}/${data.template}.hbs`;
   const page = path.split("/").pop();
@@ -17,12 +19,17 @@ function compile(path = args.p) {
   const output = `${paths.dist.base}/${outPath}index.html`;
 
   const contents = fs.readFileSync(template, 'utf8');
+
   if (!contents) {
     logger('red', `${page} is referencing an inavlid or empty template`);
     process.exit();
   }
-  const compile = handlebars.compile(contents);
-  fs.outputFileSync(output, compile(data));
+
+  const compile = handlebars().compile(contents);
+  const html = compile(data);
+  fs.outputFileSync(output, html);
+
+  delete require.cache[require.resolve(dataPath)]
 }
 
 module.exports = function (path = args.p) {
