@@ -5,18 +5,7 @@
   "bin": {
     "staxt": "./index.js"
   },
-  "scripts": {
-    "init": "staxt init",
-    "serve": "staxt serve",
-    "watch": "staxt watch",
-    "compile": "staxt compile",
-    "bundle": "staxt bundle",
-    "add": "staxt add",
-    "remove": "staxt remove",
-    "scss": "staxt scss",
-    "js": "staxt js",
-    "images": "staxt images"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
