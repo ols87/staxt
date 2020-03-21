@@ -1,31 +1,12 @@
 #!/usr/bin/env node
 
-global.__staxt = `${__dirname}/@staxt`;
+global.__staxt = __dirname;
 
-const logger = require('./@staxt/services/logger.service');
-const cli = require('./@staxt/services/cli.service');
-const modules = require('./@staxt/staxt.imports');
+const args = require('yargs').argv;
+const loader = require('./loader');
 
-process.title = 'staxt';
-process.on('unhandledRejection', r => logger('red', r));
+const script = args._[0];
 
-const scripts = cli.fetch(process.argv.slice(2));
-const moduleNames = modules.map(mod => mod.name);
-
-if (!scripts.module) {
-  logger('red', 'No staxt module supplied');
-  logger('magenta', `Available modules: ${moduleNames.join(', ')}`);
-  process.exit();
-}
-
-modules.forEach((mod) => {
-  if (mod.name === scripts.module) {
-    this[mod.name] = mod.fn();
-  }
-});
-
-if (!this[scripts.module]) {
-  logger('red', `Incorrect staxt module: [${scripts.module}]`);
-  logger('magenta', `Available modules: ${moduleNames.join(', ')}`);
-  process.exit();
+if (loader[script]) {
+  loader[script]();
 }
