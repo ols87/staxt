@@ -3,8 +3,6 @@ const projectConfig = require(`${process.cwd()}/staxt.config`);
 
 const config = projectConfig || staxtConfig;
 
-console.log(config);
-
 const paths = config.paths
 const base = paths.base;
 
