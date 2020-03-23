@@ -11,5 +11,5 @@ module.exports = function () {
     open: !args.q
   });
 
-  watch.init(this.server);
+  watch(this.server);
 }
