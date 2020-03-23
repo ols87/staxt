@@ -14,7 +14,8 @@ module.exports = function () {
   sass.render({
     file: `${src}/main.scss`,
     outputStyle: 'compressed',
-    outFile: `${dist}main.css`
+    outFile: `${dist}main.css`,
+    includePaths: [`${__staxt}`, paths.src.base]
   }, (error, result) => {
     if (error) return logger('red', error);
     fs.ensureFileSync(`${dist}/main.css`);

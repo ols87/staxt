@@ -1,0 +1,57 @@
+$breakpoints: ('phone': var(--width-phone),
+  'tablet-portrait': var(--tablet-portrait),
+  'tablet-landscape': var(--tablet-landscape),
+  'hd': var(--width-hd),
+  'fhd': var(--width-fhd)) !default;
+
+@mixin device-above($media) {
+  @each $breakpoint in $breakpoints {
+    @if $media==nth($breakpoint, 1) {
+      @media (min-width: #{nth($breakpoint, 2)}) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin device-match($media) {
+  @for $i from 1 through length($breakpoints) {
+    $breakpoint: nth($breakpoints, $i);
+    $name: nth($breakpoint, 1);
+    $value: nth($breakpoint, 2);
+
+    @if $media==$name {
+      @if $i==1 {
+        @media (max-width: #{$value}) {
+          @content;
+        }
+      }
+
+      @else if $i==length($breakpoints) {
+        @media (min-width: #{$value}) {
+          @content;
+        }
+      }
+
+      @else {
+        $next_breakpoint: nth($breakpoints, $i + 1);
+        $next_name: nth($next_breakpoint, 1);
+        $next_value: nth($next_breakpoint, 2);
+
+        @media (min-width: #{$value}) and (max-width: #{$next_value - 1px}) {
+          @content;
+        }
+      }
+    }
+  }
+}
+
+@mixin device-below($media) {
+  @each $breakpoint in $breakpoints {
+    @if $media==nth($breakpoint, 1) {
+      @media (max-width: #{nth($breakpoint, 2)}) {
+        @content;
+      }
+    }
+  }
+}
