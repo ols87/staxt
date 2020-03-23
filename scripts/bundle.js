@@ -1,7 +1,7 @@
-const compile = require('./compile');
-const scss = require('./scss');
-const js = require('./js');
-const images = require('./images');
+const compile = require('./pages/compile');
+const scss = require('./assets/scss');
+const js = require('./assets/js');
+const images = require('./assets/images');
 
 const timer = require('../helpers/timer')();
 const logger = require('../helpers/logger');

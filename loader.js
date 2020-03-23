@@ -1,12 +1,15 @@
 module.exports = {
+  // Main
   init: require('./scripts/init'),
   serve: require('./scripts/serve'),
   watch: require('./scripts/watch'),
-  add: require('./scripts/add'),
-  remove: require('./scripts/remove'),
-  compile: require('./scripts/compile'),
-  scss: require('./scripts/scss'),
-  js: require('./scripts/js'),
-  images: require('./scripts/images'),
-  bundle: require('./scripts/bundle')
+  bundle: require('./scripts/bundle'),
+  // Pages
+  add: require('./scripts/pages/add'),
+  remove: require('./scripts/pages/remove'),
+  compile: require('./scripts/pages/compile'),
+  // Assets
+  scss: require('./scripts/assets/scss'),
+  js: require('./scripts/assets/js'),
+  images: require('./scripts/assets/images')
 }

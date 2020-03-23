@@ -1,11 +1,11 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const handlebars = require('../helpers/handlebars');
-const paths = require('../helpers/paths');
-const glob = require("../helpers/glob");
-const timer = require('../helpers/timer')();
-const logger = require('../helpers/logger');
+const handlebars = require('../../helpers/handlebars');
+const paths = require('../../helpers/paths');
+const glob = require("../../helpers/glob");
+const timer = require('../../helpers/timer')();
+const logger = require('../../helpers/logger');
 
 function compile(path = args.p) {
   const dataPath = `${paths.src.pages}/${path}.js`;

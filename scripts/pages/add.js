@@ -3,10 +3,10 @@ const args = require('yargs').argv;
 
 const compile = require('./compile');
 
-const paths = require('../helpers/paths');
-const timer = require('../helpers/timer')();
-const logger = require('../helpers/logger');
-const templates = require('../helpers/templates')();
+const paths = require('../../helpers/paths');
+const timer = require('../../helpers/timer')();
+const logger = require('../../helpers/logger');
+const templates = require('../../helpers/templates')();
 
 const add = function (template = args.t) {
   if (!template) {

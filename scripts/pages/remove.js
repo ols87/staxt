@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 
 const args = require('yargs').argv;
-const paths = require('../helpers/paths');
-const timer = require('../helpers/timer')();
-const logger = require('../helpers/logger');
+const paths = require('../../helpers/paths');
+const timer = require('../../helpers/timer')();
+const logger = require('../../helpers/logger');
 
 module.exports = function (path = args.p) {
   timer.start();
