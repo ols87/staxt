@@ -9,13 +9,17 @@ const logger = require('../../helpers/logger');
 
 function compile(path = args.p) {
   const dataPath = `${paths.src.pages}/${path}.js`;
-
   const data = require(dataPath);
 
   const template = `${paths.src.templates}/${data.template}.hbs`;
+
   const page = path.split("/").pop();
 
-  const outPath = page === 'index' ? '/' : path.replace(`/${page}`, '');
+  let outPath = page === 'index' ? '/' : path.replace(`/${page}`, '');
+
+  if (data.slug) {
+    outPath = data.slug.replace(/\/+$/, '');
+  }
 
   const output = `${paths.dist.base}/${outPath}/index.html`;
 
@@ -48,7 +52,8 @@ module.exports = function (path = args.p) {
 
   const pages = glob({
     dir: paths.src.pages,
-    includes: '.js'
+    includes: '.js',
+    excludes: '.data.'
   });
 
   timer.start();
