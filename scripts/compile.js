@@ -15,8 +15,9 @@ function compile(path = args.p) {
   const template = `${paths.src.templates}/${data.template}.hbs`;
   const page = path.split("/").pop();
 
-  const outPath = page === 'index' ? '/' : path.replace(`/${page}`, '/');
-  const output = `${paths.dist.base}/${outPath}index.html`;
+  const outPath = page === 'index' ? '/' : path.replace(`/${page}`, '');
+
+  const output = `${paths.dist.base}/${outPath}/index.html`;
 
   const contents = fs.readFileSync(template, 'utf8');
 
