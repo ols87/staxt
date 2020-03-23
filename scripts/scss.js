@@ -16,7 +16,7 @@ module.exports = function () {
     outputStyle: 'compressed',
     outFile: `${dist}main.css`
   }, (error, result) => {
-    if (error) return this.logger('red', error);
+    if (error) return logger('red', error);
     fs.ensureFileSync(`${dist}/main.css`);
     fs.writeFileSync(`${dist}/main.css`, result.css);
   });
