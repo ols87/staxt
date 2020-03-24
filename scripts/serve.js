@@ -1,9 +1,13 @@
-const args = require('yargs').argv;
+const args = require("yargs").argv;
 
-const watch = require('./watch');
-const paths = require('../helpers/paths');
+const watch = require("./watch");
+const bundle = require("./bundle");
 
-module.exports = function () {
+const paths = require("../helpers/paths");
+
+module.exports = function() {
+  bundle();
+
   this.server = require("browser-sync").create();
 
   this.server.init({
@@ -12,4 +16,4 @@ module.exports = function () {
   });
 
   watch(this.server);
-}
+};
