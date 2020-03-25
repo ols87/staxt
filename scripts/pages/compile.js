@@ -29,8 +29,9 @@ function compile(path = args.p) {
 
   const output = `${paths.dist.base}/${outPath}/index.html`;
 
-  if (!template) {
-    logger("red", `Cannot get template name for ${page}`);
+  if (!fs.existsSync(template)) {
+    logger("red", `Cannot reslove template file path for ${page} page`);
+    process.exit();
   }
 
   const contents = fs.readFileSync(template, "utf8");

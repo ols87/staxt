@@ -26,13 +26,19 @@ function watch(server) {
     .on("all", (event, path) => {
       if (event == "add" || event == "change") {
         const isPage = path.indexOf("pages") > -1;
+        const isTemplate = path.indexOf("templates") > -1;
 
         let type = path.split("/");
         type = type[type.length - 1];
         type = type.split(".").pop();
 
-        if (isPage && type === "js") {
-          compiler.page(path);
+        if (type === "js") {
+          if (isPage) {
+            compiler.page(path);
+          }
+          if (isTemplate) {
+            compile();
+          }
         } else {
           compiler[type]();
         }

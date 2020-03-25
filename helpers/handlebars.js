@@ -5,15 +5,21 @@ const glob = require("./glob");
 const paths = require("./paths");
 
 module.exports = function() {
-  const includes = glob({
-    dir: paths.src.includes,
+  let includes = glob({
+    dir: paths.src.templates,
     includes: ".hbs"
   });
 
+  includes = includes.filter(include => include.indexOf("includes") > -1);
+
   includes.forEach(include => {
     contents = fs.readFileSync(include, "utf8");
-    let name = include.replace(`${paths.src.includes}/`, "");
-    name = name.replace(".hbs", "");
+    let name = include.replace(`${paths.src.templates}/`, "");
+    name = name.replace(`includes/`, "").replace(".hbs", "");
+    let path = name.split("/");
+    if (path[path.length - 1] === path[path.length - 2]) {
+      name = name.substr(0, name.lastIndexOf("/"));
+    }
     handlebars.registerPartial(name, contents);
   });
 
