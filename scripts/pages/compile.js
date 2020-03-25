@@ -13,8 +13,6 @@ function compile(path = args.p) {
 
   delete require.cache[require.resolve(dataPath)];
 
-  const template = `${paths.src.templates}/${data.template}.hbs`;
-
   const page = path.split("/").pop();
 
   if (Object.keys(data).length < 1) {
@@ -29,12 +27,18 @@ function compile(path = args.p) {
 
   const output = `${paths.dist.base}/${outPath}/index.html`;
 
+  let template = `${paths.src.templates}/${data.template}`;
+
   if (!fs.existsSync(template)) {
     logger("red", `Cannot reslove template file path for ${page} page`);
     process.exit();
   }
 
-  const contents = fs.readFileSync(template, "utf8");
+  if (fs.lstatSync(template).isDirectory()) {
+    template = `${template}/${data.template}`;
+  }
+
+  const contents = fs.readFileSync(`${template}.hbs`, "utf8");
 
   if (!contents) {
     logger("red", `${page} is referencing an inavlid or empty template`);
