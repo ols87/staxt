@@ -35,7 +35,7 @@ function compile(path = args.p) {
   }
 
   if (fs.lstatSync(template).isDirectory()) {
-    template = `${template}/${data.template}`;
+    template = `${template}/${data.template.split("/").pop()}`;
   }
 
   const contents = fs.readFileSync(`${template}.hbs`, "utf8");
