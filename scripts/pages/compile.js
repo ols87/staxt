@@ -51,7 +51,9 @@ function compile(path = args.p) {
 }
 
 module.exports = function(path = args.p) {
-  if (path) {
+  const isFolder = path ? path.indexOf("/*") > 0 : false;
+
+  if (path && !isFolder) {
     timer.start();
 
     compile(path);
@@ -63,8 +65,16 @@ module.exports = function(path = args.p) {
     return;
   }
 
+  let globFolder = paths.src.pages;
+  let folderName;
+
+  if (isFolder) {
+    folderName = path.replace("/*", "");
+    globFolder = `${paths.src.pages}/${folderName}`;
+  }
+
   const pages = glob({
-    dir: paths.src.pages,
+    dir: globFolder,
     includes: ".js",
     excludes: ".data."
   });
@@ -78,6 +88,7 @@ module.exports = function(path = args.p) {
   });
 
   timer.end().then(seconds => {
-    logger("green", `All pages compiled in ${seconds} seconds`);
+    const msg = isFolder ? folderName : "All";
+    logger("green", `${msg} pages compiled in ${seconds} seconds`);
   });
 };

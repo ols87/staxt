@@ -1,39 +1,46 @@
-const fs = require('fs-extra');
-const args = require('yargs').argv;
+const fs = require("fs-extra");
+const args = require("yargs").argv;
 
-const compile = require('./compile');
+const compile = require("./compile");
 
-const paths = require('../../helpers/paths');
-const timer = require('../../helpers/timer')();
-const logger = require('../../helpers/logger');
-const templates = require('../../helpers/templates')();
+const paths = require("../../helpers/paths");
+const timer = require("../../helpers/timer")();
+const logger = require("../../helpers/logger");
+const checkNested = require("../../helpers/nested");
+const templates = require("../../helpers/templates")();
 
-const add = function (template = args.t) {
+const add = function(template = args.t) {
   if (!template) {
     return templates.noArg().then(res => {
-      if (res.choice === 'Create new') {
+      if (res.choice === "Create new") {
         return templates.create().then(res => {
-          if (res.name !== '') {
+          if (res.name !== "") {
             const placeholder = `${__staxt}/files/default.hbs`;
             const newPath = `${paths.src.templates}/${res.name}.hbs`;
-            this.template = res.name;
             fs.copySync(placeholder, newPath);
             return add(res.name);
           }
-          logger('red', `Please enter a template name`);
+          logger("red", `Please enter a template name`);
         });
       }
+
+      let choice = `${paths.src.templates}/${res.choice}`;
+
+      if (fs.lstatSync(choice).isDirectory()) {
+        res.choice = `${res.choice}/${res.choice}`;
+      }
+
       add(res.choice);
     });
   }
 
-  const templatePath = `${paths.src.templates}/${template}.hbs`;
+  const templatePath = `${paths.src.templates}/${template}`;
 
-  if (!fs.existsSync(templatePath)) {
+  if (!fs.existsSync(`${templatePath}.hbs`)) {
     return templates.noFile().then(res => {
-      if (res.create) return fs.ensureFileSync(templatePath);
-      logger('blue', `skipping template. using default`);
-      add('default');
+      if (res.create) return fs.ensureFileSync(`${templatePath}.hbs`);
+      logger("blue", `skipping template. using default`);
+      add("default");
     });
   }
 
@@ -43,9 +50,8 @@ const add = function (template = args.t) {
   const outPath = `${paths.src.pages}/${filePath}`;
 
   let data = JSON.stringify({
-    template: template
-  }).replace(/"([^"]+)":/g, '$1:');
-
+    template: checkNested(template)
+  }).replace(/"([^"]+)":/g, "$1:");
 
   timer.start();
 
@@ -57,10 +63,10 @@ const add = function (template = args.t) {
   fs.ensureFileSync(scssFile);
 
   timer.end().then(seconds => {
-    logger('green', `${page} page src files created in ${seconds} seconds`);
+    logger("green", `${page} page src files created in ${seconds} seconds`);
   });
 
   compile(filePath);
-}
+};
 
 module.exports = add;

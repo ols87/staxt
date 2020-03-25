@@ -3,6 +3,7 @@ const handlebars = require("handlebars");
 
 const glob = require("./glob");
 const paths = require("./paths");
+const checkNested = require("./nested");
 
 module.exports = function() {
   let includes = glob({
@@ -16,10 +17,7 @@ module.exports = function() {
     contents = fs.readFileSync(include, "utf8");
     let name = include.replace(`${paths.src.templates}/`, "");
     name = name.replace(`includes/`, "").replace(".hbs", "");
-    let path = name.split("/");
-    if (path[path.length - 1] === path[path.length - 2]) {
-      name = name.substr(0, name.lastIndexOf("/"));
-    }
+    name = checkNested(name);
     handlebars.registerPartial(name, contents);
   });
 
