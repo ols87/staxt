@@ -11,6 +11,8 @@ function compile(path = args.p) {
   const dataPath = `${paths.src.pages}/${path}.js`;
   const data = require(dataPath);
 
+  delete require.cache[require.resolve(dataPath)];
+
   const template = `${paths.src.templates}/${data.template}.hbs`;
 
   const page = path.split("/").pop();
@@ -27,6 +29,10 @@ function compile(path = args.p) {
 
   const output = `${paths.dist.base}/${outPath}/index.html`;
 
+  if (!template) {
+    logger("red", `Cannot get template name for ${page}`);
+  }
+
   const contents = fs.readFileSync(template, "utf8");
 
   if (!contents) {
@@ -37,8 +43,6 @@ function compile(path = args.p) {
   const compile = handlebars().compile(contents);
   const html = compile(data);
   fs.outputFileSync(output, html);
-
-  delete require.cache[require.resolve(dataPath)];
 }
 
 module.exports = function(path = args.p) {
