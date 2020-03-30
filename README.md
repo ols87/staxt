@@ -56,7 +56,7 @@ Removes page src files.
 ### compile
 ```npx staxt compile -p=some/page/path```
 
-Compiles a single page when using ```-p``` and compiles a folder and all child pages when using wilcard e.g. ```-p=some/path/*```. Compiles all pages when no ```-p``` argument is given.
+Compiles a single page when using ```-p```. Compiles a folder and all child pages when using wilcard e.g. ```-p=some/path/*```. Compiles all pages when no ```-p``` argument is given.
 
 Called by:
 - ```npx staxt add -p=some/path``` after src files are created.
