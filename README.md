@@ -33,4 +33,4 @@ Creates a new prject with the following folder structure
 ```
 npx staxt serve
 ```
-Starts a browsersync server on port :3000  and opens browser. use argument ```-q``` to prevent browser from opening
+Starts a browsersync server on port ```:3000```  and opens browser. use argument ```-q``` to prevent browser from opening
