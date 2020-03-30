@@ -10,7 +10,21 @@ npm i staxt
 ```
 npx staxt init
 ```
-creates a new prject with the following folder structure
+Creates a new prject with the following folder structure
 ```
-
+-src
+  -assets
+    -scss
+      -main.scss
+    -js
+     -main.js
+  -templates
+    -includes
+      -header.hbs
+      -footer.hbs
+-dist
+  -assets
+    -main.js
+    -main.css
+    -images
 ```
