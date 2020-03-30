@@ -29,8 +29,14 @@ Creates a new prject with the following folder structure
     /main.css
     /images
 ```
+
 ### serve
 ```
 npx staxt serve
 ```
 Starts a browsersync server on port ```:3000```  and opens browser. use argument ```-q``` to prevent browser from opening
+### watch
+```
+npx staxt watch
+```
+watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automically when running ```npx staxt serve``` 
