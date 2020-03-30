@@ -45,4 +45,8 @@ Watches all files for changes. calls the relevant compiler depending on the type
 Adds a new page and runs the ```compile```function. ```-t``` argument is optional. If no ```-t``` argument you will be prompted to choose an exsisting template or create a new template.
 ### remove
 ```npx staxt remove -p=some/page/path```
-Removes a page src files
+Removes page src files
+### compile
+```npx staxt compile -p=some/page/path```
+Compiles a single page when using ```-p``` and compiles a folder and all child pages when using wilcard e.g. ```-p=some/path/*```. Compiles all pages when no ```-p``` argument is given.
+
