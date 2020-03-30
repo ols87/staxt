@@ -82,5 +82,12 @@ Compile scss src files. The entry point files is main.scss. All imports must be 
 Called by:
 - ```npx staxt watch``` when images are added/deleted/saved.
 - ```npx staxt bundle```
-### bundle
 
+### bundle
+Bundles all src files. 
+
+Calls:
+```npx staxt compile```
+```npx staxt images```
+```npx staxt scss```
+```npx staxt js```
