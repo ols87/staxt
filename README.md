@@ -7,24 +7,30 @@ npm i staxt
 ```
 
 ## Cli Usage
+### init
 ```
 npx staxt init
 ```
 Creates a new prject with the following folder structure
 ```
--src
-  -assets
-    -scss
-      -main.scss
-    -js
-     -main.js
-  -templates
-    -includes
-      -header.hbs
-      -footer.hbs
--dist
-  -assets
-    -main.js
-    -main.css
-    -images
+/src
+  /assets
+    /scss
+      /main.scss
+    /js
+     /main.js
+  /templates
+    /includes
+      /header.hbs
+      /footer.hbs
+/dist
+  /assets
+    /main.js
+    /main.css
+    /images
 ```
+### serve
+```
+npx staxt serve
+```
+Starts a browsersync server on port :3000  and opens browser. use argument ```-q``` to prevent browser from opening
