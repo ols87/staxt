@@ -1,17 +1,23 @@
 # staxt
 A minimal static site generator using Handlebars, Babel, Sass.
 
+## concept
+The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with Handlebars templates to deliver HTML. Sass is used for compiling css and Babel is used to compile javascript asset files which can be written in ES6.
+
+## WARNING
+This was meant as a personal project to practise NodeJS and morphed into an npm package. It is **NOT RECOMENDED** to use this in production. 
+
 ## install
 ```
 npm i staxt
 ```
 
-## Cli Usage
+## usage
 ### init
 ```
 npx staxt init
 ```
-Creates a new project with the following folder structur:
+Creates a new project with the following folder structure:
 ```
 /src
   /assets
@@ -34,19 +40,19 @@ Creates a new project with the following folder structur:
 ```
 npx staxt serve
 ```
-Starts a browsersync server on port ```:3000```  and opens browser. use argument ```-q``` to prevent browser from opening.
+Starts a browsersync server on port ```:3000```  and opens the browser. use argument ```-q``` to prevent the browser from opening.
 
 ### watch
 ```
 npx staxt watch
 ```
 
-Watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automically when running ```npx staxt serve```.
+Watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automatically when running ```npx staxt serve```.
 
 ### add 
 ```npx staxt add -p=some/page/path -t=template/path```
 
-Adds a new page and runs the ```compile```function. ```-t``` argument is optional. If no ```-t``` argument you will be prompted to choose an exsisting template or create a new template.
+Adds a new page and runs the ```compile```function. ```-t``` argument is optional. If no ```-t``` argument you will be prompted to choose an existing template or create a new template.
 
 ### remove
 ```npx staxt remove -p=some/page/path```
@@ -56,7 +62,7 @@ Removes page src files.
 ### compile
 ```npx staxt compile -p=some/page/path```
 
-Compiles a single page when using ```-p```. Compiles a folder and all child pages when using wilcard e.g. ```-p=some/path/*```. Compiles all pages when no ```-p``` argument is given.
+Compiles a single page when using ```-p```. Compiles a folder and all child pages when using wildcard e.g. ```-p=some/path/*```. Compiles all pages when no ```-p``` argument is given.
 
 Called by:
 - ```npx staxt add -p=some/path``` after src files are created.
@@ -66,7 +72,7 @@ Called by:
 ### js
 ```npx staxt js```
 
-Compile javscript src files. The entry point files is main.js. All imports must be included here.
+Compile javascript src files. The entry point files is main.js. All imports must be included here.
 
 Called by:
 - ```npx staxt watch``` when javascript files are added/deleted/saved.
