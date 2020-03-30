@@ -26,6 +26,7 @@ function watch(server) {
     .on("all", (event, path) => {
       if (event == "add" || event == "change") {
         const isPage = path.indexOf("pages") > -1;
+        const isImages = path.indexOf("images") > -1;
         const isTemplate = path.indexOf("templates") > -1;
 
         let type = path.split("/");
@@ -35,10 +36,13 @@ function watch(server) {
         if (type === "js") {
           if (isPage) {
             compiler.page(path);
-          }
-          if (isTemplate) {
+          } else if (isTemplate) {
             compile();
+          } else {
+            compiler.js();
           }
+        } else if (isImages) {
+          compiler.images();
         } else {
           compiler[type]();
         }
