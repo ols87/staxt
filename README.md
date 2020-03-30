@@ -39,4 +39,10 @@ Starts a browsersync server on port ```:3000```  and opens browser. use argument
 ```
 npx staxt watch
 ```
-watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automically when running ```npx staxt serve``` 
+Watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automically when running ```npx staxt serve``` 
+### add 
+```npx staxt add -p=some/page/path -t=template/path```
+Adds a new page and runs the ```compile```function. ```-t``` argument is optional. If no ```-t``` argument you will be prompted to choose an exsisting template or create a new template.
+### remove
+```npx staxt remove -p=some/page/path```
+Removes a page src files
