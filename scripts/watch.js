@@ -39,7 +39,7 @@ function watch(server) {
           } else if (isTemplate) {
             compile();
           } else {
-            compiler.js();
+            compiler.js(path);
           }
         } else if (isImages) {
           compiler.images();
