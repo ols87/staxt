@@ -66,19 +66,25 @@ Watches all files for changes. calls the relevant compiler depending on the type
 
 ### add
 
-`npx staxt add -p=some/page/path -t=template/path`
+```
+npx staxt add -p=some/page/path -t=template/path
+```
 
 Adds a new page and runs the `compile`function. `-t` argument is optional. If no `-t` argument you will be prompted to choose an existing template or create a new template.
 
 ### remove
 
-`npx staxt remove -p=some/page/path`
+```
+npx staxt remove -p=some/page/path
+```
 
 Removes page src files.
 
 ### compile
 
-`npx staxt compile -p=some/page/path`
+```
+npx staxt compile -p=some/page/path
+```
 
 Compiles a single page when using `-p`. Compiles a folder and all child pages when using wildcard e.g. `-p=some/path/*`. Compiles all pages when no `-p` argument is given.
 
@@ -90,7 +96,9 @@ Called by:
 
 ### js
 
-`npx staxt js`
+```
+npx staxt js
+```
 
 Compile javascript src files. The entry point file is main.js. All imports must be included here.
 
@@ -117,7 +125,9 @@ Called by:
 
 ### scss
 
-`npx staxt scss`
+```
+npx staxt scss
+```
 
 Compile scss src files. The entry point files is main.scss. All imports must be included here.
 
@@ -128,7 +138,9 @@ Called by:
 
 ### images
 
-`npx staxt images`
+```
+npx staxt images
+```
 
 Compile scss src files. The entry point files is main.scss. All imports must be included here.
 
@@ -138,6 +150,9 @@ Called by:
 - `npx staxt bundle`
 
 ### bundle
+```
+npx staxt bundle
+```
 
 Bundles all src files.
 
