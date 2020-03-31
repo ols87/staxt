@@ -25,9 +25,9 @@ function watch(server) {
     })
     .on("all", (event, path) => {
       if (event == "add" || event == "change") {
-        const isPage = path.indexOf("pages") > -1;
-        const isImages = path.indexOf("images") > -1;
-        const isTemplate = path.indexOf("templates") > -1;
+        const isPage = path.indexOf(paths.src.pages) > -1;
+        const isImages = path.indexOf(paths.src.assets.images) > -1;
+        const isTemplate = path.indexOf(paths.src.templates) > -1;
 
         let type = path.split("/");
         type = type[type.length - 1];
