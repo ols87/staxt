@@ -29,13 +29,15 @@ function compile(path = args.p) {
 
   let template = `${paths.src.templates}/${data.template}`;
 
-  if (!fs.existsSync(template)) {
-    logger("red", `Cannot reslove template file path for ${page} page`);
-    process.exit();
+  if (fs.existsSync(template)) {
+    if (fs.lstatSync(template).isDirectory()) {
+      template = `${template}/${data.template.split("/").pop()}`;
+    }
   }
 
-  if (fs.lstatSync(template).isDirectory()) {
-    template = `${template}/${data.template.split("/").pop()}`;
+  if (!fs.existsSync(`${template}.hbs`)) {
+    logger("red", `Cannot resolve template file path for ${page} page`);
+    process.exit();
   }
 
   const contents = fs.readFileSync(`${template}.hbs`, "utf8");
