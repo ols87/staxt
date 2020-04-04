@@ -17,8 +17,8 @@ const templateService = class {
         type: "list",
         name: "choice",
         message: `Choose a template`,
-        choices: choices
-      }
+        choices: choices,
+      },
     ]);
   }
 
@@ -28,8 +28,8 @@ const templateService = class {
         type: "confirm",
         name: "create",
         message: `${template} does not exist. Create it?`,
-        default: true
-      }
+        default: true,
+      },
     ]);
   }
 
@@ -38,8 +38,8 @@ const templateService = class {
       {
         type: "input",
         name: "name",
-        message: `Template name:`
-      }
+        message: `Template name:`,
+      },
     ]);
   }
 
@@ -49,13 +49,13 @@ const templateService = class {
 
     const templates = glob({
       dir: dir,
-      includes: ".hbs",
-      excludes: "includes"
+      includes: ".dot.html",
+      excludes: "includes",
     });
 
-    templates.forEach(path => {
+    templates.forEach((path) => {
       path = path.replace(`${dir}/`, "");
-      path = path.replace(".hbs", "");
+      path = path.replace(".dot.html", "");
 
       let name = path.split("/");
 

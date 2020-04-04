@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const args = require("yargs").argv;
 
-const handlebars = require("../../helpers/handlebars");
+const dot = require("../../helpers/dot");
 const paths = require("../../helpers/paths");
 const glob = require("../../helpers/glob");
 const timer = require("../../helpers/timer")();
@@ -35,24 +35,24 @@ function compile(path = args.p) {
     }
   }
 
-  if (!fs.existsSync(`${template}.hbs`)) {
+  if (!fs.existsSync(`${template}.dot.html`)) {
     logger("red", `Cannot resolve template file path for ${page} page`);
     process.exit();
   }
 
-  const contents = fs.readFileSync(`${template}.hbs`, "utf8");
+  const contents = fs.readFileSync(`${template}.dot.html`, "utf8");
 
   if (!contents) {
     logger("red", `${page} is referencing an inavlid or empty template`);
     process.exit();
   }
 
-  const compile = handlebars().compile(contents);
+  const compile = dot.template(contents, dot.templateSettings, dot.defs);
   const html = compile(data);
   fs.outputFileSync(output, html);
 }
 
-module.exports = function(path = args.p) {
+module.exports = function (path = args.p) {
   const isFolder = path ? path.indexOf("/*") > 0 : false;
 
   if (path && !isFolder) {
@@ -60,7 +60,7 @@ module.exports = function(path = args.p) {
 
     compile(path);
 
-    timer.end().then(seconds => {
+    timer.end().then((seconds) => {
       logger("green", `${path} page compiled in ${seconds} seconds`);
     });
 
@@ -78,18 +78,18 @@ module.exports = function(path = args.p) {
   const pages = glob({
     dir: globFolder,
     includes: ".js",
-    excludes: ".data."
+    excludes: ".data.",
   });
 
   timer.start();
 
-  pages.forEach(page => {
+  pages.forEach((page) => {
     page = page.replace(`${paths.src.pages}/`, "");
     page = page.replace(".js", "");
     compile(page);
   });
 
-  timer.end().then(seconds => {
+  timer.end().then((seconds) => {
     const msg = isFolder ? folderName : "All";
     logger("green", `${msg} pages compiled in ${seconds} seconds`);
   });

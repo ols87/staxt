@@ -9,14 +9,14 @@ const logger = require("../../helpers/logger");
 const checkNested = require("../../helpers/nested");
 const templates = require("../../helpers/templates")();
 
-const add = function(template = args.t) {
+const add = function (template = args.t) {
   if (!template) {
-    return templates.noArg().then(res => {
+    return templates.noArg().then((res) => {
       if (res.choice === "Create new") {
-        return templates.create().then(res => {
+        return templates.create().then((res) => {
           if (res.name !== "") {
-            const placeholder = `${__staxt}/files/default.hbs`;
-            const newPath = `${paths.src.templates}/${res.name}.hbs`;
+            const placeholder = `${__staxt}/files/default.dot.html`;
+            const newPath = `${paths.src.templates}/${res.name}.dot.html`;
             fs.copySync(placeholder, newPath);
             return add(res.name);
           }
@@ -36,9 +36,9 @@ const add = function(template = args.t) {
 
   const templatePath = `${paths.src.templates}/${template}`;
 
-  if (!fs.existsSync(`${templatePath}.hbs`)) {
-    return templates.noFile().then(res => {
-      if (res.create) return fs.ensureFileSync(`${templatePath}.hbs`);
+  if (!fs.existsSync(`${templatePath}.dot.html`)) {
+    return templates.noFile().then((res) => {
+      if (res.create) return fs.ensureFileSync(`${templatePath}.dot.html`);
       logger("blue", `skipping template. using default`);
       add("default");
     });
@@ -50,7 +50,7 @@ const add = function(template = args.t) {
   const outPath = `${paths.src.pages}/${filePath}`;
 
   let data = JSON.stringify({
-    template: checkNested(template)
+    template: checkNested(template),
   }).replace(/"([^"]+)":/g, "$1:");
 
   timer.start();
@@ -62,7 +62,7 @@ const add = function(template = args.t) {
   const scssFile = `${outPath}.scss`;
   fs.ensureFileSync(scssFile);
 
-  timer.end().then(seconds => {
+  timer.end().then((seconds) => {
     logger("green", `${page} page src files created in ${seconds} seconds`);
   });
 
