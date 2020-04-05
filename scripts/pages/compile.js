@@ -6,11 +6,11 @@ const paths = require("../../helpers/paths");
 const glob = require("../../helpers/glob");
 const timer = require("../../helpers/timer")();
 const logger = require("../../helpers/logger");
+const js = require("../assets/js");
 
 function compile(path = args.p) {
   const dataPath = `${paths.src.pages}/${path}.js`;
   const data = require(dataPath);
-
   delete require.cache[require.resolve(dataPath)];
 
   const page = path.split("/").pop();
@@ -35,16 +35,23 @@ function compile(path = args.p) {
     }
   }
 
-  if (!fs.existsSync(`${template}.dot.html`)) {
+  if (!fs.existsSync(`${template}.html`)) {
     logger("red", `Cannot resolve template file path for ${page} page`);
     process.exit();
   }
 
-  const contents = fs.readFileSync(`${template}.dot.html`, "utf8");
+  const contents = fs.readFileSync(`${template}.html`, "utf8");
 
   if (!contents) {
     logger("red", `${page} is referencing an inavlid or empty template`);
     process.exit();
+  }
+
+  const runtime = dataPath.replace(".js", ".runtime.js");
+
+  if (fs.existsSync(runtime)) {
+    data.runtime = true;
+    js(runtime);
   }
 
   const compile = dot.template(contents, dot.templateSettings, dot.defs);
@@ -77,8 +84,8 @@ module.exports = function (path = args.p) {
 
   const pages = glob({
     dir: globFolder,
-    includes: ".js",
-    excludes: ".data.",
+    includes: [".js"],
+    excludes: [".data.", ".runtime."],
   });
 
   timer.start();

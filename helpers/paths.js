@@ -8,12 +8,12 @@ const dist = paths.dist;
 
 const dir = {
   src: `${base}/${src.base}`,
-  dist: `${base}/${dist.base}`
+  dist: `${base}/${dist.base}`,
 };
 
 const assets = {
   src: `${dir.src}/${src.assets.base}`,
-  dist: `${dir.dist}/${dist.assets.base}`
+  dist: `${dir.dist}/${dist.assets.base}`,
 };
 
 module.exports = {
@@ -27,8 +27,8 @@ module.exports = {
       base: assets.src,
       js: `${assets.src}/${src.assets.js}`,
       scss: `${assets.src}/${src.assets.scss}`,
-      images: `${assets.src}/${src.assets.images}`
-    }
+      images: `${assets.src}/${src.assets.images}`,
+    },
   },
   dist: {
     base: dir.dist,
@@ -36,7 +36,7 @@ module.exports = {
       base: assets.dist,
       js: `${assets.dist}/${dist.assets.js}`,
       css: `${assets.dist}/${dist.assets.css}`,
-      images: `${assets.dist}/${dist.assets.images}`
-    }
-  }
+      images: `${assets.dist}/${dist.assets.images}`,
+    },
+  },
 };

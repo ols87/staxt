@@ -12,20 +12,21 @@ const compiler = {
     path = path.replace(`${paths.src.pages}/`, "").split(".")[0];
     compile(path);
   },
-  hbs: compile,
+  html: compile,
   js: js,
   scss: scss,
-  images: images
+  images: images,
 };
 
 function watch(server) {
   chokidar
     .watch(paths.src.base, {
-      ignoreInitial: true
+      ignoreInitial: true,
     })
     .on("all", (event, path) => {
       if (event == "add" || event == "change") {
-        const isPage = path.indexOf(paths.src.pages) > -1;
+        const isPage =
+          path.indexOf(paths.src.pages) > -1 && path.indexOf(".runtime.js") < 0;
         const isImages = path.indexOf(paths.src.assets.images) > -1;
         const isTemplate = path.indexOf(paths.src.templates) > -1;
 

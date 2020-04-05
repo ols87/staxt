@@ -1,24 +1,33 @@
 const fs = require("fs");
-const path = require("path");
 
-const glob = function(options) {
-  let { dir, includes = "", excludes = "", returnGlob = [] } = options;
+const test = (file, testGlob) => {
+  let match = false;
+
+  testGlob.forEach((pattern) => {
+    match = file.indexOf(pattern) > 1;
+  });
+
+  return match;
+};
+
+const glob = function (options) {
+  let { dir, includes = [], excludes = [], returnGlob = [] } = options;
 
   const files = fs.readdirSync(dir);
 
-  files.forEach(function(file) {
+  files.forEach(function (file) {
     if (fs.statSync(dir + "/" + file).isDirectory()) {
       returnGlob = glob({
         dir: `${dir}/${file}`,
         returnGlob,
         includes,
-        excludes
+        excludes,
       });
     } else {
       const hasInc = includes !== "";
       const hasExc = excludes !== "";
-      const isInc = hasInc && file.indexOf(includes) > -1;
-      const isExc = hasExc && file.indexOf(excludes) > -1;
+      const isInc = hasInc && test(file, includes);
+      const isExc = hasExc && test(file, excludes);
 
       if (!hasInc || (isInc && !isExc)) {
         returnGlob.push(`${dir}/${file}`);
@@ -29,6 +38,6 @@ const glob = function(options) {
   return returnGlob;
 };
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return glob(options);
 };

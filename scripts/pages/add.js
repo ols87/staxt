@@ -15,8 +15,8 @@ const add = function (template = args.t) {
       if (res.choice === "Create new") {
         return templates.create().then((res) => {
           if (res.name !== "") {
-            const placeholder = `${__staxt}/files/default.dot.html`;
-            const newPath = `${paths.src.templates}/${res.name}.dot.html`;
+            const placeholder = `${__staxt}/files/default.html`;
+            const newPath = `${paths.src.templates}/${res.name}.html`;
             fs.copySync(placeholder, newPath);
             return add(res.name);
           }
@@ -36,9 +36,9 @@ const add = function (template = args.t) {
 
   const templatePath = `${paths.src.templates}/${template}`;
 
-  if (!fs.existsSync(`${templatePath}.dot.html`)) {
+  if (!fs.existsSync(`${templatePath}.html`)) {
     return templates.noFile().then((res) => {
-      if (res.create) return fs.ensureFileSync(`${templatePath}.dot.html`);
+      if (res.create) return fs.ensureFileSync(`${templatePath}.html`);
       logger("blue", `skipping template. using default`);
       add("default");
     });

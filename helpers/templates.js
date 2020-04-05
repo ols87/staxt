@@ -49,13 +49,13 @@ const templateService = class {
 
     const templates = glob({
       dir: dir,
-      includes: ".dot.html",
-      excludes: "includes",
+      includes: [".html"],
+      excludes: ["includes"],
     });
 
     templates.forEach((path) => {
       path = path.replace(`${dir}/`, "");
-      path = path.replace(".dot.html", "");
+      path = path.replace(".html", "");
 
       let name = path.split("/");
 

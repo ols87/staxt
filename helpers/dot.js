@@ -1,8 +1,9 @@
 const fs = require("fs-extra");
 const paths = require("./paths");
 const dot = require("dot");
+const config = require("./config");
 
-dot.templateSettings = {
+dot.templateSettings = config.templateSettings || {
   evaluate: /\{\{([\s\S]+?)\}\}/g,
   interpolate: /\{\{=([\s\S]+?)\}\}/g,
   encode: /\{\{!([\s\S]+?)\}\}/g,
@@ -10,15 +11,17 @@ dot.templateSettings = {
   define: /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
   conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
   iterate: /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-  varname: "it",
+  varname: "xt",
   strip: false,
   append: true,
   selfcontained: false,
 };
 
 dot.defs = {
-  include: (path) => {
-    return fs.readFileSync(`${paths.src.templates}/${path}.dot.html`, "utf8");
+  staxt: {
+    include: (path) => {
+      return fs.readFileSync(`${paths.src.templates}/${path}.html`, "utf8");
+    },
   },
 };
 
