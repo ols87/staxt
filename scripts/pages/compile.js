@@ -1,57 +1,28 @@
-const fs = require("fs-extra");
-const args = require("yargs").argv;
+const fs = require('fs-extra');
+const args = require('yargs').argv;
 
-const dot = require("../../helpers/dot");
-const paths = require("../../helpers/paths");
-const glob = require("../../helpers/glob");
-const timer = require("../../helpers/timer")();
-const logger = require("../../helpers/logger");
-const js = require("../assets/js");
+const dot = require('../../helpers/dot');
+const _page = require('../../helpers/page');
+const paths = require('../../helpers/paths');
+const glob = require('../../helpers/glob');
+const timer = require('../../helpers/timer')();
+const logger = require('../../helpers/logger');
 
 function compile(path = args.p) {
-  const dataPath = `${paths.src.pages}/${path}.js`;
-  const data = require(dataPath);
-  delete require.cache[require.resolve(dataPath)];
+  const { name, data, dist } = _page(path);
 
-  const page = path.split("/").pop();
+  const output = `${paths.dist.base}/${dist}/index.html`;
 
-  if (Object.keys(data).length < 1) {
-    logger("red", `${page} data is invalid or not exported`);
-  }
-
-  let outPath = page === "index" ? "/" : path.replace(`/${page}`, "");
-
-  if (data.slug) {
-    outPath = data.slug.replace(/\/+$/, "");
-  }
-
-  const output = `${paths.dist.base}/${outPath}/index.html`;
-
-  let template = `${paths.src.templates}/${data.template}`;
-
-  if (fs.existsSync(template)) {
-    if (fs.lstatSync(template).isDirectory()) {
-      template = `${template}/${data.template.split("/").pop()}`;
-    }
-  }
-
-  if (!fs.existsSync(`${template}.html`)) {
-    logger("red", `Cannot resolve template file path for ${page} page`);
+  if (!fs.existsSync(`${data.template}.html`)) {
+    logger('red', `Cannot resolve template file path for ${name} page`);
     process.exit();
   }
 
-  const contents = fs.readFileSync(`${template}.html`, "utf8");
+  const contents = fs.readFileSync(`${data.template}.html`, 'utf8');
 
   if (!contents) {
-    logger("red", `${page} is referencing an inavlid or empty template`);
+    logger('red', `${name} is referencing an inavlid or empty template`);
     process.exit();
-  }
-
-  const runtime = dataPath.replace(".js", ".runtime.js");
-
-  if (fs.existsSync(runtime)) {
-    data.runtime = true;
-    js(runtime);
   }
 
   const compile = dot.template(contents, dot.templateSettings, dot.defs);
@@ -60,7 +31,7 @@ function compile(path = args.p) {
 }
 
 module.exports = function (path = args.p) {
-  const isFolder = path ? path.indexOf("/*") > 0 : false;
+  const isFolder = path ? path.indexOf('/*') > 0 : false;
 
   if (path && !isFolder) {
     timer.start();
@@ -68,7 +39,7 @@ module.exports = function (path = args.p) {
     compile(path);
 
     timer.end().then((seconds) => {
-      logger("green", `${path} page compiled in ${seconds} seconds`);
+      logger('green', `${path} page compiled in ${seconds} seconds`);
     });
 
     return;
@@ -78,26 +49,25 @@ module.exports = function (path = args.p) {
   let folderName;
 
   if (isFolder) {
-    folderName = path.replace("/*", "");
+    folderName = path.replace('/*', '');
     globFolder = `${paths.src.pages}/${folderName}`;
   }
 
   const pages = glob({
     dir: globFolder,
-    includes: [".js"],
-    excludes: [".data.", ".runtime."],
+    includes: ['.js'],
   });
 
   timer.start();
 
   pages.forEach((page) => {
-    page = page.replace(`${paths.src.pages}/`, "");
-    page = page.replace(".js", "");
-    compile(page);
+    page = page.replace(`${paths.src.pages}/`, '');
+    const path = page.replace('.js', '');
+    compile(path);
   });
 
   timer.end().then((seconds) => {
-    const msg = isFolder ? folderName : "All";
-    logger("green", `${msg} pages compiled in ${seconds} seconds`);
+    const msg = isFolder ? folderName : 'All';
+    logger('green', `${msg} pages compiled in ${seconds} seconds`);
   });
 };
