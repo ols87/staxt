@@ -1,35 +1,51 @@
 #!/usr/bin/env node
+
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-global.__staxt = `${__dirname}/src`;
+global.__staxt = `${__dirname}/app`;
 
-const staxt = {
+const cli = {
   dev: ['init', 'serve', 'watch', 'bundle'],
   template: ['add', 'remove', 'scripts', 'styles'],
   page: ['add', 'remove', 'scripts', 'styles'],
-  assets: ['images', 'scripts', 'styles'],
+  assets: ['images', 'libs', 'scripts', 'styles'],
 };
 
-const type = args._[0];
-const script = args._[1];
+const modules = Object.entries(cli);
 
-const typeProvided = staxt.hasOwnProperty(type);
-const staxtKeys = Object.entries(staxt);
+let type = args._[0];
+let script = args._[1];
 
-let path = `${type}/${script}`;
+if (!type) return;
 
-if (!typeProvided) {
-  for (let [key] of staxtKeys) {
-    let hasType = staxt[key].indexOf(type) > -1;
-    let keyMatch = args.hasOwnProperty(key.charAt(0));
+let matches = [];
 
-    if (hasType && keyMatch) {
-      path = `${key}/${type}`;
+if (!script) {
+  script = type;
+  type = null;
+
+  for (let [key, value] of modules) {
+    let arg = key.charAt(0);
+
+    if (!type && value.indexOf(script) > -1) {
+      matches.push(key);
+    }
+
+    if (args.hasOwnProperty(arg)) {
+      type = key;
+      matches = [];
     }
   }
 }
 
-if (fs.existsSync(`${__staxt}/${path}.js`)) {
-  require(`./src/${path}`)();
+if (matches.length === 1) {
+  type = matches[0];
+}
+
+const file = `${type}/${script}`;
+const path = `${__staxt}/${file}`;
+
+if (fs.existsSync(`${path}.js`)) {
+  require(`${path}`)();
 }

@@ -2,11 +2,11 @@ const fs = require('fs-extra');
 const sass = require('sass');
 const args = require('yargs').argv;
 
-const paths = require('../../helpers/paths');
-const timer = require('../../helpers/timer')();
-const logger = require('../../helpers/logger');
+const paths = require('../helpers/paths');
+const timer = require('../helpers/timer');
+const logger = require('../helpers/logger');
 
-module.exports = function (path = args.f, outPath = args.o) {
+module.exports = function (path = args.a, outPath = args.o) {
   const src = paths.src.assets.scss;
   const dist = paths.dist.assets.css;
 
@@ -30,6 +30,6 @@ module.exports = function (path = args.f, outPath = args.o) {
   );
 
   timer.end().then((seconds) => {
-    logger('green', `SCSS compiled in ${seconds} seconds`);
+    logger('green', `scss compiled in ${seconds} seconds`);
   });
 };

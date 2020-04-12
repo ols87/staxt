@@ -1,11 +1,10 @@
 const fs = require('fs-extra');
 // const bundle = require('./bundle');
 const paths = require('../helpers/paths');
-const timer = require('../helpers/timer')();
+const timer = require('../helpers/timer');
 const logger = require('../helpers/logger');
 
 module.exports = () => {
-  console.log(1);
   const dirs = [
     paths.src.assets.base,
     paths.src.assets.images,

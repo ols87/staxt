@@ -5,11 +5,11 @@ const paths = require('../helpers/paths');
 const timer = require('../helpers/timer');
 const logger = require('../helpers/logger');
 
-module.exports = (path = args.t) => {
-  const src = paths.src.templates;
-  const js = paths.dist.assets.js;
-  const css = paths.dist.assets.css;
+const src = paths.src.templates;
+const js = paths.dist.assets.js;
+const css = paths.dist.assets.css;
 
+module.exports = (path = args.t) => {
   if (!path) {
     return logger('red', 'Please provide a template path e.g. -t=some/path');
   }

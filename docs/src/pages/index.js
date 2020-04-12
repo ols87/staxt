@@ -1,5 +1,5 @@
 const data = {
-  template: "default"
+  template: 'default',
 };
 
 module.exports = data;
