@@ -9,7 +9,7 @@ module.exports = (path = args.p) => {
   const page = _page(path);
 
   const name = page.name;
-  const file = `${page.filePath}.scripts.js`;
+  const file = `${page.filePath}.js`;
   const outFile = `${page.outPath}/scripts.js`;
 
   if (!fs.existsSync(file)) {

@@ -9,8 +9,8 @@ module.exports = (path = args.p) => {
     type: 'page',
     outPut: (file) => {
       const data = `module.exports = {}`;
-      fs.outputFileSync(`${file}.js`, data);
-      fs.ensureFileSync(`${file}.scripts.js`);
+      fs.outputFileSync(`${file}.xt.js`, data);
+      fs.ensureFileSync(`${file}.js`);
       fs.ensureFileSync(`${file}.scss`);
     },
   });
