@@ -7,6 +7,10 @@ const src = paths.src;
 const dist = paths.dist.base;
 
 module.exports = (path) => {
+  if (!path) {
+    return logger('red', `Please provide a page path e.g. -p=some/path`);
+  }
+
   const name = path.split('/').pop();
 
   const filePath = `${src.pages}/${path}/${name}`;

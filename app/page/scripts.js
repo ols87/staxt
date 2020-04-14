@@ -6,11 +6,8 @@ const _page = require('../helpers/page');
 const logger = require('../helpers/logger');
 
 module.exports = (path = args.p) => {
-  if (!path) {
-    return logger('red', `Please provide a page path e.g. -p=some/path`);
-  }
-
   const page = _page(path);
+
   const name = page.name;
   const file = `${page.filePath}.scripts.js`;
   const outFile = `${page.outPath}/scripts.js`;
