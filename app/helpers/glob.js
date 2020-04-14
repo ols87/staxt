@@ -10,7 +10,7 @@ const test = (file, testGlob) => {
   return match;
 };
 
-module.exports = (options) => {
+const glob = (options) => {
   let { dir, includes = [], excludes = [], returnGlob = [] } = options;
 
   const files = fs.readdirSync(dir);
@@ -37,3 +37,5 @@ module.exports = (options) => {
 
   return returnGlob;
 };
+
+module.exports = glob;

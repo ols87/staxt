@@ -2,14 +2,14 @@ const fs = require('fs-extra');
 const args = require('yargs').argv;
 
 const dot = require('../../helpers/dot');
-const _page = require('../../helpers/page');
+const page = require('../../helpers/page');
 const paths = require('../../helpers/paths');
 const glob = require('../../helpers/glob');
 const timer = require('../../helpers/timer')();
 const logger = require('../../helpers/logger');
 
 function compile(path = args.p) {
-  const { name, data, dist } = _page(path);
+  const { name, data, dist } = page(path);
 
   const output = `${paths.dist.base}/${dist}/index.html`;
 

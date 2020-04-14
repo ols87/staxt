@@ -12,7 +12,7 @@ module.exports = (path = args.p) => {
   const page = _page(path);
 
   if (!fs.existsSync(`${src}/${path}`)) {
-    return logger('red', `${name} page does not exist`);
+    return logger('red', `${page.name} page does not exist`);
   }
 
   timer.start();

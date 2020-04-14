@@ -9,9 +9,9 @@
 
     <link rel="stylesheet" type="text/css" href="/assets/main.css" />
 
-    {{? xt.styles.template }}
-    <link rel="stylesheet" type="text/css" href="{{xt.styles.template}}.css" />
-    {{?}} {{? xt.styles.page }}
+    {{? xt.templateStyles }}
+    <link rel="stylesheet" type="text/css" href="{{xt.templateStyles}}.css" />
+    {{?}} {{? xt.hasStyles }}
     <link rel="stylesheet" type="text/css" href="style.css" />
     {{?}}
   </head>
@@ -24,9 +24,9 @@
 
   <script src="/assets/main.js"></script>
 
-  {{? xt.scripts.template }}
-  <script src="{{xt.scripts.template}}.js"></script>
-  {{?}} {{? xt.scripts.page }}
+  {{? xt.templateScripts }}
+  <script src="{{xt.templateScripts}}.js"></script>
+  {{?}} {{? xt.hasScripts }}
   <script src="scripts.js"></script>
   {{?}}
 </html>
