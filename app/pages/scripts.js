@@ -1,9 +1,8 @@
-const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const scripts = require('../helpers/scripts');
 const _page = require('../helpers/page');
-const logger = require('../helpers/logger');
+const scripts = require('../helpers/scripts');
+const exists = require('../helpers/exists');
 
 const compile = require('./compile');
 
@@ -14,15 +13,11 @@ module.exports = (path = args.p) => {
   const file = `${page.filePath}.js`;
   const outFile = `${page.outPath}/scripts.js`;
 
-  if (!fs.existsSync(file)) {
-    return logger('red', `${name} js does not exist`);
-  }
+  if (!exists(name, file)) return;
 
-  if (!fs.readFileSync(file, 'utf8')) return;
-
-  scripts({ file, name, outFile });
+  scripts({ name, file, outFile });
 
   if (!page.hasScripts) {
-    compile(path);
+    compile(name);
   }
 };

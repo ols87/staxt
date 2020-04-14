@@ -6,7 +6,7 @@ const timer = require('../helpers/timer');
 const logger = require('../helpers/logger');
 
 module.exports = (args) => {
-  const { file, outFile } = args;
+  const { name, file, outFile } = args;
 
   timer.start();
 
@@ -24,7 +24,7 @@ module.exports = (args) => {
       fs.writeFileSync(outFile, result.css);
 
       timer.end().then((seconds) => {
-        logger('green', `scss compiled in ${seconds} seconds`);
+        logger('green', `${name} scss compiled in ${seconds} seconds`);
       });
     }
   );

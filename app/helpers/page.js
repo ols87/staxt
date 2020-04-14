@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const paths = require('./paths');
 const logger = require('./logger');
 const config = require('./config');
+const exists = require('./exists');
 
 const extension = config.dot.templateSettings.varname;
 
@@ -11,7 +12,8 @@ const dist = paths.dist.base;
 
 module.exports = (path) => {
   if (!path) {
-    return logger('red', `Please provide a page path e.g. -p=some/path`);
+    logger('red', `Please provide a page path e.g. -p=some/path`);
+    process.exit();
   }
 
   const name = path.split('/').pop();
@@ -24,28 +26,20 @@ module.exports = (path) => {
 
   const dataPath = `${filePath}.${extension}.js`;
 
-  if (!fs.existsSync(dataPath)) {
-    return logger('red', `${name} does not exist`);
+  if (!exists(name, dataPath)) {
+    return false;
   }
 
   const data = require(dataPath);
   delete require.cache[require.resolve(dataPath)];
+
+  data.name = name;
 
   let outPath = path.replace(`/${name}`, '');
   outPath = data.slug ? `${dist}/${data.slug}` : `${dist}/${path}`;
 
   if (name === 'index') {
     outPath = dist;
-  }
-
-  let template = `${src.templates}/${data.template}`;
-
-  data.templateName = data.template.split('/').pop();
-
-  if (fs.existsSync(template)) {
-    if (fs.lstatSync(template).isDirectory()) {
-      data.templatePath = `${template}/${data.templateName}`;
-    }
   }
 
   const scss = `${filePath}.scss`;
@@ -58,7 +52,16 @@ module.exports = (path) => {
     data.pageScripts = fs.readFileSync(js, 'utf8') ? true : false;
   }
 
-  data.name = name;
+  let template = `${src.templates}/${data.template}`;
+
+  data.templateName = data.template.split('/').pop();
+
+  if (fs.existsSync(template)) {
+    if (fs.lstatSync(template).isDirectory()) {
+      data.templatePath = `${template}/${data.templateName}`;
+    }
+  }
+
   data.filePath = filePath;
   data.outPath = outPath;
 

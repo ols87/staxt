@@ -9,7 +9,7 @@ const extension = config.dot.templateSettings.varname;
 module.exports = (path = args.p) => {
   add({
     path: path,
-    type: 'page',
+    type: 'pages',
     outPut: (file) => {
       const data = `module.exports = {\r\ntemplate: '${config.defaultTemplate}'\r\n}`;
 

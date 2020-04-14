@@ -6,7 +6,7 @@ const paths = require('../helpers/paths');
 
 module.exports = (args) => {
   const { path, type, outPut } = args;
-  const src = paths.src[`${type}s`];
+  const src = paths.src[type];
 
   if (!path) {
     return logger(
@@ -17,8 +17,14 @@ module.exports = (args) => {
 
   const name = path.split('/').pop();
 
+  if (name === 'index') {
+    if (fs.existsSync(`${src}/index.xt.js`)) {
+      return logger('red', `index page already exists`);
+    }
+  }
+
   if (fs.existsSync(`${src}/${path}`)) {
-    return logger('red', `${name} ${type} already exists`);
+    return logger('red', `${name} ${type.slice(0, -1)} already exists`);
   }
 
   const file = `${src}/${path}/${name}`;
@@ -28,6 +34,9 @@ module.exports = (args) => {
   outPut(file);
 
   timer.end().then((seconds) => {
-    logger('green', `${name} ${type} created in ${seconds} seconds`);
+    logger(
+      'green',
+      `${name} ${type.slice(0, -1)} created in ${seconds} seconds`
+    );
   });
 };

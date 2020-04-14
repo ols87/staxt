@@ -7,8 +7,8 @@ global.__staxt = `${__dirname}/app`;
 
 const cli = {
   dev: ['init', 'serve', 'watch', 'bundle'],
-  template: ['add', 'remove', 'scripts', 'styles'],
-  page: ['add', 'remove', 'scripts', 'styles', 'compile'],
+  templates: ['add', 'remove', 'scripts', 'styles'],
+  pages: ['add', 'remove', 'scripts', 'styles', 'compile'],
   assets: ['images', 'libs', 'scripts', 'styles'],
 };
 
@@ -47,5 +47,5 @@ const file = `${type}/${script}`;
 const path = `${__staxt}/${file}`;
 
 if (fs.existsSync(`${path}.js`)) {
-  require(`${path}`)();
+  require(path)();
 }

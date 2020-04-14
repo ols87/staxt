@@ -6,12 +6,9 @@ const add = require('../helpers/add');
 module.exports = (path = args.t) => {
   add({
     path: path,
-    type: 'template',
+    type: 'templates',
     outPut: (file) => {
-      const html = `${__staxt}/files/template.html`;
-      const template = `${file}.html`;
-      fs.copySync(html, template);
-
+      fs.ensureFileSync(`${file}.html`);
       fs.ensureFileSync(`${file}.js`);
       fs.ensureFileSync(`${file}.scss`);
     },

@@ -21,7 +21,7 @@ module.exports = {
   src: {
     base: dir.src,
     templates: `${dir.src}/${src.templates}`,
-    includes: `${dir.src}/${src.includes}`,
+    includes: `${dir.src}/${src.templates}/${src.includes}`,
     pages: `${dir.src}/${src.pages}`,
     assets: {
       base: assets.src,

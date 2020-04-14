@@ -8,7 +8,8 @@ const dist = paths.dist.assets.js;
 
 module.exports = (path) => {
   if (!path) {
-    return logger('red', `Please provide a template path e.g. -t=some/path`);
+    logger('red', `Please provide a template path e.g. -t=some/path`);
+    process.exit();
   }
 
   const name = path.split('/').pop();

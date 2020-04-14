@@ -2,36 +2,23 @@ const fs = require('fs-extra');
 
 const _page = require('./page');
 const dot = require('./dot');
-const logger = require('./logger');
+const exists = require('./exists');
 
 module.exports = (path) => {
   const page = _page(path);
 
+  if (!page) return false;
+
   const output = `${page.outPath}/index.html`;
+  const templatePath = `${page.templatePath}.html`;
 
-  if (!fs.existsSync(`${page.templatePath}.html`)) {
-    logger('red', `Cannot resolve template file path for ${name} page`);
-    process.exit();
-  }
+  if (!exists(page.templateName, templatePath)) return false;
 
-  const template = fs.readFileSync(`${page.templatePath}.html`, 'utf8');
-
-  if (!template) {
-    logger('red', `${page.name} is referencing an inavlid or empty template`);
-    process.exit();
-  }
-
-  const scss = `${page.filePath}.scss`;
-  if (fs.existsSync(scss)) {
-    page.hasStyles = fs.readFileSync(scss, 'utf8') ? true : false;
-  }
-
-  const js = `${page.filePath}.js`;
-  if (fs.existsSync(js)) {
-    page.pageScripts = fs.readFileSync(js, 'utf8') ? true : false;
-  }
+  const template = fs.readFileSync(templatePath, 'utf8');
 
   const compile = dot.template(template, dot.templateSettings, dot.defs);
 
   fs.outputFileSync(output, compile(page));
+
+  return true;
 };

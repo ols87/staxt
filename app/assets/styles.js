@@ -9,8 +9,9 @@ const src = paths.src.assets.scss;
 const dist = paths.dist.assets.css;
 
 module.exports = function (path = args.a, outPath = args.o) {
+  const name = 'main';
   const file = path || `${src}/main.scss`;
   const outFile = outPath || `${dist}/main.css`;
 
-  styles({ file, outFile });
+  styles({ name, file, outFile });
 };
