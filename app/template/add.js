@@ -8,11 +8,11 @@ module.exports = (path = args.t) => {
     path: path,
     type: 'template',
     outPut: (file) => {
-      const html = `${__staxt}/files/default.html`;
+      const html = `${__staxt}/files/template.html`;
       const template = `${file}.html`;
       fs.copySync(html, template);
 
-      fs.ensureFileSync(`${file}.scripts.js`);
+      fs.ensureFileSync(`${file}.js`);
       fs.ensureFileSync(`${file}.scss`);
     },
   });

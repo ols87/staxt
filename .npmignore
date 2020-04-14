@@ -1,5 +1,5 @@
 // .npmignore
 node_modules/
-docs/
+test/
 .git
 .gitignore

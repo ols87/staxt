@@ -1,7 +1,12 @@
 const fs = require('fs-extra');
+
+const config = require('../helpers/config');
 const paths = require('../helpers/paths');
 const timer = require('../helpers/timer');
 const logger = require('../helpers/logger');
+
+const addPage = require('../page/add');
+const addTemplate = require('../template/add');
 
 module.exports = () => {
   const dirs = [
@@ -25,6 +30,9 @@ module.exports = () => {
   files.forEach((file) => fs.ensureFileSync(file));
 
   fs.copySync(`${__staxt}/staxt.config.js`, `${paths.base}/staxt.config.js`);
+
+  addTemplate(config.defaultTemplate);
+  addPage('index');
 
   timer.end().then((seconds) => {
     logger('green', `Project init in ${seconds} seconds`);
