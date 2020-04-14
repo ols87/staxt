@@ -10,9 +10,9 @@ module.exports = () => {
     return logger('red', `Missing main.js file`);
   }
 
-  scripts({
-    name: 'main',
-    file: `${src}/main.js`,
-    outFile: `${dist}/main.js`,
-  });
+  const name = 'main';
+  const file = `${src}/main.js`;
+  const outFile = `${dist}/main.js`;
+
+  scripts({ name, file, outFile });
 };

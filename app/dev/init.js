@@ -15,7 +15,7 @@ module.exports = () => {
   ];
 
   const files = [
-    `${paths.src.templates}/default/default.js`,
+    `${paths.src.templates}/default/default.scripts.js`,
     `${paths.src.templates}/default/default.scss`,
     `${paths.src.pages}/index.scss`,
     `${paths.src.assets.scss}/main.scss`,
@@ -45,6 +45,8 @@ module.exports = () => {
   );
 
   fs.copySync(`${__staxt}/files/index.js`, `${paths.src.pages}/index.js`);
+
+  fs.ensureFileSync(`${paths.src.pages}/index.scripts.js`);
 
   // bundle();
 

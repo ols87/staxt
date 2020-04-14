@@ -23,12 +23,10 @@ module.exports = (path = args.p) => {
   timer.start();
 
   const data = require(file);
-  const slug = data.compile.slug;
-
+  const slug = data.slug;
   const distPath = slug ? `${dist}/${slug}` : `${dist}/${path}`;
 
   fs.removeSync(distPath);
-
   fs.removeSync(`${src}/${path}`);
 
   timer.end().then((seconds) => {

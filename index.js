@@ -8,7 +8,7 @@ global.__staxt = `${__dirname}/app`;
 const cli = {
   dev: ['init', 'serve', 'watch', 'bundle'],
   template: ['add', 'remove', 'scripts', 'styles'],
-  page: ['add', 'remove', 'scripts', 'styles'],
+  page: ['add', 'remove', 'scripts', 'styles', 'compile'],
   assets: ['images', 'libs', 'scripts', 'styles'],
 };
 

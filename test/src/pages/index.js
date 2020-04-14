@@ -1,5 +1,1 @@
-const data = {
-  template: 'default',
-};
-
-module.exports = data;
+module.exports = {};

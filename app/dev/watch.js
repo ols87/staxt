@@ -15,6 +15,12 @@ const dirs = {
   assets: paths.src.assets.base,
 };
 
+const types = {
+  compile: () => {},
+  scripts: () => {},
+  styles: () => {},
+};
+
 module.exports = (server) => {
   return chokidar
     .watch(paths.src.base, {
@@ -23,16 +29,21 @@ module.exports = (server) => {
     .on('all', (event, path) => {
       if (event == 'add' || event == 'change') {
         const type = path.slice(((path.lastIndexOf('.') - 1) >>> 0) + 2);
-        let compiler;
+        let dir;
 
         for (let [key, value] of Object.entries(dirs)) {
-          if (path.indexOf(value) > -1) {
-            compiler = key;
-          }
+          dir = path.indexOf(value) > -1 ? key : dir;
         }
 
-        console.log(compiler);
-
+        switch (type) {
+          case 'js':
+            break;
+          case y:
+            // code block
+            break;
+          default:
+          // code block
+        }
         if (server) {
           server.reload();
         }

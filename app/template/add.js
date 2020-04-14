@@ -12,9 +12,7 @@ module.exports = (path = args.t) => {
       const template = `${file}.html`;
       fs.copySync(html, template);
 
-      const data = `module.exports = {};`;
-      fs.outputFileSync(`${file}.js`, data);
-
+      fs.ensureFileSync(`${file}.scripts.js`);
       fs.ensureFileSync(`${file}.scss`);
     },
   });
