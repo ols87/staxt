@@ -1,6 +1,6 @@
 {
   "name": "staxt",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "description": "",
   "bin": {
     "staxt": "./index.js"
@@ -10,10 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.9.5",
-    "babel-preset-minify": "^0.5.1",
-    "babelify": "^10.0.0",
     "browser-sync": "^2.26.7",
     "browserify": "^16.5.1",
     "chalk": "^3.0.0",
