@@ -11,7 +11,8 @@ const compile = require('../compile.service');
 const extension = config.dot.templateSettings.varname;
 
 module.exports = (path = args.p) => {
-  const isFolder = path ? path.indexOf('/*') > 0 : false;
+  const hasPath = typeof path === 'string';
+  const isFolder = hasPath ? path.indexOf('/*') > 0 : false;
 
   if (path && !isFolder) {
     timer.start();
@@ -29,7 +30,7 @@ module.exports = (path = args.p) => {
   let folderName;
 
   if (isFolder) {
-    folderName = path.replace('/*', '');
+    folderName = hasPath ? path.replace('/*', '') : '';
     globFolder = `${paths.src.pages}/${folderName}`;
   }
 

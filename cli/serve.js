@@ -1,19 +1,24 @@
 const args = require('yargs').argv;
 
-const watch = require('./watch');
-const bundle = require('./bundle');
-
+const watch = require('../helpers/watch');
 const paths = require('../helpers/paths');
 
 module.exports = () => {
-  bundle();
+  // bundle();
 
   const server = require('browser-sync').create();
 
-  server.init({
-    server: paths.dist.base,
-    open: !args.q,
-  });
+  if (!args.w) {
+    server.init({
+      server: paths.dist.base,
+      open: !args.q,
+    });
+  }
 
-  watch(server);
+  server.watch(paths.src.base, { ignoreInitial: true }, (event, path) => {
+    if (event === 'add' || event === 'change') {
+      watch(path);
+      server.reload();
+    }
+  });
 };

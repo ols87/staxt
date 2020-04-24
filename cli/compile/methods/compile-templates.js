@@ -1,14 +1,11 @@
 const args = require('yargs').argv;
 
-const config = require(`${__staxt}/helpers/config`);
 const paths = require(`${__staxt}/helpers/paths`);
 const glob = require(`${__staxt}/helpers/glob`);
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
 const compile = require('../compile.service');
-
-const extension = config.dot.templateSettings.varname;
 
 module.exports = (path = args.t) => {
   if (typeof path === 'string') {
