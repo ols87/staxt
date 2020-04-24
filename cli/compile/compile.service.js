@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
 
-const _page = require('./page');
-const dot = require('./dot');
-const exists = require('./exists');
+const _page = require(`${__staxt}/helpers/page`);
+const dot = require(`${__staxt}/helpers/dot`);
+const exists = require(`${__staxt}/helpers/exists`);
 
 module.exports = (path) => {
   const page = _page(path);

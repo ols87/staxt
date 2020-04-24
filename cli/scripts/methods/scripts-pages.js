@@ -5,7 +5,7 @@ const file = require(`${__staxt}/helpers/file`);
 
 const scripts = require('../scripts.service');
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-page`);
+const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
 
 module.exports = (path = args.p) => {
   const data = page(path);

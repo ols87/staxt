@@ -1,19 +1,19 @@
 const args = require('yargs').argv;
 
-const page = require(`${__staxt}/helpers/page`);
+const template = require(`${__staxt}/helpers/template`);
 const file = require(`${__staxt}/helpers/file`);
 
 const styles = require('../styles.service');
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-page`);
+const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
 
-module.exports = (path = args.p) => {
-  const data = page(path);
+module.exports = (path = args.t) => {
+  const data = template(path);
 
   const options = file({
     data: data,
     ext: 'scss',
-    out: '/style.css',
+    out: '.css',
   });
 
   if (!options) return;

@@ -22,5 +22,5 @@ module.exports = (type) => {
     return args.hasOwnProperty(arg);
   });
 
-  return methods[0];
+  return methods[0] ? methods[0] : path;
 };

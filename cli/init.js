@@ -5,7 +5,7 @@ const logger = require(`${__staxt}/helpers/logger`);
 const timer = require(`${__staxt}/helpers/timer`);
 const paths = require(`${__staxt}/helpers/paths`);
 
-const addPage = require('./add/methods/add-page');
+const addPage = require('./add/methods/add-pages');
 
 const defaultTemplate = `${paths.src.templates}/${config.defaultTemplate}/${config.defaultTemplate}`;
 
@@ -18,12 +18,7 @@ const dirs = [
   paths.dist.base,
 ];
 
-const files = [
-  `${paths.src.assets.scss}/main.scss`,
-  `${paths.src.assets.js}/main.js`,
-  `${defaultTemplate}.scss`,
-  `${defaultTemplate}.js`,
-];
+const files = [`${paths.src.assets.scss}/main.scss`, `${paths.src.assets.js}/main.js`, `${defaultTemplate}.scss`, `${defaultTemplate}.js`];
 
 module.exports = () => {
   timer.start();

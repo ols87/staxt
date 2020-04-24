@@ -47,8 +47,10 @@ module.exports = (server) => {
           script = 'images';
         }
 
-        const method = `${__staxt}/${type}/${script}`;
+        const method = `${__staxt}/cli/${script}/methods/${script}-${type}`;
         const name = path.split('/').pop().replace(/\.\w+/g, '');
+
+        console.log(method);
 
         if (fs.existsSync(`${method}.js`)) {
           require(method)(name);
