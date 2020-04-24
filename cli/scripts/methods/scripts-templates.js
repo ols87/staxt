@@ -8,7 +8,7 @@ const scripts = require('../scripts.service');
 const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
 
 module.exports = (path = args.t) => {
-  const data = template(path);
+  const data = template(path, 'js');
 
   const options = file({
     data: data,

@@ -16,7 +16,7 @@ module.exports = (path = args.p) => {
   if (path && !isFolder) {
     timer.start();
 
-    if (!compile(path)) return;
+    if (!compile.page(path)) return;
 
     timer.end().then((seconds) => {
       logger('green', `${path} page compiled in ${seconds} seconds`);
@@ -41,10 +41,8 @@ module.exports = (path = args.p) => {
   timer.start();
 
   pages.forEach((path) => {
-    path = path.replace(`${paths.src.pages}/`, '');
-    path = path.replace(`.${extension}.js`, '');
-    path = [...new Set(path.split('/'))].join('/');
-    if (!compile(path)) return;
+    path = compile.pathName(path);
+    if (!compile.page(path)) return;
   });
 
   timer.end().then((seconds) => {

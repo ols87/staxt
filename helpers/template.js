@@ -4,9 +4,8 @@ const paths = require('./paths');
 const logger = require('./logger');
 
 const src = paths.src.templates;
-const dist = paths.dist.assets.js;
 
-module.exports = (path) => {
+module.exports = (path, out) => {
   if (!path) {
     logger('red', `Please provide a template path e.g. -t=some/path`);
     process.exit();
@@ -16,6 +15,7 @@ module.exports = (path) => {
   const filePath = `${src}/${path}/${name}`;
 
   const outName = path.replace(src, '').replace(/\//g, '-');
+  const dist = out ? paths.dist.assets[out] : '';
   const outPath = `${dist}/template-${outName}`;
 
   return {
