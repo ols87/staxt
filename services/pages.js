@@ -1,16 +1,30 @@
 const fs = require('fs-extra');
 
-const paths = require('./paths');
-const logger = require('./logger');
-const config = require('./config');
-const exists = require('./exists');
+const paths = require('../helpers/paths');
+const logger = require('../helpers/logger');
+const glob = require('../helpers/glob');
+const config = require('../helpers/config');
+const exists = require('../helpers/exists');
+const file = require(`../helpers/file`);
 
 const extension = config.dot.templateSettings.varname;
 
 const src = paths.src;
 const dist = paths.dist.base;
 
-module.exports = (path) => {
+const sanitize = (path) => {
+  if (path.indexOf(`.${extension}.js`) > -1) {
+    path = path.replace(`${paths.src.pages}/`, '');
+    path = path.replace(`.${extension}.js`, '');
+    path = [...new Set(path.split('/'))].join('/');
+  }
+
+  return path;
+};
+
+const data = (path) => {
+  path = sanitize(path);
+
   if (!path) {
     logger('red', `Please provide a page path e.g. -p=some/path`);
     process.exit();
@@ -67,3 +81,27 @@ module.exports = (path) => {
 
   return data;
 };
+
+const args = (path) => {
+  const hasPath = typeof path === 'string';
+  const isFolder = hasPath ? path.indexOf('/*') > 0 : false;
+
+  return { hasPath, isFolder };
+};
+
+const folder = (args, path) => {
+  let globFolder = paths.src.pages;
+  let folderName;
+
+  if (args.isFolder) {
+    folderName = args.hasPath ? path.replace('/*', '') : '';
+    globFolder = `${paths.src.pages}/${folderName}`;
+  }
+
+  return glob({
+    dir: globFolder,
+    includes: [`.${extension}.js`],
+  });
+};
+
+module.exports = { sanitize, data, args, folder };

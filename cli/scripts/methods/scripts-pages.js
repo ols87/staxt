@@ -1,26 +1,44 @@
 const args = require('yargs').argv;
 
-const page = require(`${__staxt}/helpers/page`);
-const file = require(`${__staxt}/helpers/file`);
-
+const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const pages = require(`${__staxt}/services/pages`);
 const scripts = require('../scripts.service');
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const file = require(`${__staxt}/helpers/file`);
 
-module.exports = (path = args.p) => {
-  const data = page(path);
+const pageData = (path) => {
+  return pages.data(path);
+};
 
-  const options = file({
+const pageFile = (path, data = pageData(path)) => {
+  return file({
     data: data,
     ext: 'js',
     out: '/scripts.js',
   });
+};
 
-  if (!options) return;
+module.exports = (path = args.p) => {
+  const args = pages.args(path);
 
-  scripts(options);
+  if (args.hasPath && !args.isFolder) {
+    const data = pageData(path);
+    const options = pageFile(path, data);
 
-  if (!data.hasScripts) {
-    compile(data.name);
+    if (!options) return;
+
+    scripts(options);
+
+    if (!data.hasScripts) {
+      compile(data.name);
+    }
+
+    return;
   }
+
+  pages.folder(args, path).forEach((pagePath) => {
+    let options = pageFile(pagePath);
+    if (!options) return;
+    scripts(options);
+  });
 };

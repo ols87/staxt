@@ -9,10 +9,7 @@ module.exports = (args) => {
   const src = paths.src[type];
 
   if (!path) {
-    return logger(
-      'red',
-      `Provide a ${type} path e.g. -${type.charAt(0)}=some/path`
-    );
+    return logger('red', `Provide a ${type} path e.g. -${type.charAt(0)}=some/path`);
   }
 
   const name = path.split('/').pop();
@@ -34,9 +31,6 @@ module.exports = (args) => {
   write(file);
 
   timer.end().then((seconds) => {
-    logger(
-      'green',
-      `${name} ${type.slice(0, -1)} created in ${seconds} seconds`
-    );
+    logger('green', `${name} ${type.slice(0, -1)} created in ${seconds} seconds`);
   });
 };

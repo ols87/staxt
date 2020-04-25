@@ -1,25 +1,24 @@
 const fs = require('fs-extra');
 
-const _page = require(`${__staxt}/helpers/page`);
-const _template = require(`${__staxt}/helpers/template`);
+const pages = require(`${__staxt}/services/pages`);
+const templates = require(`${__staxt}/services/templates`);
+
 const paths = require(`${__staxt}/helpers/paths`);
 const glob = require(`${__staxt}/helpers/glob`);
 const dot = require(`${__staxt}/helpers/dot`);
 const exists = require(`${__staxt}/helpers/exists`);
 const config = require(`${__staxt}/helpers/config`);
+const timer = require(`${__staxt}/helpers/timer`);
+const logger = require(`${__staxt}/helpers/logger`);
 
 const extension = config.dot.templateSettings.varname;
 
-const pageName = (path) => {
-  path = path.replace(`${paths.src.pages}/`, '');
-  path = path.replace(`.${extension}.js`, '');
-  return [...new Set(path.split('/'))].join('/');
-};
-
 const page = (path) => {
-  const page = _page(path);
+  const page = pages.data(path);
 
   if (!page) return false;
+
+  timer.start();
 
   const output = `${page.outPath}/index.html`;
   const templatePath = `${page.templatePath}.html`;
@@ -31,20 +30,22 @@ const page = (path) => {
 
   fs.outputFileSync(output, compile(page));
 
-  return true;
+  timer.end().then((seconds) => {
+    logger('green', `${page.name} page compiled in ${seconds} seconds`);
+  });
 };
 
 const template = (path) => {
-  const data = _template(path);
+  const data = templates.data(path);
 
-  const pages = glob({
+  const pagesFolder = glob({
     dir: paths.src.pages,
     includes: [`.${extension}.js`],
   });
 
   const que = [];
 
-  pages.forEach((pagePath) => {
+  pagesFolder.forEach((pagePath) => {
     const page = require(pagePath);
     delete require.cache[require.resolve(pagePath)];
 
@@ -54,11 +55,9 @@ const template = (path) => {
   });
 
   que.forEach((quePath) => {
-    let name = pageName(quePath);
+    let name = pages.sanitize(quePath);
     if (!page(name)) return;
   });
-
-  return data.name;
 };
 
 module.exports = { page, template };

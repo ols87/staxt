@@ -1,26 +1,43 @@
 const args = require('yargs').argv;
 
-const template = require(`${__staxt}/helpers/template`);
-const file = require(`${__staxt}/helpers/file`);
-
+const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const templates = require(`${__staxt}/services/templates`);
 const scripts = require('../scripts.service');
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const file = require(`${__staxt}/helpers/file`);
 
-module.exports = (path = args.t) => {
-  const data = template(path, 'js');
+const templateData = (path) => {
+  return templates.data(path, 'js');
+};
 
-  const options = file({
+const templateFile = (path, data = templateData(path)) => {
+  return file({
     data: data,
     ext: 'js',
     out: '.js',
   });
+};
 
-  if (!options) return;
+module.exports = (path = args.t) => {
+  if (typeof path === 'string') {
+    const data = templateData(path);
+    const options = templateFile(path, data);
 
-  scripts(options);
+    if (!options) return;
 
-  if (!data.hasScripts) {
-    compile(data.name);
+    scripts(options);
+
+    if (!data.hasScripts) {
+      compile(data.name);
+    }
+
+    return;
   }
+
+  templates.all('js').forEach((templatePath) => {
+    let name = templates.sanitize(templatePath, 'js');
+    let options = templateFile(name);
+    if (!options) return;
+    scripts(options);
+  });
 };

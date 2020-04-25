@@ -1,26 +1,43 @@
 const args = require('yargs').argv;
 
-const template = require(`${__staxt}/helpers/template`);
-const file = require(`${__staxt}/helpers/file`);
-
+const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const templates = require(`${__staxt}/services/templates`);
 const styles = require('../styles.service');
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const file = require(`${__staxt}/helpers/file`);
 
-module.exports = (path = args.t) => {
-  const data = template(path, 'css');
+const templateData = (path) => {
+  return templates.data(path, 'css');
+};
 
-  const options = file({
+const templateFile = (path, data = templateData(path)) => {
+  return file({
     data: data,
     ext: 'scss',
     out: '.css',
   });
+};
 
-  if (!options) return;
+module.exports = (path = args.t) => {
+  if (typeof path === 'string') {
+    const data = templateData(path);
+    const options = templateFile(path, data);
 
-  styles(options);
+    if (!options) return;
 
-  if (!data.hasStyles) {
-    compile(data.name);
+    styles(options);
+
+    if (!data.hasStyles) {
+      compile(data.name);
+    }
+
+    return;
   }
+
+  templates.all('scss').forEach((templatePath) => {
+    let name = templates.sanitize(templatePath, 'scss');
+    let options = templateFile(name);
+    if (!options) return;
+    styles(options);
+  });
 };
