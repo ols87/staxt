@@ -1,17 +1,24 @@
 const args = require('yargs').argv;
 
-const assets = require(`${__staxt}/helpers/assets`);
+const paths = require(`${__staxt}/config/paths`);
+const logger = require(`${__staxt}/helpers/logger`);
+const exists = require(`${__staxt}/helpers/exists`);
 
-const styles = require('../styles.service');
+const styles = require('../styles');
 
-module.exports = (file = args.a, out = args.o) => {
-  const options = assets({
-    name: file,
-    out: out,
-    ext: 'scss',
-  });
+const src = paths.src.assets.scss;
+const dist = paths.dist.assets.css;
 
-  if (!options) return;
+module.exports = (path = args.a, out = args.o || path) => {
+  if (typeof path !== 'string') {
+    logger('red', `No src file given, use -a=some/path`);
+    return process.exit();
+  }
 
-  styles(options);
+  const srcPath = `${src}/${path}.scss`;
+  const distPath = `${dist}${out}.css`;
+
+  if (!exists(path, srcPath)) return;
+
+  styles({ path, srcPath, distPath });
 };

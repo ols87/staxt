@@ -1,31 +1,24 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const paths = require(`${__staxt}/helpers/paths`);
+const paths = require(`${__staxt}/config/paths`);
 
-const remove = require('../remove.service');
+const remove = require('../remove');
 
 const src = paths.src.templates;
 const js = paths.dist.assets.js;
 const css = paths.dist.assets.css;
 
-const type = 'templates';
-
 module.exports = (path = args.t) => {
-  const name = path.split('/').pop();
+  let templateName = path.split('/').pop();
 
-  remove({
-    path,
-    name: name,
-    type: type,
-    clean: () => {
-      const fileName = path.replace(src, '').replace(/\//g, '-');
-      const jsFile = `${js}/template-${fileName}.js`;
-      const cssFile = `${css}/template-${fileName}.css`;
+  remove(path, templateName, 'templates', () => {
+    templateName = path.replace(src, '').replace(/\//g, '-');
+    const jsFile = `${js}/template-${templateName}.js`;
+    const cssFile = `${css}/template-${templateName}.css`;
 
-      fs.removeSync(`${src}/${path}`);
-      fs.removeSync(jsFile);
-      fs.removeSync(cssFile);
-    },
+    fs.removeSync(`${src}/${path}`);
+    fs.removeSync(jsFile);
+    fs.removeSync(cssFile);
   });
 };

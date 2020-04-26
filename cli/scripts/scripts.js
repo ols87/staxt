@@ -6,21 +6,21 @@ const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
 module.exports = (args) => {
-  const { name, file, outFile } = args;
+  const { path, srcPath, distPath } = args;
 
   timer.start();
 
-  if (!fs.existsSync(outFile)) {
-    fs.createFileSync(outFile);
+  if (!fs.existsSync(distPath)) {
+    fs.createFileSync(distPath);
   }
 
-  browserify(file)
+  browserify(srcPath)
     .transform(partialify)
     .bundle()
-    .pipe(fs.createWriteStream(outFile))
+    .pipe(fs.createWriteStream(distPath))
     .on('finish', () => {
       timer.end().then((seconds) => {
-        logger('green', `${name} js compiled in ${seconds} seconds`);
+        logger('green', `${path} js compiled in ${seconds} seconds`);
       });
     });
 };

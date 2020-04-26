@@ -2,43 +2,29 @@ const args = require('yargs').argv;
 
 const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
 const pages = require(`${__staxt}/services/pages`);
-const styles = require('../styles.service');
+const styles = require('../styles');
 
 const file = require(`${__staxt}/helpers/file`);
 
-const pageData = (path) => {
-  return pages.data(path);
-};
+function render(path) {
+  const pageData = pages.prepareData(path);
+  const filePaths = file(pageData, 'scss', '/style.css');
 
-const pageFile = (path, data = pageData(path)) => {
-  return file({
-    data: data,
-    ext: 'scss',
-    out: '/style.css',
-  });
-};
+  if (!filePaths) return;
+
+  if (pageData.hasStyles) compile(pageData.name);
+
+  return styles(filePaths);
+}
 
 module.exports = (path = args.p) => {
-  const args = pages.args(path);
+  const arg = pages.arg(path);
 
-  if (args.hasPath && !args.isFolder) {
-    const data = pageData(path);
-    const options = pageFile(path, data);
-
-    if (!options) return;
-
-    styles(options);
-
-    if (!data.hasStyles) {
-      compile(data.name);
-    }
-
-    return;
+  if (arg.hasPath && !arg.isFolder) {
+    return render(path);
   }
 
-  pages.folder(args, path).forEach((pagePath) => {
-    let options = pageFile(pagePath);
-    if (!options) return;
-    styles(options);
+  pages.getFolder(arg, path).forEach((pagePath) => {
+    render(pagePath);
   });
 };

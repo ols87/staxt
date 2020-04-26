@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require(`${__staxt}/config/config`);
 
 const paths = config.paths;
 const base = paths.base;

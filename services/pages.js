@@ -1,18 +1,26 @@
 const fs = require('fs-extra');
 
-const paths = require('../helpers/paths');
+const paths = require('../config/paths');
 const logger = require('../helpers/logger');
 const glob = require('../helpers/glob');
-const config = require('../helpers/config');
+const config = require('../config/config');
 const exists = require('../helpers/exists');
-const file = require(`../helpers/file`);
 
 const extension = config.dot.templateSettings.varname;
 
 const src = paths.src;
 const dist = paths.dist.base;
 
-const sanitize = (path) => {
+const pages = {};
+
+pages.arg = (arg) => {
+  const hasPath = typeof arg === 'string';
+  const isFolder = hasPath ? arg.indexOf('/*') > 0 : false;
+
+  return { hasPath, isFolder };
+};
+
+pages.sanitizePath = (path) => {
   if (path.indexOf(`.${extension}.js`) > -1) {
     path = path.replace(`${paths.src.pages}/`, '');
     path = path.replace(`.${extension}.js`, '');
@@ -22,79 +30,72 @@ const sanitize = (path) => {
   return path;
 };
 
-const data = (path) => {
-  path = sanitize(path);
+pages.prepareData = (path) => {
+  path = pages.sanitizePath(path);
 
   if (!path) {
     logger('red', `Please provide a page path e.g. -p=some/path`);
     process.exit();
   }
 
-  const name = path.split('/').pop();
+  const pageName = path.split('/').pop();
 
-  let filePath = `${src.pages}/${path}/${name}`;
+  let srcPath = `${src.pages}/${path}/${pageName}`;
 
-  if (name === 'index') {
-    filePath = filePath.replace('/index', '');
+  if (pageName === 'index') {
+    srcPath = srcPath.replace('/index', '');
   }
 
-  const dataPath = `${filePath}.${extension}.js`;
+  const dataPath = `${srcPath}.${extension}.js`;
 
-  if (!exists(name, dataPath)) {
+  if (!exists(pageName, dataPath)) {
     return false;
   }
 
-  const data = require(dataPath);
+  const pageData = require(dataPath);
   delete require.cache[require.resolve(dataPath)];
 
-  data.name = name;
+  pageData.name = pageName;
 
-  let outPath = path.replace(`/${name}`, '');
-  outPath = data.slug ? `${dist}/${data.slug}` : `${dist}/${path}`;
+  let distPath = path.replace(`/${pageName}`, '');
+  distPath = pageData.slug ? `${dist}/${pageData.slug}` : `${dist}/${path}`;
 
-  if (name === 'index') {
-    outPath = dist;
+  if (pageName === 'index') {
+    distPath = dist;
   }
 
-  const scss = `${filePath}.scss`;
+  const scss = `${srcPath}.scss`;
   if (fs.existsSync(scss)) {
-    data.hasStyles = fs.readFileSync(scss, 'utf8') ? true : false;
+    pageData.hasStyles = fs.readFileSync(scss, 'utf8') ? true : false;
   }
 
-  const js = `${filePath}.js`;
+  const js = `${srcPath}.js`;
   if (fs.existsSync(js)) {
-    data.pageScripts = fs.readFileSync(js, 'utf8') ? true : false;
+    pageData.pageScripts = fs.readFileSync(js, 'utf8') ? true : false;
   }
 
-  let template = `${src.templates}/${data.template}`;
+  let template = `${src.templates}/${pageData.template}`;
 
-  data.templateName = data.template.split('/').pop();
+  pageData.templateName = pageData.template.split('/').pop();
 
   if (fs.existsSync(template)) {
     if (fs.lstatSync(template).isDirectory()) {
-      data.templatePath = `${template}/${data.templateName}`;
+      pageData.templatePath = `${template}/${pageData.templateName}`;
     }
   }
 
-  data.filePath = filePath;
-  data.outPath = outPath;
+  pageData.srcPath = srcPath;
+  pageData.distPath = distPath;
 
-  return data;
+  return pageData;
 };
 
-const args = (path) => {
-  const hasPath = typeof path === 'string';
-  const isFolder = hasPath ? path.indexOf('/*') > 0 : false;
-
-  return { hasPath, isFolder };
-};
-
-const folder = (args, path) => {
+pages.getFolder = (arg, path) => {
   let globFolder = paths.src.pages;
   let folderName;
 
-  if (args.isFolder) {
-    folderName = args.hasPath ? path.replace('/*', '') : '';
+  if (arg.isFolder) {
+    folderName = arg.hasPath ? path.replace('/*', '') : '';
     globFolder = `${paths.src.pages}/${folderName}`;
   }
 
@@ -104,4 +105,4 @@ const folder = (args, path) => {
   });
 };
 
-module.exports = { sanitize, data, args, folder };
+module.exports = pages;

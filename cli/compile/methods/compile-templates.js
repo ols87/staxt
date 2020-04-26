@@ -1,7 +1,7 @@
 const args = require('yargs').argv;
 
 const templates = require(`${__staxt}/services/templates`);
-const compile = require('../compile.service');
+const compile = require('../compile');
 
 module.exports = (path = args.t) => {
   if (typeof path === 'string') {
@@ -9,7 +9,7 @@ module.exports = (path = args.t) => {
   }
 
   templates.all('html').forEach((templatePath) => {
-    let name = templates.sanitize(templatePath, 'html');
-    compile.template(name);
+    let templateName = templates.sanitizePath(templatePath, 'html');
+    compile.template(templateName);
   });
 };

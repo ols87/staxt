@@ -1,22 +1,25 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const paths = require(`${__staxt}/helpers/paths`);
+const paths = require(`${__staxt}/config/paths`);
 const logger = require(`${__staxt}/helpers/logger`);
+const exists = require(`${__staxt}/helpers/exists`);
 
-const scripts = require('../scripts.service');
+const scripts = require('../scripts');
 
 const src = paths.src.assets.js;
 const dist = paths.dist.assets.js;
 
-module.exports = (file = args.a || 'main', out = args.o || 'main') => {
-  if (!fs.existsSync(`${src}/${file}.js`)) {
-    return logger('red', `${file}.js not found`);
+module.exports = (path = args.a, out = args.o || path) => {
+  if (typeof path !== 'string') {
+    logger('red', `No src file given, use -a=some/path`);
+    return process.exit();
   }
 
-  scripts({
-    name: 'main',
-    file: `${src}/${file}.js`,
-    outFile: `${dist}/${out}.js`,
-  });
+  const srcPath = `${src}/${path}.js`;
+  const distPath = `${dist}${out}.js`;
+
+  if (!exists(path, srcPath)) return;
+
+  scripts({ path, srcPath, distPath });
 };

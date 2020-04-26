@@ -1,7 +1,7 @@
 const args = require('yargs').argv;
 
 const watch = require('../helpers/watch');
-const paths = require('../helpers/paths');
+const paths = require('../config/paths');
 
 module.exports = () => {
   // bundle();

@@ -1,8 +1,8 @@
 const args = require('yargs').argv;
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
+const compile = require(`${__staxt}/cli/compile/methods/compile-templates`);
 const templates = require(`${__staxt}/services/templates`);
-const styles = require('../styles.service');
+const styles = require('../styles');
 
 const file = require(`${__staxt}/helpers/file`);
 
@@ -35,7 +35,7 @@ module.exports = (path = args.t) => {
   }
 
   templates.all('scss').forEach((templatePath) => {
-    let name = templates.sanitize(templatePath, 'scss');
+    let name = templates.sanitizePath(templatePath, 'scss');
     let options = templateFile(name);
     if (!options) return;
     styles(options);

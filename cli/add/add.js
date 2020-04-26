@@ -2,10 +2,9 @@ const fs = require('fs-extra');
 
 const logger = require(`${__staxt}/helpers/logger`);
 const timer = require(`${__staxt}/helpers/timer`);
-const paths = require(`${__staxt}/helpers/paths`);
+const paths = require(`${__staxt}/config/paths`);
 
-module.exports = (args) => {
-  const { path, type, write } = args;
+module.exports = (path, type, outFn) => {
   const src = paths.src[type];
 
   if (!path) {
@@ -24,11 +23,11 @@ module.exports = (args) => {
     return logger('red', `${name} ${type.slice(0, -1)} already exists`);
   }
 
-  const file = `${src}/${path}/${name}`;
+  const srcPath = `${src}/${path}/${name}`;
 
   timer.start();
 
-  write(file);
+  outFn(srcPath);
 
   timer.end().then((seconds) => {
     logger('green', `${name} ${type.slice(0, -1)} created in ${seconds} seconds`);

@@ -1,13 +1,11 @@
 const exists = require('./exists');
 
-module.exports = (args) => {
-  const { data, ext, out } = args;
+module.exports = (data, ext, dist) => {
+  const path = data.name;
+  const srcPath = `${data.srcPath}.${ext}`;
+  const distPath = `${data.distPath}${dist}`;
 
-  const name = data.name;
-  const file = `${data.filePath}.${ext}`;
-  const outFile = `${data.outPath}${out}`;
+  if (!exists(path, srcPath)) return false;
 
-  if (!exists(name, file)) return false;
-
-  return { name, file, outFile };
+  return { path, srcPath, distPath };
 };

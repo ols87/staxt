@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
-const config = require('./config');
-const paths = require('./paths');
+const config = require(`${__staxt}/config/config`);
+const paths = require(`${__staxt}/config/paths`);
 
 const extension = config.dot.templateSettings.varname;
 

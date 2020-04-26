@@ -1,10 +1,15 @@
-const paths = require('../helpers/paths');
+const paths = require('../config/paths');
 const logger = require('../helpers/logger');
 const glob = require('../helpers/glob');
+const config = require(`../config/config`);
+
+const extension = config.dot.templateSettings.varname;
 
 const src = paths.src.templates;
 
-const sanitize = (path, type) => {
+const templates = {};
+
+templates.sanitizePath = (path, type) => {
   if (path.indexOf(`.${type}`) > -1) {
     path = path.split('/').pop();
     path = path.replace(`.${type}`, '');
@@ -13,27 +18,49 @@ const sanitize = (path, type) => {
   return path;
 };
 
-const data = (path, out) => {
+templates.filePaths = (path, out) => {
   if (!path) {
     logger('red', `Please provide a template path e.g. -t=some/path`);
     process.exit();
   }
 
   const name = path.split('/').pop();
-  const filePath = `${src}/${path}/${name}`;
+  const srcPath = `${src}/${path}/${name}`;
 
   const outName = path.replace(src, '').replace(/\//g, '-');
   const dist = out ? paths.dist.assets[out] : '';
-  const outPath = `${dist}/template-${outName}`;
+  const distPath = `${dist}/template-${outName}`;
 
   return {
     name,
-    filePath,
-    outPath,
+    srcPath,
+    distPath,
   };
 };
 
-const all = (ext) => {
+templates.getPages = (path) => {
+  const template = data(path);
+
+  const pagesFolder = glob({
+    dir: paths.src.pages,
+    includes: [`.${extension}.js`],
+  });
+
+  const list = [];
+
+  pagesFolder.forEach((pagePath) => {
+    const page = require(pagePath);
+    delete require.cache[require.resolve(pagePath)];
+
+    if (page.template === template.name) {
+      list.push(pagePath);
+    }
+  });
+
+  return list;
+};
+
+templates.all = (ext) => {
   return glob({
     dir: src,
     includes: [`.${ext}`],
@@ -41,4 +68,4 @@ const all = (ext) => {
   });
 };
 
-module.exports = { sanitize, data, all };
+module.exports = templates;

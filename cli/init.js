@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 
-const config = require(`${__staxt}/helpers/config`);
+const config = require(`${__staxt}/config/config`);
 const logger = require(`${__staxt}/helpers/logger`);
 const timer = require(`${__staxt}/helpers/timer`);
-const paths = require(`${__staxt}/helpers/paths`);
+const paths = require(`${__staxt}/config/paths`);
 
 const addPage = require('./add/methods/add-pages');
 

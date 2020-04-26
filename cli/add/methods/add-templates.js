@@ -1,16 +1,12 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const add = require('../add.service');
-
-const type = 'templates';
+const add = require('../add');
 
 module.exports = (path = args.t) => {
-  const write = (file) => {
-    fs.ensureFileSync(`${file}.html`);
-    fs.ensureFileSync(`${file}.js`);
-    fs.ensureFileSync(`${file}.scss`);
-  };
-
-  add({ path, type, write });
+  add(path, 'templates', (srcPath) => {
+    fs.ensureFileSync(`${srcPath}.html`);
+    fs.ensureFileSync(`${srcPath}.js`);
+    fs.ensureFileSync(`${srcPath}.scss`);
+  });
 };
