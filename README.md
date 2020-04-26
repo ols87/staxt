@@ -60,8 +60,6 @@ npx staxt serve
 
 Starts a browsersync server on port `:3000` and opens the browser. Use `-q` to prevent the browser from opening. Use `-w` to only watch the files.
 
-### watch
-
 ### add
 
 ```
