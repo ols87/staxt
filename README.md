@@ -1,14 +1,14 @@
 # staxt
 
-A minimal static site generator using Handlebars, Babel, Sass.
+A minimal static site generator. 
 
 ## concept
 
-The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with Handlebars templates to deliver HTML. Sass is used for compiling css and Babel is used to compile javascript asset files which can be written in ES6.
+The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with doT.js templates to deliver HTML. Sass is used for compiling css and Browserify is used to compile javascript files. 
 
 ## WARNING
 
-This was meant as a personal project to practise NodeJS and morphed into an npm package. It is **NOT RECOMENDED** to use this in production.
+This was as a personal project to practise NodeJS and morphed into an npm package. It is **NOT RECOMENDED** to use this in production.
 
 ## install
 
@@ -35,16 +35,20 @@ Creates a new project with the following folder structure:
      /main.js
   /pages
     /index.js
+    /index.xt.js
     /index.scss
   /templates
-    /default.hbs
+    /pages
+      /pages.html
+      /pages.scss
+      /pages.js
     /includes
-      /header.hbs
-      /footer.hbs
 /dist
   /assets
-    /main.js
-    /main.css
+    /js
+      /main.js
+    /css
+      /main.css
     /images
 ```
 
@@ -54,111 +58,54 @@ Creates a new project with the following folder structure:
 npx staxt serve
 ```
 
-Starts a browsersync server on port `:3000` and opens the browser. use argument `-q` to prevent the browser from opening.
+Starts a browsersync server on port `:3000` and opens the browser. Use `-q` to prevent the browser from opening. Use `-w` to only watch the files.
 
 ### watch
-
-```
-npx staxt watch
-```
-
-Watches all files for changes. calls the relevant compiler depending on the type of file. Triggered automatically when running `npx staxt serve`.
 
 ### add
 
 ```
-npx staxt add -p=some/page/path -t=template/path
+npx staxt add -p=[page] (or) -t=[template]
 ```
 
-Adds a new page and runs the `compile`function. `-t` argument is optional. If no `-t` argument you will be prompted to choose an existing template or create a new template.
+adds a new page or template
 
 ### remove
 
 ```
-npx staxt remove -p=some/page/path
+npx staxt remove -p=[page] (or) -t=[template]
 ```
 
-Removes page src files.
+Removes a page or template.
 
 ### compile
 
 ```
-npx staxt compile -p=some/page/path
+npx staxt compile -p=[page] (or) -t=[template] -i=[include]
 ```
 
-Compiles a single page when using `-p`. Compiles a folder and all child pages when using wildcard e.g. `-p=some/path/*`. Compiles all pages when no `-p` argument is given.
+Compiles a page or template or include.
 
-Called by:
 
-- `npx staxt add -p=some/path` after src files are created.
-- `npx staxt watch` when pages or templates are added/deleted/saved.
-- `npx staxt bundle`
-
-### js
+### styles
 
 ```
-npx staxt js
+npx staxt styles -a=[asset] -p=[page] -t[template]
 ```
 
-Compile javascript src files. The entry point file is main.js. All imports must be included here.
+Generates css for an asset or page or template
 
-Libs are imported into the `staxt.config.js` file in your project directory.
-
-```
-module.exports = {
-  libs: [
-    "libs/jquery.3.4.1.slim.min",
-    "libs/aos.2.3.4.min",
-    "libs/slick.1.8.1.min",
-    "libs/bouncer.1.4.6.min"
-  ]
-};
+### scripts
 
 ```
-
-Use arguments `-f=libs` or `-f=main` to generate those files.
-
-Called by:
-
-- `npx staxt watch` when javascript files are added/deleted/saved.
-- `npx staxt bundle`
-
-### scss
-
-```
-npx staxt scss
+npx staxt scripts -a=[asset] -p=[page] -t[template]
 ```
 
-Compile scss src files. The entry point files is main.scss. All imports must be included here.
-
-Called by:
-
-- `npx staxt watch` when scss files are added/deleted/saved.
-- `npx staxt bundle`
-
-### images
-
-```
-npx staxt images
-```
-
-Compile scss src files. The entry point files is main.scss. All imports must be included here.
-
-Called by:
-
-- `npx staxt watch` when images are added/deleted/saved.
-- `npx staxt bundle`
+Generates js for an asset or page or template
 
 ### bundle
 ```
 npx staxt bundle
 ```
 
-Bundles all src files.
-
-Calls:
-
-- `npx staxt compile`
-- `npx staxt images`
-- `npx staxt scss`
-- `npx staxt js`
+Bundles all pages and assets.
