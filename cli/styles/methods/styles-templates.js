@@ -1,43 +1,39 @@
 const args = require('yargs').argv;
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-templates`);
 const templates = require(`${__staxt}/services/templates`);
+const pages = require(`${__staxt}/services/pages`);
 const styles = require('../styles');
+
+const compile = require(`${__staxt}/cli/compile/compile`);
 
 const file = require(`${__staxt}/helpers/file`);
 
-const templateData = (path) => {
-  return templates.data(path, 'css');
-};
+function render(path) {
+  const templateData = templates.filePaths(path, 'css');
+  const filePaths = file(templateData, 'scss', '.css');
 
-const templateFile = (path, data = templateData(path)) => {
-  return file({
-    data: data,
-    ext: 'scss',
-    out: '.css',
+  if (!filePaths) return;
+
+  const pageList = templates.getPages(path);
+
+  pageList.forEach((pagePath) => {
+    let pageData = pages.prepareData(pagePath);
+
+    if (!pageData.templateStyles) {
+      compile.page(pageData.name);
+    }
   });
-};
+
+  return styles(filePaths);
+}
 
 module.exports = (path = args.t) => {
   if (typeof path === 'string') {
-    const data = templateData(path);
-    const options = templateFile(path, data);
-
-    if (!options) return;
-
-    styles(options);
-
-    if (!data.hasStyles) {
-      compile(data.name);
-    }
-
-    return;
+    return render(path);
   }
 
   templates.all('scss').forEach((templatePath) => {
-    let name = templates.sanitizePath(templatePath, 'scss');
-    let options = templateFile(name);
-    if (!options) return;
-    styles(options);
+    let templateName = templates.sanitizePath(templatePath, 'scss');
+    return render(templateName);
   });
 };

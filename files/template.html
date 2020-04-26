@@ -7,10 +7,9 @@
 
     <title></title>
 
-    <link rel="stylesheet" type="text/css" href="/assets/main.css" />
-
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
     {{? xt.templateStyles }}
-    <link rel="stylesheet" type="text/css" href="{{xt.templateStyles}}.css" />
+    <link rel="stylesheet" type="text/css" href="{{= xt.templateStyles}}" />
     {{?}} {{? xt.hasStyles }}
     <link rel="stylesheet" type="text/css" href="style.css" />
     {{?}}
@@ -20,12 +19,9 @@
     Staxt Static Site Generator
   </body>
 
-  <script src="/assets/libs.js"></script>
-
-  <script src="/assets/main.js"></script>
-
+  <script src="/assets/js/main.js"></script>
   {{? xt.templateScripts }}
-  <script src="{{xt.templateScripts}}.js"></script>
+  <script src="{{= xt.templateScripts}}"></script>
   {{?}} {{? xt.hasScripts }}
   <script src="scripts.js"></script>
   {{?}}

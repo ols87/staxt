@@ -1,10 +1,12 @@
 const args = require('yargs').argv;
 
+const bundle = require('./bundle');
+
 const watch = require('../helpers/watch');
 const paths = require('../config/paths');
 
 module.exports = () => {
-  // bundle();
+  bundle();
 
   const server = require('browser-sync').create();
 

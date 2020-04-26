@@ -39,7 +39,7 @@ templates.filePaths = (path, out) => {
 };
 
 templates.getPages = (path) => {
-  const template = data(path);
+  const template = templates.filePaths(path);
 
   const pagesFolder = glob({
     dir: paths.src.pages,

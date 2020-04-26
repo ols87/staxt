@@ -52,7 +52,7 @@ pages.prepareData = (path) => {
     return false;
   }
 
-  const pageData = require(dataPath);
+  let pageData = require(dataPath);
   delete require.cache[require.resolve(dataPath)];
 
   pageData.name = pageName;
@@ -64,25 +64,8 @@ pages.prepareData = (path) => {
     distPath = dist;
   }
 
-  const scss = `${srcPath}.scss`;
-  if (fs.existsSync(scss)) {
-    pageData.hasStyles = fs.readFileSync(scss, 'utf8') ? true : false;
-  }
-
-  const js = `${srcPath}.js`;
-  if (fs.existsSync(js)) {
-    pageData.pageScripts = fs.readFileSync(js, 'utf8') ? true : false;
-  }
-
-  let template = `${src.templates}/${pageData.template}`;
-
-  pageData.templateName = pageData.template.split('/').pop();
-
-  if (fs.existsSync(template)) {
-    if (fs.lstatSync(template).isDirectory()) {
-      pageData.templatePath = `${template}/${pageData.templateName}`;
-    }
-  }
+  pageData = pageAssets(pageData, srcPath);
+  pageData = templateData(pageData, path);
 
   pageData.srcPath = srcPath;
   pageData.distPath = distPath;
@@ -104,5 +87,48 @@ pages.getFolder = (arg, path) => {
     includes: [`.${extension}.js`],
   });
 };
+
+function pageAssets(pageData, srcPath) {
+  const pageSCSS = `${srcPath}.scss`;
+  pageData.hasStyles = hasAsset(pageSCSS);
+
+  const pageJS = `${srcPath}.js`;
+  pageData.hasScripts = hasAsset(pageJS);
+
+  return pageData;
+}
+
+function templateData(pageData) {
+  let template = `${src.templates}/${pageData.template}`;
+
+  const templateOut = pageData.template.replace(/\//g, '-');
+  const templateDist = `template-${templateOut}`;
+
+  pageData.templateName = pageData.template.split('/').pop();
+
+  if (fs.existsSync(template)) {
+    if (fs.lstatSync(template).isDirectory()) {
+      pageData.templatePath = `${template}/${pageData.templateName}`;
+    }
+  }
+
+  const cssDist = paths.dist.assets.css.replace(`${process.cwd()}/dist`, '');
+  const templateSCSS = `${pageData.templatePath}.scss`;
+  pageData.templateStyles = hasAsset(templateSCSS) ? `${cssDist}/${templateDist}.css` : false;
+
+  const jsDist = paths.dist.assets.js.replace(`${process.cwd()}/dist`, '');
+  const templateJS = `${pageData.templatePath}.js`;
+  pageData.templateScripts = hasAsset(templateJS) ? `${jsDist}/${templateDist}.js` : false;
+
+  return pageData;
+}
+
+function hasAsset(path) {
+  if (fs.existsSync(path)) {
+    return fs.readFileSync(path, 'utf8') ? true : false;
+  }
+
+  return false;
+}
 
 module.exports = pages;

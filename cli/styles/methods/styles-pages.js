@@ -1,8 +1,9 @@
 const args = require('yargs').argv;
 
-const compile = require(`${__staxt}/cli/compile/methods/compile-pages`);
 const pages = require(`${__staxt}/services/pages`);
 const styles = require('../styles');
+
+const compile = require(`${__staxt}/cli/compile/compile`);
 
 const file = require(`${__staxt}/helpers/file`);
 
@@ -12,7 +13,7 @@ function render(path) {
 
   if (!filePaths) return;
 
-  if (pageData.hasStyles) compile(pageData.name);
+  if (!pageData.hasStyles) compile.page(pageData.name);
 
   return styles(filePaths);
 }
