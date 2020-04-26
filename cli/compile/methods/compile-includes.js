@@ -10,7 +10,8 @@ module.exports = (path = args.i) => {
     templateContent = templateContent.replace(/s/g,'');
 
     if(templateContent.indexOf(`${path}')}}`) > -1) {
-      compile.template(templatePath);
+      let templateName = templates.sanitizePath(templatePath, 'html');
+      compile.template(templateName);
     }
   });
 };
