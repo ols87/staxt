@@ -6,5 +6,4 @@ module.exports = {
     defs: {},
   },
   defaultTemplate: 'page',
-  libs: [],
 };
