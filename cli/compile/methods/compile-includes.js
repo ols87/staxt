@@ -6,6 +6,11 @@ const compile = require('../compile');
 
 module.exports = (path = args.i) => {
   templates.all('html').forEach((templatePath) => {
-    console.log(fs.readFileSync(templatePath, 'utf8'));
+    let templateContent = fs.readFileSync(templatePath, 'utf8');
+    templateContent = templateContent.replace(/s/g,'');
+
+    if(templateContent.indexOf(`${path}')}}`) > -1) {
+      compile.template(templatePath);
+    }
   });
 };
