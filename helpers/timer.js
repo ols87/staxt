@@ -1,21 +1,15 @@
-const timer = class {
-  constructor() {
-    this.startTime = null;
-    this.endTime = null
-  }
+module.exports = {
+  startTime: null,
+  endTime: null,
 
-  start() {
+  start: function () {
     this.startTime = new Date().getTime();
-  };
+  },
 
-  end() {
-    return new Promise(resolve => {
+  end: function () {
+    return new Promise((resolve) => {
       this.endTime = new Date().getTime() - this.startTime;
-      resolve(this.endTime /= 1000);
+      resolve((this.endTime /= 1000));
     });
-  }
-}
-
-module.exports = () => {
-  return new timer();
-}
+  },
+};

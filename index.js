@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
+const args = require('yargs').argv;
+const loader = require(`./helpers/loader`);
+
 global.__staxt = __dirname;
 
-const args = require('yargs').argv;
-const loader = require('./loader');
+let type = args._[0];
 
-const script = args._[0];
+let method = loader(type);
 
-if (loader[script]) {
-  loader[script]();
-}
+require(method)();
+
+return;
