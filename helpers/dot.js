@@ -11,7 +11,7 @@ dot.defs = config.dot.defs;
 
 dot.defs.staxt = {
   include: (path) => {
-    return fs.readFileSync(`${paths.src.templates}/${path}.html`, 'utf8');
+    return fs.readFileSync(`${paths.src.includes}/${path}.html`, 'utf8');
   },
 };
 
