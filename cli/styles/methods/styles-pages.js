@@ -11,11 +11,9 @@ function render(path) {
   const pageData = pages.prepareData(path);
   const filePaths = file(pageData, 'scss', '/style.css');
 
-  if (!filePaths) return;
+  compile.page(pageData.name);
 
-  if (!pageData.hasStyles) compile.page(pageData.name);
-
-  return styles(filePaths);
+  return filePaths ? styles(filePaths) : false;
 }
 
 module.exports = (path = args.p) => {

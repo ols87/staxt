@@ -8,6 +8,7 @@ module.exports = (path = args.i) => {
   templates.all('html').forEach((templatePath) => {
     let templateContent = fs.readFileSync(templatePath, 'utf8');
     templateContent = templateContent.replace(/\s/g, '');
+
     if (templateContent.indexOf(`${path}')}}`) > -1) {
       let templateName = templates.sanitizePath(templatePath, 'html');
       compile.template(templateName);

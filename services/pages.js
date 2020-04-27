@@ -20,10 +20,10 @@ pages.arg = (arg) => {
   return { hasPath, isFolder };
 };
 
-pages.sanitizePath = (path) => {
-  if (path.indexOf(`.${extension}.js`) > -1) {
+pages.sanitizePath = (path, ext = `${extension}.js`) => {
+  if (path.indexOf(`.${ext}`) > -1) {
     path = path.replace(`${paths.src.pages}/`, '');
-    path = path.replace(`.${extension}.js`, '');
+    path = path.replace(`.${ext}`, '');
     path = [...new Set(path.split('/'))].join('/');
   }
 
@@ -48,9 +48,9 @@ pages.prepareData = (path) => {
 
   const dataPath = `${srcPath}.${extension}.js`;
 
-  if (!exists(pageName, dataPath)) {
-    return false;
-  }
+  // if (!exists(pageName, dataPath)) {
+  //   return false;
+  // }
 
   let pageData = require(dataPath);
   delete require.cache[require.resolve(dataPath)];
@@ -73,7 +73,7 @@ pages.prepareData = (path) => {
   return pageData;
 };
 
-pages.getFolder = (arg, path) => {
+pages.getFolder = (arg, path, ext = `${extension}.js`) => {
   let globFolder = paths.src.pages;
   let folderName;
 
@@ -84,7 +84,7 @@ pages.getFolder = (arg, path) => {
 
   return glob({
     dir: globFolder,
-    includes: [`.${extension}.js`],
+    includes: [`.${ext}`],
   });
 };
 
@@ -114,11 +114,11 @@ function templateData(pageData) {
 
   const cssDist = paths.dist.assets.css.replace(`${process.cwd()}/dist`, '');
   const templateSCSS = `${pageData.templatePath}.scss`;
-  pageData.templateStyles = hasAsset(templateSCSS) ? `${cssDist}/${templateDist}.css` : false;
+  pageData.templateStyles = hasAsset(templateSCSS) ? `${cssDist}/${templateDist}.css` : null;
 
   const jsDist = paths.dist.assets.js.replace(`${process.cwd()}/dist`, '');
   const templateJS = `${pageData.templatePath}.js`;
-  pageData.templateScripts = hasAsset(templateJS) ? `${jsDist}/${templateDist}.js` : false;
+  pageData.templateScripts = hasAsset(templateJS) ? `${jsDist}/${templateDist}.js` : null;
 
   return pageData;
 }

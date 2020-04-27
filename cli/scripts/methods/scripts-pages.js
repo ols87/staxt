@@ -11,11 +11,9 @@ function render(path) {
   const pageData = pages.prepareData(path);
   const filePaths = file(pageData, 'js', '/scripts.js');
 
-  if (!filePaths) return;
+  compile.page(pageData.name);
 
-  if (!pageData.hasScripts) compile.page(pageData.name);
-
-  return scripts(filePaths);
+  return filePaths ? scripts(filePaths) : false;
 }
 
 module.exports = (path = args.p) => {

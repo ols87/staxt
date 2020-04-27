@@ -12,19 +12,14 @@ function render(path) {
   const templateData = templates.filePaths(path, 'css');
   const filePaths = file(templateData, 'scss', '.css');
 
-  if (!filePaths) return;
-
   const pageList = templates.getPages(path);
 
   pageList.forEach((pagePath) => {
     let pageData = pages.prepareData(pagePath);
-
-    if (!pageData.templateStyles) {
-      compile.page(pageData.name);
-    }
+    compile.page(pageData.name);
   });
 
-  return styles(filePaths);
+  return filePaths ? styles(filePaths) : false;
 }
 
 module.exports = (path = args.t) => {
