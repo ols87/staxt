@@ -3,13 +3,14 @@ const fs = require('fs-extra');
 const staxtConfig = require('../files/staxt.config');
 const projectConf = `${process.cwd()}/staxt.config.js`;
 
+const merge = require('../helpers/merge');
+
 let config = staxtConfig;
 
 if (fs.existsSync(projectConf)) {
-  config = Object.assign({}, staxtConfig, require(projectConf));
+  config = merge(staxtConfig, require(projectConf));
 }
-
-config = Object.assign(
+config = merge(
   {
     paths: {
       base: process.cwd(),
@@ -38,5 +39,7 @@ config = Object.assign(
   },
   config
 );
+
+console.log(config);
 
 module.exports = config;

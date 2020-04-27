@@ -34,6 +34,6 @@ module.exports = (path = args.t) => {
 
   templates.all('scss').forEach((templatePath) => {
     let templateName = templates.sanitizePath(templatePath, 'scss');
-    return render(templateName);
+    return templates.isInclude(templatePath) ? false : render(templateName);
   });
 };

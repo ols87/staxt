@@ -34,6 +34,6 @@ module.exports = (path = args.t) => {
 
   templates.all('js').forEach((templatePath) => {
     let templateName = templates.sanitizePath(templatePath, 'js');
-    return render(templateName);
+    return templates.isInclude(templatePath) ? false : render(templateName);
   });
 };

@@ -18,6 +18,10 @@ templates.sanitizePath = (path, type) => {
   return path;
 };
 
+templates.isInclude = (path) => {
+  return path.indexOf(paths.src.includes) > -1;
+};
+
 templates.filePaths = (path, out) => {
   if (!path) {
     logger('red', `Please provide a template path e.g. -t=some/path`);
