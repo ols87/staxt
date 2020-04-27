@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
 const staxtConfig = require('../files/staxt.config');
-const projectConf = `${process.cwd()}/files/staxt.config.js`;
+const projectConf = `${process.cwd()}/staxt.config.js`;
 
 let config = staxtConfig;
 

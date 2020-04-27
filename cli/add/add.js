@@ -3,6 +3,9 @@ const fs = require('fs-extra');
 const logger = require(`${__staxt}/helpers/logger`);
 const timer = require(`${__staxt}/helpers/timer`);
 const paths = require(`${__staxt}/config/paths`);
+const config = require(`${__staxt}/config/config`);
+
+const extension = config.dot.templateSettings.varname;
 
 module.exports = (path, type, outFn) => {
   const src = paths.src[type];
@@ -14,7 +17,7 @@ module.exports = (path, type, outFn) => {
   const name = path.split('/').pop();
 
   if (name === 'index') {
-    if (fs.existsSync(`${src}/index.xt.js`)) {
+    if (fs.existsSync(`${src}/index.${extension}.js`)) {
       return logger('red', `index page already exists`);
     }
   }

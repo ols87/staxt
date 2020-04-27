@@ -1,10 +1,10 @@
 # staxt
 
-A minimal static site generator. 
+A minimal static site generator.
 
 ## concept
 
-The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with doT.js templates to deliver HTML. Sass is used for compiling css and Browserify is used to compile javascript files. 
+The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with doT.js templates to deliver HTML. Sass is used for compiling css and Browserify is used to compile javascript files.
 
 ## WARNING
 
@@ -38,10 +38,10 @@ Creates a new project with the following folder structure:
     /index.xt.js
     /index.scss
   /templates
-    /pages
-      /pages.html
-      /pages.scss
-      /pages.js
+    /page
+      /page.html
+      /page.scss
+      /page.js
     /includes
 /dist
   /assets
@@ -84,11 +84,10 @@ npx staxt compile -p=[page] (or) -t=[template] -i=[include]
 
 Compiles a page or template or include.
 
-
 ### styles
 
 ```
-npx staxt styles -a=[asset] -p=[page] -t[template]
+npx staxt styles -a=[asset] -p=[page] -t=[template]
 ```
 
 Generates css for an asset or page or template
@@ -96,12 +95,13 @@ Generates css for an asset or page or template
 ### scripts
 
 ```
-npx staxt scripts -a=[asset] -p=[page] -t[template]
+npx staxt scripts -a=[asset] -p=[page] -t=[template]
 ```
 
 Generates js for an asset or page or template
 
 ### bundle
+
 ```
 npx staxt bundle
 ```
