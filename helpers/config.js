@@ -32,7 +32,7 @@ module.exports = objectMerge(
         assets: {
           base: 'assets',
           js: 'js',
-          css: 'css',
+          scss: 'css',
           images: 'images',
         },
       },

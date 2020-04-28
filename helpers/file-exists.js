@@ -11,16 +11,16 @@ const getExtention = function getFileExtension(filePath) {
   return fileExtension.join('.');
 };
 
-module.exports = function fileExists(fileName, filePath) {
-  let fileExtension = getExtention(filePath);
+module.exports = function fileExists(filePath, srcPath) {
+  let fileExtension = getExtention(srcPath);
 
-  if (!fs.existsSync(filePath)) {
-    logger('red', `${fileName}.${fileExtension} does not exist`);
+  if (!fs.existsSync(srcPath)) {
+    logger('red', `${filePath}.${fileExtension} does not exist`);
     return false;
   }
 
-  if (!fs.readFileSync(filePath, 'utf8')) {
-    logger('yellow', `${fileName}.${fileExtension} is empty, skipping...`);
+  if (!fs.readFileSync(srcPath, 'utf8')) {
+    logger('yellow', `${filePath}.${fileExtension} is empty, skipping...`);
     return false;
   }
 

@@ -6,7 +6,7 @@ const exists = require(`${__staxt}/helpers/exists`);
 const styles = require('../styles');
 
 const src = paths.src.assets.scss;
-const dist = paths.dist.assets.css;
+const dist = paths.dist.assets.scss;
 
 module.exports = (path = args.a, out = args.o || path) => {
   if (typeof path !== 'string') {

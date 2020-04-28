@@ -10,29 +10,28 @@ const testMatch = function testFileMatch(fileName, matchArguments) {
   return hasMatch;
 };
 
-module.exports = function folderFilter(options) {
-  let { directory, includes = [], excludes = [], returnFolder = [] } = options;
-
+module.exports = function getFiles({ directory, includes = [], excludes = [], returnFolder = [] }) {
   const fileList = fs.readdirSync(directory);
 
   fileList.forEach((fileName) => {
-    directory = `${directory}/${fileName}`;
+    let filePath = `${directory}/${fileName}`;
 
-    if (fs.statSync(directory).isDirectory()) {
-      returnFolder = folderFilter({
-        directory,
+    if (fs.statSync(filePath).isDirectory()) {
+      returnFolder = getFiles({
         includes,
         excludes,
         returnFolder,
+        directory: filePath,
       });
     } else {
       const hasIncludes = includes !== '';
       const hasExcludes = excludes !== '';
-      const isIncludes = hasIncludes && testMatch(fileName, includes);
-      const isExcludes = hasExcludes && testMatch(fileName, excludes);
 
-      if (!hasIncludes || (isIncludes && !isExcludes)) {
-        returnFolder.push(directory);
+      const isIncluded = hasIncludes && testMatch(fileName, includes);
+      const isExcluded = hasExcludes && testMatch(fileName, excludes);
+
+      if (!hasIncludes || (isIncluded && !isExcluded)) {
+        returnFolder.push(filePath);
       }
     }
   });

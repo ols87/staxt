@@ -112,7 +112,7 @@ function templateData(pageData) {
     }
   }
 
-  const cssDist = paths.dist.assets.css.replace(`${process.cwd()}/dist`, '');
+  const cssDist = paths.dist.assets.scss.replace(`${process.cwd()}/dist`, '');
   const templateSCSS = `${pageData.templatePath}.scss`;
   pageData.templateStyles = hasAsset(templateSCSS) ? `${cssDist}/${templateDist}.css` : null;
 

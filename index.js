@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const args = require('yargs').argv;
-const loader = require(`./helpers/loader`);
+const loader = require(`./helpers/cli-parser`);
 
 global.__staxt = __dirname;
 

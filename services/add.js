@@ -7,7 +7,7 @@ const config = require(`../helpers/config`);
 
 const extension = config.dot.templateSettings.varname;
 
-module.exports = function addModule(filePath, fileType, outFunction) {
+module.exports = function addService(filePath, fileType, outFunction) {
   const srcDirectory = paths.src[type];
 
   if (!filePath) {

@@ -3,14 +3,14 @@ const fs = require('fs-extra');
 const paths = require('../helpers/paths');
 const config = require('../helpersconfig');
 const logger = require('../helpers/logger');
-const filterFolder = require('../helpers/filterFolder');
+const getFiles = require('../helpers/get-files');
 
 const extension = config.dot.templateSettings.varname;
 
 const srcDirectory = paths.src;
 const distDirectory = paths.dist.base;
 
-const cssDist = paths.dist.assets.css.replace(`${process.cwd()}/dist`, '');
+const cssDist = paths.dist.assets.scss.replace(`${process.cwd()}/dist`, '');
 const jsDist = paths.dist.assets.js.replace(`${process.cwd()}/dist`, '');
 
 const hasAsset = function hasAssetAndContent(filePath) {
@@ -54,7 +54,7 @@ const setTemplateData = function SetPageTemplateData(pageData) {
   return pageData;
 };
 
-module.exports = pagesModule = {
+module.exports = pagesService = {
   parsePath(argument) {
     const hasPath = typeof argument === 'string';
     const isFolder = hasPath ? argument.indexOf('/*') > 0 : false;
@@ -72,17 +72,17 @@ module.exports = pagesModule = {
     return filePath;
   },
 
-  prepareData(fileName) {
-    fileName = pages.sanitizePath(path);
+  prepareData(filePath) {
+    filePath = pages.sanitizePath(filePath);
 
-    if (!fileName) {
+    if (!filePath) {
       logger('red', `Please provide a page path e.g. -p=some/path`);
       process.exit();
     }
 
-    const pageName = fileName.split('/').pop();
+    const pageName = filePath.split('/').pop();
 
-    let srcPath = `${src.pages}/${fileName}/${pageName}`;
+    let srcPath = `${src.pages}/${filePath}/${pageName}`;
 
     if (pageName === 'index') {
       srcPath = srcPath.replace('/index', '');
@@ -95,15 +95,15 @@ module.exports = pagesModule = {
 
     pageData.name = pageName;
 
-    let distPath = fileName.replace(`/${pageName}`, '');
-    distPath = pageData.slug ? `${distDirectory}/${pageData.slug}` : `${distDirectory}/${fileName}`;
+    let distPath = filePath.replace(`/${pageName}`, '');
+    distPath = pageData.slug ? `${distDirectory}/${pageData.slug}` : `${distDirectory}/${filePath}`;
 
     if (pageName === 'index') {
       distPath = distDirectory;
     }
 
     pageData = setPageAssets(pageData, srcPath);
-    pageData = setTemplateData(pageData, fileName);
+    pageData = setTemplateData(pageData);
 
     pageData.srcPath = srcPath;
     pageData.distPath = distPath;
@@ -119,7 +119,7 @@ module.exports = pagesModule = {
       returnFolder = `${srcDirectory.pages}/${folderName}`;
     }
 
-    return filterFolder({
+    return getFiles({
       directory: returnFolder,
       includes: [`.${fileExtension}`],
     });

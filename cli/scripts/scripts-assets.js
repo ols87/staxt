@@ -1,24 +1,16 @@
-const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const paths = require(`${__staxt}/config/paths`);
-const exists = require(`${__staxt}/helpers/exists`);
+const assetsService = require(`${__staxt}/services/assets`);
+const scriptsService = require(`${__staxt}/services/scripts`);
 
-const scripts = require('../scripts');
+module.exports = function scriptsAssets(filePath = args.a, outPath = args.o || filePath) {
+  const filePaths = assetsService.filePaths({
+    filePath,
+    outPath,
+    fileExtension: 'js',
+  });
 
-const src = paths.src.assets.js;
-const dist = paths.dist.assets.js;
+  if (!filePaths) return;
 
-module.exports = (path = args.a, out = args.o || path) => {
-  if (typeof path !== 'string') {
-    path = 'main';
-    out = 'main';
-  }
-
-  const srcPath = `${src}/${path}.js`;
-  const distPath = `${dist}/${out}.js`;
-
-  if (!exists(path, srcPath)) return;
-
-  scripts({ path, srcPath, distPath });
+  scriptsService(filePaths);
 };

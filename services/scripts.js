@@ -5,9 +5,7 @@ const partialify = require('partialify');
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-module.exports = function scriptsModule(options) {
-  const { fileName, srcPath, distPath } = options;
-
+module.exports = function scriptsService({ filePath, srcPath, distPath }) {
   timer.start();
 
   if (!fs.existsSync(distPath)) {
@@ -20,7 +18,7 @@ module.exports = function scriptsModule(options) {
     .pipe(fs.createWriteStream(distPath))
     .on('finish', () => {
       timer.end().then((seconds) => {
-        logger('green', `${fileName} js compiled in ${seconds} seconds`);
+        logger('green', `${filePath} js compiled in ${seconds} seconds`);
       });
     });
 };

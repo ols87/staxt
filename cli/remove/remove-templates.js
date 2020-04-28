@@ -7,7 +7,7 @@ const remove = require('../remove');
 
 const src = paths.src.templates;
 const js = paths.dist.assets.js;
-const css = paths.dist.assets.css;
+const css = paths.dist.assets.scss;
 
 module.exports = (path = args.t) => {
   let templateName = path.split('/').pop();

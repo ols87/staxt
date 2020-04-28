@@ -1,14 +1,14 @@
 const fs = require('fs-extra');
 const sass = require('sass');
 
-const paths = require(`${__staxt}/config/paths`);
+const paths = require(`${__staxt}/helpers/paths`);
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-module.exports = function stylesModule(options) {
-  const { fileName, srcPath, distPath } = options;
-
+module.exports = function stylesService({ filePath, srcPath, distPath }) {
   timer.start();
+
+  distPath = distPath.replace('.scss', '.css');
 
   sass.render(
     {
@@ -24,7 +24,7 @@ module.exports = function stylesModule(options) {
       fs.writeFileSync(distPath, result.css);
 
       timer.end().then((seconds) => {
-        logger('green', `${fileName} scss compiled in ${seconds} seconds`);
+        logger('green', `${filePath} scss compiled in ${seconds} seconds`);
       });
     }
   );

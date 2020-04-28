@@ -1,7 +1,7 @@
 const paths = require('../helpers/paths');
 const config = require('../helpersconfig');
 const logger = require('../helpers/logger');
-const filterFolder = require('../helpers/filterFolder');
+const getFiles = require('../helpers/get-files');
 
 const extension = config.dot.templateSettings.varname;
 
@@ -9,7 +9,7 @@ const templatesSrc = paths.src.templates;
 const includesSrc = paths.src.includes;
 const pagesSrc = paths.src.includes;
 
-module.exports = templatesModule = {
+module.exports = templatesService = {
   sanitizePath(filePath, FileExtension) {
     if (filePath.indexOf(`.${FileExtension}`) > -1) {
       filePath = filePath.split('/').pop();
@@ -66,7 +66,7 @@ module.exports = templatesModule = {
   },
 
   getAll(FileExtension) {
-    return glob({
+    return getFiles({
       directory: templateSrc,
       includes: [`.${FileExtension}`],
       excludes: [`/${includesSrc}`],

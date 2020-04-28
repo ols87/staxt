@@ -8,22 +8,21 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
-    
-    <link rel="stylesheet" type="text/css" href="/assets/css/template-page.css" />
-     
+    {{? xt.templateStyles }}
+    <link rel="stylesheet" type="text/css" href="{{= xt.templateStyles}}" />
+    {{?}} {{? xt.hasStyles }}
     <link rel="stylesheet" type="text/css" href="style.css" />
-    
+    {{?}}
   </head>
 
   <body>
-    Staxt Static Site bar abc bar
-
-
-    <div id="view"></div>
+    Staxt Static Site Generator
   </body>
 
   <script src="/assets/js/main.js"></script>
-  
-  <script src="/assets/js/template-page.js"></script>
-   
+  {{? xt.templateScripts }}
+  <script src="{{= xt.templateScripts}}"></script>
+  {{?}} {{? xt.hasScripts }}
+  <script src="scripts.js"></script>
+  {{?}}
 </html>

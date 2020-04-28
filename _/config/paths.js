@@ -35,7 +35,7 @@ module.exports = {
     assets: {
       base: assets.dist,
       js: `${assets.dist}/${dist.assets.js}`,
-      css: `${assets.dist}/${dist.assets.css}`,
+      css: `${assets.dist}/${dist.assets.scss}`,
       images: `${assets.dist}/${dist.assets.images}`,
     },
   },

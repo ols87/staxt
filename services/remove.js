@@ -4,7 +4,7 @@ const paths = require(`${__staxt}/config/paths`);
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-module.exports = function removeModule(filePath, fileName, fileType, cleanFunction) {
+module.exports = function removeService(filePath, fileName, fileType, cleanFunction) {
   const srcDirectory = paths.src[fileType];
 
   if (!filePath) {

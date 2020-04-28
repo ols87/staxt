@@ -1,4 +1,4 @@
-const config = require(`.config`);
+const config = require(`./config`);
 
 const paths = config.paths;
 const base = paths.base;
@@ -35,7 +35,7 @@ module.exports = {
     assets: {
       base: assets.dist,
       js: `${assets.dist}/${dist.assets.js}`,
-      css: `${assets.dist}/${dist.assets.css}`,
+      scss: `${assets.dist}/${dist.assets.scss}`,
       images: `${assets.dist}/${dist.assets.images}`,
     },
   },

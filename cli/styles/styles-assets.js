@@ -1,23 +1,16 @@
 const args = require('yargs').argv;
 
-const paths = require(`${__staxt}/config/paths`);
-const exists = require(`${__staxt}/helpers/exists`);
+const assetsService = require(`${__staxt}/services/assets`);
+const stylesService = require(`${__staxt}/services/styles`);
 
-const styles = require('../styles');
+module.exports = function stylesAssets(filePath = args.a, outPath = args.o || filePath) {
+  const filePaths = assetsService.filePaths({
+    filePath,
+    outPath,
+    fileExtension: 'scss',
+  });
 
-const src = paths.src.assets.scss;
-const dist = paths.dist.assets.css;
+  if (!filePaths) return;
 
-module.exports = (path = args.a, out = args.o || path) => {
-  if (typeof path !== 'string') {
-    path = 'main';
-    out = 'main';
-  }
-
-  const srcPath = `${src}/${path}.scss`;
-  const distPath = `${dist}/${out}.css`;
-
-  if (!exists(path, srcPath)) return;
-
-  styles({ path, srcPath, distPath });
+  stylesService(filePaths);
 };
