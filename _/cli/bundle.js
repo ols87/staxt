@@ -3,13 +3,9 @@ const paths = require(`${__staxt}/config/paths`);
 
 module.exports = () => {
   const methods = [
-    ['compile', 'pages'],
-
-    ['styles', 'pages'],
     ['styles', 'templates'],
     ['styles', 'assets'],
 
-    ['scripts', 'pages'],
     ['scripts', 'templates'],
     ['scripts', 'assets'],
   ];

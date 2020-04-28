@@ -28,7 +28,7 @@ module.exports = () => {
   files.forEach((file) => fs.ensureFileSync(file));
 
   if (!fs.existsSync(`${paths.base}/staxt.config.js`)) {
-    fs.copySync(`${__staxt}/staxt.config.js`, `${paths.base}/staxt.config.js`);
+    fs.copySync(`${__staxt}/files/staxt.config.js`, `${paths.base}/staxt.config.js`);
   }
 
   fs.copySync(`${__staxt}/files/template.html`, `${defaultTemplate}.html`);
