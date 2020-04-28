@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
-const paths = require(`${__staxt}/config/paths`);
-const config = require(`${__staxt}/config/config`);
+const paths = require(`./paths`);
+const config = require(`./config`);
 
 const dot = require('dot');
 

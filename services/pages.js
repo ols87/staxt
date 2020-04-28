@@ -1,9 +1,12 @@
 const fs = require('fs-extra');
 
+const dot = require(`../helpers/dot`);
 const paths = require('../helpers/paths');
-const config = require('../helpersconfig');
+const timer = require(`../helpers/timer`);
+const config = require('../helpers/config');
 const logger = require('../helpers/logger');
 const getFiles = require('../helpers/get-files');
+const fileExists = require('../helpers/file-exists');
 
 const extension = config.dot.templateSettings.varname;
 
@@ -55,9 +58,9 @@ const setTemplateData = function SetPageTemplateData(pageData) {
 };
 
 module.exports = pagesService = {
-  parsePath(argument) {
-    const hasPath = typeof argument === 'string';
-    const isFolder = hasPath ? argument.indexOf('/*') > 0 : false;
+  parsePath(filePath) {
+    const hasPath = typeof filePath === 'string';
+    const isFolder = hasPath ? filePath.indexOf('/*') > 0 : false;
 
     return { hasPath, isFolder };
   },
@@ -72,8 +75,22 @@ module.exports = pagesService = {
     return filePath;
   },
 
+  getFolder(argument, folderPath, fileExtension = `${extension}.js`) {
+    let returnFolder = srcDirectory.pages;
+
+    if (argument.isFolder) {
+      const folderName = argument.hasPath ? folderPath.replace('/*', '') : '';
+      returnFolder = `${srcDirectory.pages}/${folderName}`;
+    }
+
+    return getFiles({
+      directory: returnFolder,
+      includes: [`.${fileExtension}`],
+    });
+  },
+
   prepareData(filePath) {
-    filePath = pages.sanitizePath(filePath);
+    filePath = this.sanitizePath(filePath);
 
     if (!filePath) {
       logger('red', `Please provide a page path e.g. -p=some/path`);
@@ -82,7 +99,7 @@ module.exports = pagesService = {
 
     const pageName = filePath.split('/').pop();
 
-    let srcPath = `${src.pages}/${filePath}/${pageName}`;
+    let srcPath = `${srcDirectory.pages}/${filePath}/${pageName}`;
 
     if (pageName === 'index') {
       srcPath = srcPath.replace('/index', '');
@@ -111,17 +128,25 @@ module.exports = pagesService = {
     return pageData;
   },
 
-  getFolder(argument, folderPath, fileExtension = `${extension}.js`) {
-    let returnFolder = srcDirectory.pages;
+  compile(filePath) {
+    const pageData = this.prepareData(filePath);
 
-    if (argument.isFolder) {
-      const folderName = argument.hasPath ? folderPath.replace('/*', '') : '';
-      returnFolder = `${srcDirectory.pages}/${folderName}`;
-    }
+    if (!pageData) return false;
 
-    return getFiles({
-      directory: returnFolder,
-      includes: [`.${fileExtension}`],
+    timer.start();
+
+    const distPath = `${pageData.distPath}/index.html`;
+    const templatePath = `${pageData.templatePath}.html`;
+
+    if (!fileExists(pageData.templateName, templatePath)) return false;
+
+    const templateContent = fs.readFileSync(templatePath, 'utf8');
+    const compile = dot.template(templateContent, dot.templateSettings, dot.defs);
+
+    fs.outputFileSync(distPath, compile(pageData));
+
+    timer.end().then((seconds) => {
+      logger('green', `${pageData.name} page compiled in ${seconds} seconds`);
     });
   },
 };
