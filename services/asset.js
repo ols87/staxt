@@ -7,6 +7,11 @@ const paths = require('../helpers/paths');
 const getPaths = require('../helpers/get-paths');
 const fileExists = require('../helpers/file-exists');
 
+const assetsServices = {
+  js: scriptService,
+  scss: styleService,
+};
+
 const pageAsset = function renderPageAsset(assetPaths, filePath) {
   const pageData = pageService.prepareData(filePath);
 
@@ -18,18 +23,13 @@ const pageAsset = function renderPageAsset(assetPaths, filePath) {
 
   if (!filePaths) return;
 
-  const assetServices = {
-    js: scriptService,
-    scss: styleService,
-  };
-
   compileService.page(pageData.name);
 
-  assetServices[assetPaths.fileExtension](filePaths);
+  assetsServices[assetPaths.fileExtension](filePaths);
 };
 
 module.exports = assetService = {
-  filePaths({ filePath, outPath, fileExtension }) {
+  main({ filePath, outPath, fileExtension }) {
     const srcDirectory = paths.src.assets[fileExtension];
     const distDirectory = paths.dist.assets[fileExtension];
 
@@ -41,9 +41,9 @@ module.exports = assetService = {
     const srcPath = `${srcDirectory}/${filePath}.${fileExtension}`;
     const distPath = `${distDirectory}/${outPath}.${fileExtension}`;
 
-    const hasFile = fileExists(filePath, srcPath);
+    if(!fileExists(filePath, srcPath)) return;
 
-    return hasFile ? { filePath, srcPath, distPath } : false;
+    assetsServices[fileExtension]({ filePath, srcPath, distPath });
   },
 
   page(assetPaths) {
