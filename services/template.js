@@ -1,5 +1,5 @@
 const paths = require('../helpers/paths');
-const config = require('../helpersconfig');
+const config = require('../helpers/config');
 const logger = require('../helpers/logger');
 const getFiles = require('../helpers/get-files');
 
@@ -7,9 +7,9 @@ const extension = config.dot.templateSettings.varname;
 
 const templatesSrc = paths.src.templates;
 const includesSrc = paths.src.includes;
-const pagesSrc = paths.src.includes;
+const pagesSrc = paths.src.pages;
 
-module.exports = templatesService = {
+module.exports = templateService = {
   sanitizePath(filePath, FileExtension) {
     if (filePath.indexOf(`.${FileExtension}`) > -1) {
       filePath = filePath.split('/').pop();
@@ -25,14 +25,14 @@ module.exports = templatesService = {
 
   filePaths(filePath, outDirectory) {
     if (!filePath) {
-      logger('red', `Please provide a template path e.g. -t=some/path`);
+      logger('red', `Please provide a template path e.g. -t=path`);
       process.exit();
     }
 
     const fileName = filePath.split('/').pop();
     const srcPath = `${templatesSrc}/${filePath}/${fileName}`;
 
-    const outName = filePath.replace(src, '').replace(/\//g, '-');
+    const outName = filePath.replace(templatesSrc, '').replace(/\//g, '-');
     const distDirectory = outDirectory ? paths.dist.assets[out] : '';
     const distPath = `${distDirectory}/template-${outName}`;
 
@@ -44,9 +44,9 @@ module.exports = templatesService = {
   },
 
   getPages(filePath) {
-    const template = templates.filePaths(filePath);
+    const templatePaths = this.filePaths(filePath);
 
-    const pagesFolder = filterFolder({
+    const pagesFolder = getFiles({
       directory: pagesSrc,
       includes: [`${extension}.js`],
     });
@@ -57,7 +57,7 @@ module.exports = templatesService = {
       const pageData = require(pagePath);
       delete require.cache[require.resolve(pagePath)];
 
-      if (pageData.template === template.name) {
+      if (pageData.template === templatePaths.fileName) {
         pageList.push(pagePath);
       }
     });
@@ -67,7 +67,7 @@ module.exports = templatesService = {
 
   getAll(FileExtension) {
     return getFiles({
-      directory: templateSrc,
+      directory: templatesSrc,
       includes: [`.${FileExtension}`],
       excludes: [`/${includesSrc}`],
     });

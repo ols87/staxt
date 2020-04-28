@@ -1,15 +1,16 @@
 const args = require('yargs').argv;
 
-const pagesService = require(`${__staxt}/services/pages`);
+const pageService = require(`${__staxt}/services/page`);
+const compileService = require(`${__staxt}/services/compile`);
 
 module.exports = (filePath = args.p) => {
-  const cliArgs = pagesService.parsePath(filePath);
+  const cliArgs = pageService.parsePath(filePath);
 
   if (cliArgs.hasPath && !cliArgs.isFolder) {
-    return pagesService.compile(filePath);
+    return compileService.page(filePath);
   }
 
-  pagesService.getFolder(cliArgs, filePath).forEach((pagePath) => {
-    pagesService.compile(pagePath);
+  pageService.getFolder(cliArgs, filePath).forEach((pagePath) => {
+    compileService.page(pagePath);
   });
 };

@@ -1,9 +1,9 @@
 const args = require('yargs').argv;
 
-const assetsService = require(`${__staxt}/services/assets`);
+const assetService = require(`${__staxt}/services/asset`);
 
 module.exports = function stylesAssets(filePath = args.p) {
-  assetsService.page({
+  assetService.page({
     filePath,
     fileExtension: 'scss',
     distFile: '/styles.css',

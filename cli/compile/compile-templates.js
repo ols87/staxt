@@ -1,15 +1,15 @@
 const args = require('yargs').argv;
 
-const templates = require(`${__staxt}/services/templates`);
-const compile = require('../compile');
+const templateService = require(`${__staxt}/services/template`);
+const compileService = require(`${__staxt}/services/compile`);
 
-module.exports = (path = args.t) => {
-  if (typeof path === 'string') {
-    return compile.template(path);
+module.exports = (filePath = args.t) => {
+  if (typeof filePath === 'string') {
+    return compileService.template(filePath);
   }
 
-  templates.all('html').forEach((templatePath) => {
-    let templateName = templates.sanitizePath(templatePath, 'html');
-    compile.template(templateName);
+  templateService.getAll('html').forEach((templatePath) => {
+    let templateName = templateService.sanitizePath(templatePath, 'html');
+    compileService.template(templateName);
   });
 };

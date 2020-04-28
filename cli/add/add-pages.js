@@ -1,22 +1,33 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const config = require(`${__staxt}/config/config`);
-const add = require('../add');
+const addService = require(`${__staxt}/services/add`);
+
+const config = require(`${__staxt}/helpers/config`);
 
 const template = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
-module.exports = (path = args.p) => {
-  add(path, 'pages', (srcPath) => {
-    const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
+const directory = 'pages';
 
-    if (srcPath.indexOf('/index/index') > -1) {
-      srcPath = srcPath.replace('/index', '');
-    }
+const outFunction = function outPutPageFiles({ fileName, srcPath }) {
+  const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
 
-    fs.outputFileSync(`${srcPath}.${extension}.js`, data);
-    fs.ensureFileSync(`${srcPath}.js`);
-    fs.ensureFileSync(`${srcPath}.scss`);
+  if (srcPath.indexOf('/index/index') > -1) {
+    srcPath = srcPath.replace('/index', '');
+  }
+
+  fs.outputFileSync(`${srcPath}.${extension}.js`, data);
+  fs.ensureFileSync(`${srcPath}.js`);
+  fs.ensureFileSync(`${srcPath}.scss`);
+
+  compileService.page(fileName);
+};
+
+module.exports = (filePath = args.p) => {
+  addService({
+    filePath,
+    directory,
+    outFunction,
   });
 };

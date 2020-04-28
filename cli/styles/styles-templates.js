@@ -1,8 +1,8 @@
 const args = require('yargs').argv;
 
-const templates = require(`${__staxt}/services/templates`);
-const pages = require(`${__staxt}/services/pages`);
-const styles = require('../styles');
+const templates = require(`${__staxt}/services/template`);
+const pages = require(`${__staxt}/services/page`);
+const styles = require('../style');
 
 const compile = require(`${__staxt}/cli/compile/compile`);
 

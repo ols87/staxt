@@ -1,14 +1,14 @@
-const stylesService = require(`./styles`);
-const scriptsService = require(`./scripts`);
-const pagesService = require(`./pages`);
+const pageService = require(`./page`);
+const styleService = require(`./style`);
+const compileService = require('./compile');
+const scriptService = require(`./script`);
 
 const paths = require('../helpers/paths');
-const getFiles = require('../helpers/get-files');
-const fileExists = require('../helpers/file-exists');
 const getPaths = require('../helpers/get-paths');
+const fileExists = require('../helpers/file-exists');
 
 const pageAsset = function renderPageAsset(assetPaths, filePath) {
-  const pageData = pagesService.prepareData(filePath);
+  const pageData = pageService.prepareData(filePath);
 
   const filePaths = getPaths({
     fileData: pageData,
@@ -19,21 +19,16 @@ const pageAsset = function renderPageAsset(assetPaths, filePath) {
   if (!filePaths) return;
 
   const assetServices = {
-    js: scriptsService,
-    scss: stylesService,
+    js: scriptService,
+    scss: styleService,
   };
+
+  compileService.page(pageData.name);
 
   assetServices[assetPaths.fileExtension](filePaths);
 };
 
-module.exports = assetsService = {
-  getFiles(fileExtension) {
-    return getFiles({
-      directory: paths.src.assets[fileExtension],
-      includes: [`.${fileExtension}`],
-    });
-  },
-
+module.exports = assetService = {
   filePaths({ filePath, outPath, fileExtension }) {
     const srcDirectory = paths.src.assets[fileExtension];
     const distDirectory = paths.dist.assets[fileExtension];
@@ -53,10 +48,10 @@ module.exports = assetsService = {
 
   page(assetPaths) {
     const { filePath } = assetPaths;
-    const cliArgs = pagesService.parsePath(filePath);
+    const cliArgs = pageService.parsePath(filePath);
 
     if (typeof filePath !== 'string') {
-      pagesService.getFolder(cliArgs, filePath).forEach((pagePath) => {
+      pageService.getFolder(cliArgs, filePath).forEach((pagePath) => {
         pageAsset(assetPaths, pagePath);
       });
 

@@ -5,7 +5,7 @@ const partialify = require('partialify');
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-module.exports = function scriptsService({ filePath, srcPath, distPath }) {
+module.exports = function scriptService({ filePath, srcPath, distPath }) {
   timer.start();
 
   if (!fs.existsSync(distPath)) {

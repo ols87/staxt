@@ -7,11 +7,11 @@ const config = require(`../helpers/config`);
 
 const extension = config.dot.templateSettings.varname;
 
-module.exports = function addService(filePath, fileType, outFunction) {
-  const srcDirectory = paths.src[type];
+module.exports = function addService({ filePath, directory, outFunction }) {
+  const srcDirectory = paths.src[directory];
 
-  if (!filePath) {
-    return logger('red', `Provide a ${fileType} path e.g. -${fileType.charAt(0)}=some/path`);
+  if (!filePath || typeof filePath !== 'string') {
+    return logger('red', `Provide a ${directory} path e.g. -${directory.charAt(0)}=path`);
   }
 
   const fileName = filePath.split('/').pop();
@@ -23,16 +23,16 @@ module.exports = function addService(filePath, fileType, outFunction) {
   }
 
   if (fs.existsSync(`${srcDirectory}/${filePath}`)) {
-    return logger('red', `${fileName} ${fileType.slice(0, -1)} already exists`);
+    return logger('red', `${fileName} ${directory.slice(0, -1)} already exists`);
   }
 
   const srcPath = `${srcDirectory}/${filePath}/${fileName}`;
 
   timer.start();
 
-  outFunction(srcPath);
+  outFunction({ fileName, srcPath });
 
   timer.end().then((seconds) => {
-    logger('green', `${fileName} ${fileType.slice(0, -1)} created in ${seconds} seconds`);
+    logger('green', `${fileName} ${directory.slice(0, -1)} created in ${seconds} seconds`);
   });
 };

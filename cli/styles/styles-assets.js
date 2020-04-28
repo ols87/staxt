@@ -1,10 +1,10 @@
 const args = require('yargs').argv;
 
-const assetsService = require(`${__staxt}/services/assets`);
-const stylesService = require(`${__staxt}/services/styles`);
+const assetService = require(`${__staxt}/services/asset`);
+const styleService = require(`${__staxt}/services/styles`);
 
 module.exports = function stylesAssets(filePath = args.a, outPath = args.o || filePath) {
-  const filePaths = assetsService.filePaths({
+  const filePaths = assetService.filePaths({
     filePath,
     outPath,
     fileExtension: 'scss',
@@ -12,5 +12,5 @@ module.exports = function stylesAssets(filePath = args.a, outPath = args.o || fi
 
   if (!filePaths) return;
 
-  stylesService(filePaths);
+  styleService(filePaths);
 };

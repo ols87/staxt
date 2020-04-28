@@ -5,7 +5,7 @@ const paths = require(`${__staxt}/helpers/paths`);
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-module.exports = function stylesService({ filePath, srcPath, distPath }) {
+module.exports = function styleService({ filePath, srcPath, distPath }) {
   timer.start();
 
   distPath = distPath.replace('.scss', '.css');

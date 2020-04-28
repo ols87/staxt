@@ -1,10 +1,10 @@
 const args = require('yargs').argv;
 
-const assetsService = require(`${__staxt}/services/assets`);
-const scriptsService = require(`${__staxt}/services/scripts`);
+const assetService = require(`${__staxt}/services/asset`);
+const scriptService = require(`${__staxt}/services/script`);
 
 module.exports = function scriptsAssets(filePath = args.a, outPath = args.o || filePath) {
-  const filePaths = assetsService.filePaths({
+  const filePaths = assetService.filePaths({
     filePath,
     outPath,
     fileExtension: 'js',
@@ -12,5 +12,5 @@ module.exports = function scriptsAssets(filePath = args.a, outPath = args.o || f
 
   if (!filePaths) return;
 
-  scriptsService(filePaths);
+  scriptService(filePaths);
 };

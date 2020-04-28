@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const args = require('yargs').argv;
 
-const pages = require(`${__staxt}/services/pages`);
+const pages = require(`${__staxt}/services/page`);
 const paths = require(`${__staxt}/config/paths`);
 
 const remove = require('../remove');

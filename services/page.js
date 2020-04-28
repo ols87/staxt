@@ -1,12 +1,9 @@
 const fs = require('fs-extra');
 
-const dot = require(`../helpers/dot`);
 const paths = require('../helpers/paths');
-const timer = require(`../helpers/timer`);
 const config = require('../helpers/config');
 const logger = require('../helpers/logger');
 const getFiles = require('../helpers/get-files');
-const fileExists = require('../helpers/file-exists');
 
 const extension = config.dot.templateSettings.varname;
 
@@ -57,7 +54,7 @@ const setTemplateData = function SetPageTemplateData(pageData) {
   return pageData;
 };
 
-module.exports = pagesService = {
+module.exports = pageService = {
   parsePath(filePath) {
     const hasPath = typeof filePath === 'string';
     const isFolder = hasPath ? filePath.indexOf('/*') > 0 : false;
@@ -93,7 +90,7 @@ module.exports = pagesService = {
     filePath = this.sanitizePath(filePath);
 
     if (!filePath) {
-      logger('red', `Please provide a page path e.g. -p=some/path`);
+      logger('red', `Please provide a page path e.g. -p=page/path`);
       process.exit();
     }
 
@@ -126,27 +123,5 @@ module.exports = pagesService = {
     pageData.distPath = distPath;
 
     return pageData;
-  },
-
-  compile(filePath) {
-    const pageData = this.prepareData(filePath);
-
-    if (!pageData) return false;
-
-    timer.start();
-
-    const distPath = `${pageData.distPath}/index.html`;
-    const templatePath = `${pageData.templatePath}.html`;
-
-    if (!fileExists(pageData.templateName, templatePath)) return false;
-
-    const templateContent = fs.readFileSync(templatePath, 'utf8');
-    const compile = dot.template(templateContent, dot.templateSettings, dot.defs);
-
-    fs.outputFileSync(distPath, compile(pageData));
-
-    timer.end().then((seconds) => {
-      logger('green', `${pageData.name} page compiled in ${seconds} seconds`);
-    });
   },
 };
