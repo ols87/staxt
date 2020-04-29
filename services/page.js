@@ -104,6 +104,10 @@ module.exports = pageService = {
 
     const dataPath = `${srcPath}.${extension}.js`;
 
+    if (!fs.existsSync(dataPath)) {
+      return { name: pageName };
+    }
+
     let pageData = require(dataPath);
     delete require.cache[require.resolve(dataPath)];
 

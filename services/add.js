@@ -1,13 +1,40 @@
 const fs = require('fs-extra');
 
+const compileService = require(`${__staxt}/services/compile`);
+
 const logger = require(`../helpers/logger`);
 const timer = require(`../helpers/timer`);
 const paths = require(`../helpers/paths`);
 const config = require(`../helpers/config`);
 
+const template = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
-module.exports = function addService({ filePath, directory, outFunction }) {
+const addFileFunctions = {
+  pages({ srcPath }) {
+    const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
+
+    if (srcPath.indexOf('/index/index') > -1) {
+      srcPath = srcPath.replace('/index', '');
+    }
+
+    fs.outputFileSync(`${srcPath}.${extension}.js`, data);
+    fs.ensureFileSync(`${srcPath}.js`);
+    fs.ensureFileSync(`${srcPath}.scss`);
+  },
+
+  templates({ srcPath }) {
+    fs.ensureFileSync(`${srcPath}.html`);
+    fs.ensureFileSync(`${srcPath}.js`);
+    fs.ensureFileSync(`${srcPath}.scss`);
+  },
+
+  includes({ srcPath }) {
+    return this.templates({ srcPath });
+  },
+};
+
+module.exports = function addService({ filePath, directory }) {
   const srcDirectory = paths.src[directory];
 
   if (!filePath || typeof filePath !== 'string') {
@@ -30,9 +57,13 @@ module.exports = function addService({ filePath, directory, outFunction }) {
 
   timer.start();
 
-  outFunction({ fileName, srcPath });
+  addFileFunctions[directory]({ srcPath });
 
   timer.end().then((seconds) => {
     logger('green', `${fileName} ${directory.slice(0, -1)} created in ${seconds} seconds`);
   });
+
+  if (directory === 'pages') {
+    compileService.page(filePath);
+  }
 };

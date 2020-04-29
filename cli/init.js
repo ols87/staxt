@@ -1,11 +1,11 @@
 const fs = require('fs-extra');
 
-const config = require(`${__staxt}/config/config`);
-const logger = require(`${__staxt}/helpers/logger`);
+const paths = require(`${__staxt}/helpers/paths`);
 const timer = require(`${__staxt}/helpers/timer`);
-const paths = require(`${__staxt}/config/paths`);
+const config = require(`${__staxt}/helpers/config`);
+const logger = require(`${__staxt}/helpers/logger`);
 
-const addPage = require('./add/methods/add-pages');
+const addPage = require('./add/add-pages');
 
 const defaultTemplate = `${paths.src.templates}/${config.defaultTemplate}/${config.defaultTemplate}`;
 

@@ -5,10 +5,12 @@ const loader = require(`./helpers/cli-parser`);
 
 global.__staxt = __dirname;
 
-let type = args._[0];
+const cliArgument = args._[0];
 
-let method = loader(type);
+const cliMethod = loader(cliArgument);
 
-require(method)();
+if (typeof cliMethod === 'function') {
+  cliMethod();
+}
 
 return;

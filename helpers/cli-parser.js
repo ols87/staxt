@@ -24,5 +24,7 @@ module.exports = function cliParser(cliArgument) {
     return args.hasOwnProperty(argumentShorthand);
   });
 
-  return cliFiles[0] ? cliFiles[0] : cliFilePath;
+  const cliMethod = cliFiles[0] ? cliFiles[0] : cliFilePath;
+
+  return require(cliMethod);
 };

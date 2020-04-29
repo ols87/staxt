@@ -1,4 +1,3 @@
 module.exports = {
-  template: 'page',
-  foo: 'bar',
-};
+template: 'page'
+}
