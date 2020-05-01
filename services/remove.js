@@ -6,9 +6,9 @@ const paths = require(`${__staxt}/helpers/paths`);
 const timer = require(`${__staxt}/helpers/timer`);
 const logger = require(`${__staxt}/helpers/logger`);
 
-const removeFileFunctions = {
+const fileFunctions = {
   pages({ filePath, srcPath }) {
-    const pageData = pageService.prepareData(filePath);
+    const pageData = pageService.prepareData({ filePath });
     distPath = pageData.distPath;
 
     fs.removeSync(srcPath);
@@ -47,7 +47,7 @@ module.exports = function removeService({ filePath, directory }) {
 
   timer.start();
 
-  removeFileFunctions[directory]({ filePath, srcPath });
+  fileFunctions[directory]({ filePath, srcPath });
 
   timer.end().then((seconds) => {
     logger('green', `${fileName} ${directory.slice(0, -1)} removed in ${seconds} seconds`);

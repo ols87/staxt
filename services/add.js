@@ -10,7 +10,7 @@ const config = require(`../helpers/config`);
 const template = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
-const addFileFunctions = {
+const fileFunctions = {
   pages({ srcPath }) {
     const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
 
@@ -57,7 +57,7 @@ module.exports = function addService({ filePath, directory }) {
 
   timer.start();
 
-  addFileFunctions[directory]({ srcPath });
+  fileFunctions[directory]({ srcPath });
 
   timer.end().then((seconds) => {
     logger('green', `${fileName} ${directory.slice(0, -1)} created in ${seconds} seconds`);

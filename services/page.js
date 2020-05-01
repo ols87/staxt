@@ -90,7 +90,7 @@ module.exports = pageService = {
   },
 
   prepareData({ filePath }) {
-    filePath = this.sanitizePath(filePath);
+    filePath = this.sanitizePath({ filePath });
 
     if (!filePath) {
       logger('red', `Please provide a page path e.g. -p=page/path`);
@@ -115,6 +115,7 @@ module.exports = pageService = {
     delete require.cache[require.resolve(dataPath)];
 
     pageData.name = pageName;
+    pageData.filePath = filePath;
 
     let distPath = filePath.replace(`/${pageName}`, '');
     distPath = pageData.slug ? `${distDirectory}/${pageData.slug}` : `${distDirectory}/${filePath}`;

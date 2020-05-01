@@ -3,7 +3,7 @@ const args = require('yargs').argv;
 const assetService = require(`${__staxt}/services/asset`);
 
 module.exports = function stylesAssets(filePath = args.p) {
-  assetService.page({
+  assetService.pages({
     filePath,
     fileExtension: 'scss',
     distFile: '/styles.css',

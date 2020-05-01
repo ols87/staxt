@@ -10,10 +10,11 @@ const includesSrc = paths.src.includes;
 const pagesSrc = paths.src.pages;
 
 module.exports = templateService = {
-  sanitizePath({ filePath, FileExtension }) {
-    if (filePath.indexOf(`.${FileExtension}`) > -1) {
+  sanitizePath({ filePath, fileExtension }) {
+    if (filePath.indexOf(`.${fileExtension}`) > -1) {
+      filePath = filePath.replace(templatesSrc, '');
       filePath = filePath.split('/').pop();
-      filePath = filePath.replace(`.${FileExtension}`, '');
+      filePath = filePath.replace(`.${fileExtension}`, '');
     }
 
     return filePath;
@@ -29,22 +30,22 @@ module.exports = templateService = {
       process.exit();
     }
 
-    const fileName = filePath.split('/').pop();
-    const srcPath = `${templatesSrc}/${filePath}/${fileName}`;
+    const name = filePath.split('/').pop();
+    const srcPath = `${templatesSrc}/${filePath}/${name}`;
 
     const outName = filePath.replace(templatesSrc, '').replace(/\//g, '-');
-    const distDirectory = outDirectory ? paths.dist.assets[out] : '';
+    const distDirectory = outDirectory ? paths.dist.assets[outDirectory] : '';
     const distPath = `${distDirectory}/template-${outName}`;
 
     return {
-      fileName,
+      name,
       srcPath,
       distPath,
     };
   },
 
   getPages({ filePath }) {
-    const templatePaths = this.filePaths(filePath);
+    const templatePaths = this.filePaths({ filePath });
 
     const pagesFolder = getFiles({
       directory: pagesSrc,
@@ -57,7 +58,7 @@ module.exports = templateService = {
       const pageData = require(pagePath);
       delete require.cache[require.resolve(pagePath)];
 
-      if (pageData.template === templatePaths.fileName) {
+      if (pageData.template === templatePaths.name) {
         pageList.push(pagePath);
       }
     });
@@ -65,11 +66,11 @@ module.exports = templateService = {
     return pageList;
   },
 
-  getAll({ FileExtension }) {
+  getAll({ fileExtension }) {
     return getFiles({
       directory: templatesSrc,
-      includes: [`.${FileExtension}`],
-      excludes: [`/${includesSrc}`],
+      includes: [`.${fileExtension}`],
+      excludes: [includesSrc],
     });
   },
 };

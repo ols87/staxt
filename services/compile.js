@@ -11,7 +11,9 @@ const fileExists = require('../helpers/file-exists');
 const compilePage = function compilePageHTML({ filePath }) {
   const pageData = pageService.prepareData({ filePath });
 
-  if (!pageData) return false;
+  if (!pageData.srcPath) {
+    return logger('red', `${pageData.name} does not exist`);
+  }
 
   timer.start();
 
@@ -30,13 +32,13 @@ const compilePage = function compilePageHTML({ filePath }) {
   });
 };
 
-const compileTemplate = function compileAllTemplatePages({ templatePath }) {
-  let templateName = templateService.sanitizePath({
-    templatePath,
-    extension: 'html',
+const compileTemplate = function compileAllTemplatePages({ filePath }) {
+  filePath = templateService.sanitizePath({
+    filePath,
+    fileExtension: 'html',
   });
 
-  const pageList = templateService.getPages(templateName);
+  const pageList = templateService.getPages({ filePath });
 
   pageList.forEach((filePath) => {
     compilePage({ filePath });
@@ -51,28 +53,28 @@ module.exports = compileService = {
       return compilePage({ filePath });
     }
 
-    pageService.getFolder({ argument, filePath }).forEach((filePath) => {
+    pageService.getFolder({ argument, folderPath: filePath }).forEach((filePath) => {
       compilePage({ filePath });
     });
   },
 
   templates({ filePath }) {
-    if (typeof filePath === 'string') return compileTemplate(filePath);
+    if (typeof filePath === 'string') return compileTemplate({ filePath });
 
-    templateService.getAll('html').forEach((templatePath) => {
-      compileTemplate({ templatePath });
+    templateService.getAll({ fileExtension: 'html' }).forEach((filePath) => {
+      compileTemplate({ filePath });
     });
   },
 
   includes({ filePath }) {
     if (typeof filePath !== 'string') return;
 
-    templateService.getAll('html').forEach((templatePath) => {
+    templateService.getAll({ fileExtension: 'html' }).forEach((templatePath) => {
       let templateContent = fs.readFileSync(templatePath, 'utf8');
       templateContent = templateContent.replace(/\s/g, '');
 
       if (templateContent.indexOf(`${filePath}')}}`) > -1) {
-        compileTemplate({ templatePath });
+        compileTemplate({ filePath: templatePath });
       }
     });
   },
