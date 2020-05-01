@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 
 const paths = require(`../helpers/paths`);
 
-module.exports = () => {
+module.exports = function bundle() {
   const methods = [
     ['compile', 'pages'],
 

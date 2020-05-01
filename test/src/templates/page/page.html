@@ -8,11 +8,7 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
-    {{? xt.templateStyles }}
-    <link rel="stylesheet" type="text/css" href="{{= xt.templateStyles}}" />
-    {{?}} {{? xt.hasStyles }}
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    {{?}}
+    {{= xt.templateStyles }} {{= xt.pageStyles }}
   </head>
 
   <body>
@@ -20,9 +16,5 @@
   </body>
 
   <script src="/assets/js/main.js"></script>
-  {{? xt.templateScripts }}
-  <script src="{{= xt.templateScripts}}"></script>
-  {{?}} {{? xt.hasScripts }}
-  <script src="scripts.js"></script>
-  {{?}}
+  {{= xt.templateScripts }} {{= xt.pageScripts }}
 </html>

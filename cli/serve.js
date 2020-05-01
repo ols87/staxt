@@ -2,10 +2,10 @@ const args = require('yargs').argv;
 
 const bundle = require('./bundle');
 
-const watch = require('../helpers/watch');
-const paths = require('../config/paths');
+const paths = require('../helpers/paths');
+const fileWatcher = require('../helpers/file-watcher');
 
-module.exports = () => {
+module.exports = async function serve() {
   bundle();
 
   const server = require('browser-sync').create();
@@ -19,7 +19,7 @@ module.exports = () => {
 
   server.watch(paths.src.base, { ignoreInitial: true }, (event, path) => {
     if (event === 'add' || event === 'change') {
-      watch(path);
+      fileWatcher(path);
       server.reload();
     }
   });

@@ -20,7 +20,7 @@ const dirs = [
 
 const files = [`${paths.src.assets.scss}/main.scss`, `${paths.src.assets.js}/main.js`, `${defaultTemplate}.scss`, `${defaultTemplate}.js`];
 
-module.exports = () => {
+module.exports = function init() {
   timer.start();
 
   dirs.forEach((dir) => fs.ensureDirSync(dir));

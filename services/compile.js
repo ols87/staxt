@@ -26,6 +26,14 @@ const compilePage = function compilePageHTML({ filePath }) {
   const templateContent = fs.readFileSync(templatePath, 'utf8');
   const compile = dot.template(templateContent, dot.templateSettings, dot.defs);
 
+  if (fs.existsSync(distPath)) {
+    const distContent = fs.readFileSync(distPath, 'utf8');
+
+    if (distContent === compile(pageData)) {
+      return timer.end();
+    }
+  }
+
   fs.outputFileSync(distPath, compile(pageData));
 
   timer.end().then((seconds) => {

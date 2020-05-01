@@ -22,16 +22,23 @@ const hasAsset = function hasAssetAndContent(filePath) {
 };
 
 const setPageAssets = function setPageAssetsData({ pageData, srcPath }) {
-  const pageSCSS = `${srcPath}.scss`;
-  pageData.hasStyles = hasAsset(pageSCSS);
+  let pageScripts, pageStyles;
 
-  const pageJS = `${srcPath}.js`;
-  pageData.hasScripts = hasAsset(pageJS);
+  if (hasAsset(`${srcPath}.scss`)) {
+    pageStyles = `<link rel="stylesheet" type="text/css" href="styles.css" />`;
+  }
+
+  if (hasAsset(`${srcPath}.js`)) {
+    pageScripts = `<script src="scripts.js"></script>`;
+  }
+
+  pageData.pageStyles = pageStyles ? pageStyles : '';
+  pageData.pageScripts = pageScripts ? pageScripts : '';
 
   return pageData;
 };
 
-const setTemplateData = function SetPageTemplateData({ pageData }) {
+const setTemplateAssets = function SetPageTemplateAssets({ pageData }) {
   let templatePath = `${srcDirectory.templates}/${pageData.template}`;
 
   const templateOut = pageData.template.replace(/\//g, '-');
@@ -45,11 +52,18 @@ const setTemplateData = function SetPageTemplateData({ pageData }) {
     }
   }
 
-  const templateSCSS = `${pageData.templatePath}.scss`;
-  pageData.templateStyles = hasAsset(templateSCSS) ? `${cssDist}/${templateDist}.css` : null;
+  let templateScripts, templateStyles;
 
-  const templateJS = `${pageData.templatePath}.js`;
-  pageData.templateScripts = hasAsset(templateJS) ? `${jsDist}/${templateDist}.js` : null;
+  if (hasAsset(`${pageData.templatePath}.scss`)) {
+    templateStyles = `<link rel="stylesheet" type="text/css" href="${cssDist}/${templateDist}.css" />`;
+  }
+
+  if (hasAsset(`${pageData.templatePath}.js`)) {
+    templateScripts = `<script src="${jsDist}/${templateDist}.js"></script>`;
+  }
+
+  pageData.templateStyles = templateStyles ? templateStyles : '';
+  pageData.templateScripts = templateScripts ? templateScripts : '';
 
   return pageData;
 };
@@ -125,7 +139,7 @@ module.exports = pageService = {
     }
 
     pageData = setPageAssets({ pageData, srcPath });
-    pageData = setTemplateData({ pageData });
+    pageData = setTemplateAssets({ pageData });
 
     pageData.srcPath = srcPath;
     pageData.distPath = distPath;
