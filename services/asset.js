@@ -1,11 +1,15 @@
+const fs = require('fs');
+
 const pageService = require(`./page`);
 const styleService = require(`./style`);
 const scriptService = require(`./script`);
 const compileService = require('./compile');
 const templateService = require('./template');
 
+const config = require('../helpers/config');
 const paths = require('../helpers/paths');
 const getPaths = require('../helpers/get-paths');
+const getFiles = require('../helpers/get-files');
 const fileExists = require('../helpers/file-exists');
 
 const assetServices = {
@@ -57,6 +61,21 @@ const templateAsset = function renderTemplateAsset({ filePath, fileExtension }) 
   assetServices[fileExtension](filePaths);
 };
 
+const includesAsset = function renderIncludesAsset({ findInFile, directory }, callback) {
+  const checkDirectory = getFiles({ directory });
+
+  checkDirectory.forEach((filePath) => {
+    let fileContent = fs.readFileSync(filePath, 'utf8');
+    fileContent = fileContent.replace(/\s/g, '');
+
+    if (fileContent.indexOf(findInFile) > -1) {
+      filePath = filePath.replace(directory, '');
+      console.log(filePath);
+      // callback();
+    }
+  });
+};
+
 module.exports = assetService = {
   main({ filePath, outPath, fileExtension }) {
     const srcDirectory = paths.src.assets[fileExtension];
@@ -97,6 +116,32 @@ module.exports = assetService = {
 
     templateService.getAll({ fileExtension }).forEach((filePath) => {
       return templateAsset({ filePath, fileExtension });
+    });
+  },
+
+  includes({ filePath, fileExtension }) {
+    const srcDirectory = paths.src;
+
+    const srcFolders = [
+      {
+        directory: srcDirectory.assets[fileExtension],
+        find: `${config.paths.src.includes}/${filePath}`,
+        callback: () => this.main({ filePath }),
+      },
+      // {
+      //   directory: srcDirectory.templates,
+      //   find: ``,
+      //   callback: () => this.templates({ filePath }),
+      // },
+      // {
+      //   directory: srcDirectory.pages,
+      //   find: ``,
+      //   callback: () => this.pages({ filePath }),
+      // },
+    ];
+
+    srcFolders.forEach((folder) => {
+      includesAsset(folder, folder.callback());
     });
   },
 };

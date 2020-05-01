@@ -24,8 +24,8 @@ module.exports = function getFiles({ directory, includes = [], excludes = [], re
         directory: filePath,
       });
     } else {
-      const hasIncludes = includes !== '';
-      const hasExcludes = excludes !== '';
+      const hasIncludes = includes.length > 0;
+      const hasExcludes = excludes.length > 0;
 
       const isIncluded = hasIncludes && testMatch(filePath, includes);
       const isExcluded = hasExcludes && testMatch(filePath, excludes);

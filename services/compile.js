@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 
 const pageService = require(`./page`);
+const includeService = require(`./include`);
 const templateService = require(`./template`);
 
 const dot = require(`../helpers/dot`);
@@ -67,15 +68,10 @@ module.exports = compileService = {
   },
 
   includes({ filePath }) {
-    if (typeof filePath !== 'string') return;
+    if (typeof filePath !== 'string') return this.templates({ filePath: null });
 
-    templateService.getAll({ fileExtension: 'html' }).forEach((templatePath) => {
-      let templateContent = fs.readFileSync(templatePath, 'utf8');
-      templateContent = templateContent.replace(/\s/g, '');
-
-      if (templateContent.indexOf(`${filePath}')}}`) > -1) {
-        compileTemplate({ filePath: templatePath });
-      }
+    includeService.getTemplates({ filePath }, ({ templatePath }) => {
+      compileTemplate({ filePath: templatePath });
     });
   },
 };
