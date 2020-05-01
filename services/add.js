@@ -64,6 +64,6 @@ module.exports = function addService({ filePath, directory }) {
   });
 
   if (directory === 'pages') {
-    compileService.page(filePath);
+    compileService.pages({ filePath });
   }
 };

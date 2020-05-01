@@ -12,8 +12,8 @@ const assetsServices = {
   scss: styleService,
 };
 
-const pageAsset = function renderPageAsset(assetPaths, filePath) {
-  const pageData = pageService.prepareData(filePath);
+const pageAsset = function renderPageAsset({ assetPaths, filePath }) {
+  const pageData = pageService.prepareData({ filePath });
 
   const filePaths = getPaths({
     fileData: pageData,
@@ -23,7 +23,7 @@ const pageAsset = function renderPageAsset(assetPaths, filePath) {
 
   if (!filePaths) return;
 
-  compileService.page(pageData.name);
+  compileService.page({ filePath: pageData.name });
 
   assetsServices[assetPaths.fileExtension](filePaths);
 };
@@ -41,25 +41,25 @@ module.exports = assetService = {
     const srcPath = `${srcDirectory}/${filePath}.${fileExtension}`;
     const distPath = `${distDirectory}/${outPath}.${fileExtension}`;
 
-    if(!fileExists(filePath, srcPath)) return;
+    if (!fileExists(filePath, srcPath)) return;
 
     assetsServices[fileExtension]({ filePath, srcPath, distPath });
   },
 
   page(assetPaths) {
     const { filePath } = assetPaths;
-    const cliArgs = pageService.parsePath(filePath);
+    const argument = pageService.parsePath(filePath);
 
     if (typeof filePath !== 'string') {
-      pageService.getFolder(cliArgs, filePath).forEach((pagePath) => {
+      pageService.getFolder({ argument, filePath }).forEach((pagePath) => {
         pageAsset(assetPaths, pagePath);
       });
 
       return;
     }
 
-    if (cliArgs.hasPath && !cliArgs.isFolder) {
-      pageAsset(assetPaths, filePath);
+    if (argument.hasPath && !argument.isFolder) {
+      pageAsset({ assetPaths, filePath });
     }
   },
 };

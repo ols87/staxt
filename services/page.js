@@ -21,7 +21,7 @@ const hasAsset = function hasAssetAndContent(filePath) {
   return false;
 };
 
-const setPageAssets = function setPageAssetsData(pageData, srcPath) {
+const setPageAssets = function setPageAssetsData({ pageData, srcPath }) {
   const pageSCSS = `${srcPath}.scss`;
   pageData.hasStyles = hasAsset(pageSCSS);
 
@@ -31,7 +31,7 @@ const setPageAssets = function setPageAssetsData(pageData, srcPath) {
   return pageData;
 };
 
-const setTemplateData = function SetPageTemplateData(pageData) {
+const setTemplateData = function SetPageTemplateData({ pageData }) {
   let templatePath = `${srcDirectory.templates}/${pageData.template}`;
 
   const templateOut = pageData.template.replace(/\//g, '-');
@@ -55,14 +55,16 @@ const setTemplateData = function SetPageTemplateData(pageData) {
 };
 
 module.exports = pageService = {
-  parsePath(filePath) {
+  parsePath({ filePath }) {
     const hasPath = typeof filePath === 'string';
     const isFolder = hasPath ? filePath.indexOf('/*') > 0 : false;
 
     return { hasPath, isFolder };
   },
 
-  sanitizePath(filePath, fileExtension = `${extension}.js`) {
+  sanitizePath({ filePath, fileExtension }) {
+    fileExtension = fileExtension || `${extension}.js`;
+
     if (filePath.indexOf(`.${fileExtension}`) > -1) {
       filePath = filePath.replace(`${srcDirectory.pages}/`, '');
       filePath = filePath.replace(`.${fileExtension}`, '');
@@ -72,7 +74,8 @@ module.exports = pageService = {
     return filePath;
   },
 
-  getFolder(argument, folderPath, fileExtension = `${extension}.js`) {
+  getFolder({ argument, folderPath }) {
+    let fileExtension = `${extension}.js`;
     let returnFolder = srcDirectory.pages;
 
     if (argument.isFolder) {
@@ -86,7 +89,7 @@ module.exports = pageService = {
     });
   },
 
-  prepareData(filePath) {
+  prepareData({ filePath }) {
     filePath = this.sanitizePath(filePath);
 
     if (!filePath) {
@@ -120,8 +123,8 @@ module.exports = pageService = {
       distPath = distDirectory;
     }
 
-    pageData = setPageAssets(pageData, srcPath);
-    pageData = setTemplateData(pageData);
+    pageData = setPageAssets({ pageData, srcPath });
+    pageData = setTemplateData({ pageData });
 
     pageData.srcPath = srcPath;
     pageData.distPath = distPath;

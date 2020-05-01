@@ -10,7 +10,7 @@ const includesSrc = paths.src.includes;
 const pagesSrc = paths.src.pages;
 
 module.exports = templateService = {
-  sanitizePath(filePath, FileExtension) {
+  sanitizePath({ filePath, FileExtension }) {
     if (filePath.indexOf(`.${FileExtension}`) > -1) {
       filePath = filePath.split('/').pop();
       filePath = filePath.replace(`.${FileExtension}`, '');
@@ -19,11 +19,11 @@ module.exports = templateService = {
     return filePath;
   },
 
-  isInclude(filePath) {
+  isInclude({ filePath }) {
     return filePath.indexOf(includesSrc) > -1;
   },
 
-  filePaths(filePath, outDirectory) {
+  filePaths({ filePath, outDirectory }) {
     if (!filePath) {
       logger('red', `Please provide a template path e.g. -t=path`);
       process.exit();
@@ -43,7 +43,7 @@ module.exports = templateService = {
     };
   },
 
-  getPages(filePath) {
+  getPages({ filePath }) {
     const templatePaths = this.filePaths(filePath);
 
     const pagesFolder = getFiles({
@@ -65,7 +65,7 @@ module.exports = templateService = {
     return pageList;
   },
 
-  getAll(FileExtension) {
+  getAll({ FileExtension }) {
     return getFiles({
       directory: templatesSrc,
       includes: [`.${FileExtension}`],

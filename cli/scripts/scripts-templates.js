@@ -16,8 +16,8 @@ function render(path) {
 
   const pageList = templates.getPages(path);
 
-  pageList.forEach((pagePath) => {
-    let pageData = pages.prepareData(pagePath);
+  pageList.forEach((filePath) => {
+    let pageData = pages.prepareData({ filePath });
 
     if (!pageData.templateScripts) {
       compile.page(pageData.name);
@@ -33,7 +33,7 @@ module.exports = (path = args.t) => {
   }
 
   templates.all('js').forEach((templatePath) => {
-    let templateName = templates.sanitizePath(templatePath, 'js');
+    let templateName = templates.sanitizePath({ templatePath, fileExtension: 'js' });
     return render(templateName);
   });
 };
