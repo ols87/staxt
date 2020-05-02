@@ -34,7 +34,7 @@ const fileFunctions = {
   },
 };
 
-module.exports = function addService({ filePath, directory }) {
+module.exports = async function addService({ filePath, directory }) {
   const srcDirectory = paths.src[directory];
 
   if (!filePath || typeof filePath !== 'string') {
@@ -66,4 +66,6 @@ module.exports = function addService({ filePath, directory }) {
   if (directory === 'pages') {
     compileService.pages({ filePath });
   }
+
+  return true;
 };

@@ -9,6 +9,8 @@ const timer = require(`../helpers/timer`);
 const config = require(`../helpers/config`);
 const logger = require(`../helpers/logger`);
 
+const extension = config.dot.templateSettings.varname;
+
 const dirs = [
   paths.src.assets.base,
   paths.src.assets.images,
@@ -36,6 +38,9 @@ module.exports = function init() {
   fs.copySync(`${__staxt}/files/main.js`, `${paths.src.assets.js}/main.js`);
 
   fs.copySync(`${__staxt}/files/template.html`, `${defaultTemplate}.html`);
+
+  const templateContent = fs.readFileSync(`${defaultTemplate}.html`, 'utf8').replace(/xt\./g, `${extension}.`);
+  fs.outputFileSync(`${defaultTemplate}.html`, templateContent, 'utf8');
 
   addPage('index');
 
