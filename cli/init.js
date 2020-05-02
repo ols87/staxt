@@ -1,13 +1,13 @@
 const fs = require('fs-extra');
+const args = require('yargs').argv;
+
+const serve = require('./serve');
+const addPage = require('./add/add-pages');
 
 const paths = require(`../helpers/paths`);
 const timer = require(`../helpers/timer`);
 const config = require(`../helpers/config`);
 const logger = require(`../helpers/logger`);
-
-const addPage = require('./add/add-pages');
-
-const defaultTemplate = `${paths.src.templates}/${config.defaultTemplate}/${config.defaultTemplate}`;
 
 const dirs = [
   paths.src.assets.base,
@@ -18,18 +18,22 @@ const dirs = [
   paths.dist.base,
 ];
 
-const files = [`${paths.src.assets.scss}/main.scss`, `${paths.src.assets.js}/main.js`, `${defaultTemplate}.scss`, `${defaultTemplate}.js`];
+const defaultTemplate = `${paths.src.templates}/${config.defaultTemplate}/${config.defaultTemplate}`;
+const templateFiles = [`${defaultTemplate}.scss`, `${defaultTemplate}.js`];
 
 module.exports = function init() {
   timer.start();
 
   dirs.forEach((dir) => fs.ensureDirSync(dir));
 
-  files.forEach((file) => fs.ensureFileSync(file));
+  templateFiles.forEach((file) => fs.ensureFileSync(file));
 
   if (!fs.existsSync(`${paths.base}/staxt.config.js`)) {
-    fs.copySync(`${__staxt}/staxt.config.js`, `${paths.base}/staxt.config.js`);
+    fs.copySync(`${__staxt}/files/staxt.config.js`, `${paths.base}/staxt.config.js`);
   }
+
+  fs.copySync(`${__staxt}/files/main.scss`, `${paths.src.assets.scss}/main.scss`);
+  fs.copySync(`${__staxt}/files/main.js`, `${paths.src.assets.js}/main.js`);
 
   fs.copySync(`${__staxt}/files/template.html`, `${defaultTemplate}.html`);
 
@@ -37,5 +41,9 @@ module.exports = function init() {
 
   timer.end().then((seconds) => {
     logger('green', `Project init in ${seconds} seconds`);
+
+    if (args.s) {
+      serve();
+    }
   });
 };

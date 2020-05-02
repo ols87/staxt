@@ -3,7 +3,7 @@ const dot = require('dot');
 
 const paths = require(`./paths`);
 const config = require(`./config`);
-const logger = require(`./config`);
+const logger = require(`./logger`);
 
 dot.templateSettings = config.dot.templateSettings;
 
