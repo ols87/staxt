@@ -20,7 +20,6 @@ module.exports = function fileExists(filePath, srcPath) {
   }
 
   if (!fs.readFileSync(srcPath, 'utf8')) {
-    logger('yellow', `${filePath}.${fileExtension} is empty, skipping...`);
     return false;
   }
 

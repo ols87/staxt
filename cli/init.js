@@ -8,6 +8,7 @@ const paths = require(`../helpers/paths`);
 const timer = require(`../helpers/timer`);
 const config = require(`../helpers/config`);
 const logger = require(`../helpers/logger`);
+const config = require(`../helpers/config`);
 
 const extension = config.dot.templateSettings.varname;
 
@@ -23,7 +24,9 @@ const dirs = [
 const defaultTemplate = `${paths.src.templates}/${config.defaultTemplate}/${config.defaultTemplate}`;
 const templateFiles = [`${defaultTemplate}.scss`, `${defaultTemplate}.js`];
 
-module.exports = function init() {
+module.exports = async function init() {
+  config.hooks.init.before();
+
   timer.start();
 
   dirs.forEach((dir) => fs.ensureDirSync(dir));
@@ -42,13 +45,15 @@ module.exports = function init() {
   const templateContent = fs.readFileSync(`${defaultTemplate}.html`, 'utf8').replace(/xt\./g, `${extension}.`);
   fs.outputFileSync(`${defaultTemplate}.html`, templateContent, 'utf8');
 
-  addPage('index');
+  await addPage('index');
 
-  timer.end().then((seconds) => {
+  return timer.end().then((seconds) => {
     logger('green', `Project init in ${seconds} seconds`);
 
     if (args.s) {
-      serve();
+      await serve();
     }
+    
+    return await config.hooks.init.after();
   });
 };

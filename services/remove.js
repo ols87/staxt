@@ -7,15 +7,17 @@ const timer = require(`../helpers/timer`);
 const logger = require(`../helpers/logger`);
 
 const fileFunctions = {
-  pages({ filePath, srcPath }) {
+  async pages({ filePath, srcPath }) {
     const pageData = pageService.prepareData({ filePath });
     distPath = pageData.distPath;
 
     fs.removeSync(srcPath);
     fs.removeSync(distPath);
+
+    return true;
   },
 
-  templates({ filePath, srcPath }) {
+  async templates({ filePath, srcPath }) {
     let templateName = filePath.replace(paths.src.templates, '').replace(/\//g, '-');
 
     const assetsDist = paths.dist.assets;
@@ -23,14 +25,18 @@ const fileFunctions = {
     fs.removeSync(srcPath);
     fs.removeSync(`${assetsDist.js}/template-${templateName}.js`);
     fs.removeSync(`${assetsDist.css}/template-${templateName}.css`);
+
+    return true;
   },
 
-  includes({ srcPath }) {
+  async includes({ srcPath }) {
     fs.removeSync(srcPath);
+
+    return true;
   },
 };
 
-module.exports = function removeService({ filePath, directory }) {
+module.exports = async function removeService({ filePath, directory }) {
   const fileName = filePath.split('/').pop();
 
   const srcDirectory = paths.src[directory];
@@ -47,9 +53,11 @@ module.exports = function removeService({ filePath, directory }) {
 
   timer.start();
 
-  fileFunctions[directory]({ filePath, srcPath });
+  await fileFunctions[directory]({ filePath, srcPath });
 
   timer.end().then((seconds) => {
     logger('green', `${fileName} ${directory.slice(0, -1)} removed in ${seconds} seconds`);
   });
+
+  return true;
 };

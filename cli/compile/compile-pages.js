@@ -2,6 +2,12 @@ const args = require('yargs').argv;
 
 const compileService = require(`${__staxt}/services/compile`);
 
-module.exports = (filePath = args.p) => {
-  compileService.pages({ filePath });
+const config = require(`${__staxt}/helpers/config`);
+
+module.exports = async function compilePages(filePath = args.p) {
+  await config.hooks.compile.pages.before();
+
+  await compileService.pages({ filePath });
+
+  return await config.hooks.compile.pages.after();
 };

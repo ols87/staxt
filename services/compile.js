@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 
 const pageService = require(`./page`);
-const includeService = require(`./include`);
 const templateService = require(`./template`);
 
 const dot = require(`../helpers/dot`);
@@ -9,7 +8,7 @@ const timer = require(`../helpers/timer`);
 const logger = require('../helpers/logger');
 const fileExists = require('../helpers/file-exists');
 
-const compilePage = function compilePageHTML({ filePath }) {
+const compilePage = async function compilePageHTML({ filePath }) {
   const pageData = pageService.prepareData({ filePath });
 
   if (!pageData.srcPath) {
@@ -36,12 +35,12 @@ const compilePage = function compilePageHTML({ filePath }) {
 
   fs.outputFileSync(distPath, compile(pageData));
 
-  timer.end().then((seconds) => {
+  return timer.end().then((seconds) => {
     logger('green', `${pageData.name} page compiled in ${seconds} seconds`);
   });
 };
 
-const compileTemplate = function compileAllTemplatePages({ filePath }) {
+const compileTemplate = async function compileAllTemplatePages({ filePath }) {
   filePath = templateService.sanitizePath({
     filePath,
     fileExtension: 'html',
@@ -49,37 +48,56 @@ const compileTemplate = function compileAllTemplatePages({ filePath }) {
 
   const pageList = templateService.getPages({ filePath });
 
-  pageList.forEach((filePath) => {
-    compilePage({ filePath });
-  });
+  for (let filePath of pageList) {
+    await compilePage({ filePath });
+  }
+
+  return true;
 };
 
 module.exports = compileService = {
-  pages({ filePath }) {
+  async pages({ filePath }) {
     const argument = pageService.parsePath({ filePath });
 
     if (argument.hasPath && !argument.isFolder) {
-      return compilePage({ filePath });
+      return await compilePage({ filePath });
     }
 
-    pageService.getFolder({ argument, folderPath: filePath }).forEach((filePath) => {
-      compilePage({ filePath });
-    });
+    const pagesFolder = pageService.getFolder({ argument, folderPath: filePath });
+
+    for (let filePath of pagesFolder) {
+      await compilePage({ filePath });
+    }
+
+    return true;
   },
 
-  templates({ filePath }) {
-    if (typeof filePath === 'string') return compileTemplate({ filePath });
+  async templates({ filePath }) {
+    if (typeof filePath === 'string') return await compileTemplate({ filePath });
 
-    templateService.getAll({ fileExtension: 'html' }).forEach((filePath) => {
-      compileTemplate({ filePath });
-    });
+    const templatesFolder = templateService.getAll({ fileExtension: 'html' });
+
+    for (let filePath of templatesFolder) {
+      await compileTemplate({ filePath });
+    }
+
+    return true;
   },
 
-  includes({ filePath }) {
-    if (typeof filePath !== 'string') return this.templates({ filePath: null });
+  async includes({ filePath }) {
+    if (typeof filePath !== 'string') return await this.templates({ filePath: null });
 
-    includeService.getTemplates({ filePath }, ({ templatePath }) => {
-      compileTemplate({ filePath: templatePath });
-    });
+    const templatesFolder = templateService.getAll({ fileExtension: 'html' });
+
+    for (let filePath of templatesFolder) {
+      let templateContent = fs.readFileSync(templatePath, 'utf8');
+      templateContent = templateContent.replace(/\s/g, '');
+
+      if (templateContent.indexOf(`${filePath}')}}`) > -1) {
+        await compileTemplate({ filePath });
+      }
+    }
+
+    return true;
   },
 };

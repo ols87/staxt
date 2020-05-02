@@ -1,9 +1,13 @@
-const args = require('yargs').argv;
-
 const assetService = require(`${__staxt}/services/asset`);
 
-module.exports = function scriptsAssets() {
-  assetService.main({
+const config = require(`${__staxt}/helpers/config`);
+
+module.exports = async function scriptsAssets() {
+  await config.hooks.scripts.assets.before();
+
+  await assetService.main({
     fileExtension: 'js',
   });
+
+  return await config.hooks.scripts.assets.after();
 };

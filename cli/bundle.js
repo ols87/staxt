@@ -1,8 +1,9 @@
 const fs = require('fs-extra');
 
 const paths = require(`../helpers/paths`);
+const config = require(`../helpers/config`);
 
-module.exports = function bundle() {
+module.exports = async function bundle() {
   const methods = [
     ['compile', 'pages'],
 
@@ -18,7 +19,11 @@ module.exports = function bundle() {
   fs.removeSync(paths.dist.base);
   fs.ensureDirSync(paths.dist.base);
 
-  methods.forEach((method) => {
-    require(`./${method[0]}/${method[0]}-${method[1]}`)();
-  });
+  await config.hooks.bundle.before();
+
+  for (let method of methods) {
+    await require(`./${method[0]}/${method[0]}-${method[1]}`)();
+  }
+
+  return await config.hooks.bundle.after();
 };

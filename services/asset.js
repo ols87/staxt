@@ -10,14 +10,13 @@ const config = require('../helpers/config');
 const paths = require('../helpers/paths');
 const getPaths = require('../helpers/get-paths');
 const getFiles = require('../helpers/get-files');
-const fileExists = require('../helpers/file-exists');
 
 const assetServices = {
   js: scriptService,
   scss: styleService,
 };
 
-const pageAsset = function renderPageAsset({ assetPaths, filePath }) {
+const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
   const pageData = pageService.prepareData({ filePath });
 
   const filePaths = getPaths({
@@ -28,12 +27,12 @@ const pageAsset = function renderPageAsset({ assetPaths, filePath }) {
 
   if (!filePaths) return;
 
-  compileService.pages({ filePath: pageData.filePath });
+  await compileService.pages({ filePath: pageData.filePath });
 
-  assetServices[assetPaths.fileExtension](filePaths);
+  return await assetServices[assetPaths.fileExtension](filePaths);
 };
 
-const templateAsset = function renderTemplateAsset({ filePath, fileExtension }) {
+const templateAsset = async function renderTemplateAsset({ filePath, fileExtension }) {
   filePath = templateService.sanitizePath({ filePath, fileExtension });
 
   const templateData = templateService.filePaths({
@@ -53,18 +52,18 @@ const templateAsset = function renderTemplateAsset({ filePath, fileExtension }) 
 
   const pageList = templateService.getPages({ filePath });
 
-  pageList.forEach((filePath) => {
+  for (let filePath of pageList) {
     let pageData = pageService.prepareData({ filePath });
-    compileService.pages({ filePath: pageData.filePath });
-  });
+    await compileService.pages({ filePath: pageData.filePath });
+  }
 
-  assetServices[fileExtension](filePaths);
+  return await assetServices[fileExtension](filePaths);
 };
 
-const includesAsset = function renderIncludesAsset({ matchFile, directory, callback }) {
+const includesAsset = async function renderIncludesAsset({ matchFile, directory, callback }) {
   const checkDirectory = getFiles({ directory });
 
-  checkDirectory.forEach((filePath) => {
+  for (let filePath of checkDirectory) {
     let fileContent = fs.readFileSync(filePath, 'utf8');
     fileContent = fileContent.replace(/\s/g, '');
     fileContent = fileContent.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
@@ -73,68 +72,77 @@ const includesAsset = function renderIncludesAsset({ matchFile, directory, callb
       filePath = filePath.replace(`${directory}/`, '');
       filePath = filePath.split('.')[0];
       filePath = filePath.split('/').pop();
-      callback({ filePath });
+      return await callback({ filePath });
     }
-  });
+  }
+
+  return true;
 };
 
 module.exports = assetService = {
-  main({ fileExtension }) {
+  async main({ fileExtension }) {
     const srcDirectory = paths.src.assets[fileExtension];
     const distDirectory = paths.dist.assets[fileExtension];
 
     const srcPath = `${srcDirectory}/main.${fileExtension}`;
     const distPath = `${distDirectory}/main.${fileExtension}`;
 
-    assetServices[fileExtension]({ filePath: 'main', srcPath, distPath });
+    return await assetServices[fileExtension]({ filePath: 'main', srcPath, distPath });
   },
 
-  pages(assetPaths) {
+  async pages(assetPaths) {
     const { filePath } = assetPaths;
     const argument = pageService.parsePath({ filePath });
 
     if (typeof filePath !== 'string') {
-      return pageService.getFolder({ argument, filePath }).forEach((filePath) => {
-        pageAsset({ assetPaths, filePath });
-      });
+      const pageList = pageService.getFolder({ argument, filePath });
+
+      for (let filePath of pageList) {
+        await pageAsset({ assetPaths, filePath });
+      }
     }
 
     if (argument.hasPath && !argument.isFolder) {
-      pageAsset({ assetPaths, filePath });
+      await pageAsset({ assetPaths, filePath });
     }
   },
 
-  templates({ filePath, fileExtension }) {
+  async templates({ filePath, fileExtension }) {
     if (typeof filePath === 'string') {
-      return templateAsset({ filePath, fileExtension });
+      return await templateAsset({ filePath, fileExtension });
     }
 
-    templateService.getAll({ fileExtension }).forEach((filePath) => {
-      return templateAsset({ filePath, fileExtension });
-    });
+    const templateList = templateService.getAll({ fileExtension });
+
+    for (let filePath of templateList) {
+      return await templateAsset({ filePath, fileExtension });
+    }
   },
 
-  includes({ filePath, fileExtension }) {
+  async includes({ filePath, fileExtension }) {
     const srcDirectory = paths.src;
 
     const srcFolders = [
       {
         directory: srcDirectory.assets[fileExtension],
-        callback: () =>
-          this.main({
+        async callback() {
+          return await this.main({
             fileExtension,
-          }),
+          });
+        },
       },
       {
         directory: srcDirectory.templates,
-        callback: ({ filePath }) => this.templates({ filePath, fileExtension }),
+        async callback({ filePath }) {
+          return await this.templates({ filePath, fileExtension });
+        },
       },
       {
         directory: srcDirectory.pages,
-        callback: ({ filePath }) => {
+        async callback({ filePath }) {
           let distFile = fileExtension === 'js' ? '/scripts.js' : '/styles.css';
 
-          this.pages({
+          return await this.pages({
             filePath,
             fileExtension,
             distFile,
@@ -143,9 +151,9 @@ module.exports = assetService = {
       },
     ];
 
-    srcFolders.forEach((folder) => {
+    for (let folder of srcFolders) {
       folder.matchFile = filePath;
-      includesAsset(folder);
-    });
+      await includesAsset(folder);
+    }
   },
 };

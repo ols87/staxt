@@ -3,10 +3,11 @@ const fs = require('fs-extra');
 const cliMethods = fs.readdirSync(`${__staxt}/cli`);
 const hooks = {};
 
-const hookFunctions = { before: () => {}, after: () => {} };
+const hookFunctions = { async before() {}, async after() {} };
 
 cliMethods.forEach((method) => {
   if (method.indexOf('.js') > -1) {
+    method = method.replace('.js', '');
     hooks[method] = hookFunctions;
   } else {
     let cliSubMethods = fs.readdirSync(`${__staxt}/cli/${method}`);

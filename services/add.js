@@ -11,7 +11,7 @@ const template = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
 const fileFunctions = {
-  pages({ srcPath }) {
+  async pages({ srcPath }) {
     const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
 
     if (srcPath.indexOf('/index/index') > -1) {
@@ -21,16 +21,20 @@ const fileFunctions = {
     fs.outputFileSync(`${srcPath}.${extension}.js`, data);
     fs.ensureFileSync(`${srcPath}.js`);
     fs.ensureFileSync(`${srcPath}.scss`);
+
+    return true;
   },
 
-  templates({ srcPath }) {
+  async templates({ srcPath }) {
     fs.ensureFileSync(`${srcPath}.html`);
     fs.ensureFileSync(`${srcPath}.js`);
     fs.ensureFileSync(`${srcPath}.scss`);
+
+    return true;
   },
 
-  includes({ srcPath }) {
-    return this.templates({ srcPath });
+  async includes({ srcPath }) {
+    return await this.templates({ srcPath });
   },
 };
 
@@ -57,14 +61,14 @@ module.exports = async function addService({ filePath, directory }) {
 
   timer.start();
 
-  fileFunctions[directory]({ srcPath });
+  await fileFunctions[directory]({ srcPath });
 
   timer.end().then((seconds) => {
     logger('green', `${fileName} ${directory.slice(0, -1)} created in ${seconds} seconds`);
   });
 
   if (directory === 'pages') {
-    compileService.pages({ filePath });
+    return await compileService.pages({ filePath });
   }
 
   return true;
