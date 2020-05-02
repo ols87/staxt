@@ -2,8 +2,9 @@ const fs = require('fs-extra');
 const browserify = require('browserify');
 const partialify = require('partialify');
 
-const timer = require(`${__staxt}/helpers/timer`);
-const logger = require(`${__staxt}/helpers/logger`);
+const timer = require(`../helpers/timer`);
+const logger = require(`../helpers/logger`);
+const config = require(`../helpers/config`);
 
 module.exports = function scriptService({ filePath, srcPath, distPath }) {
   timer.start();
@@ -12,7 +13,9 @@ module.exports = function scriptService({ filePath, srcPath, distPath }) {
     fs.createFileSync(distPath);
   }
 
-  browserify(srcPath)
+  browserify(srcPath, {
+    standalone: config.dot.templateSettings.varname,
+  })
     .transform(partialify)
     .bundle()
     .pipe(fs.createWriteStream(distPath))

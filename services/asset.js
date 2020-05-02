@@ -79,21 +79,14 @@ const includesAsset = function renderIncludesAsset({ matchFile, directory, callb
 };
 
 module.exports = assetService = {
-  main({ filePath, outPath, fileExtension }) {
+  main({ fileExtension }) {
     const srcDirectory = paths.src.assets[fileExtension];
     const distDirectory = paths.dist.assets[fileExtension];
 
-    if (typeof filePath !== 'string') {
-      filePath = 'main';
-      outPath = 'main';
-    }
+    const srcPath = `${srcDirectory}/main.${fileExtension}`;
+    const distPath = `${distDirectory}/main.${fileExtension}`;
 
-    const srcPath = `${srcDirectory}/${filePath}.${fileExtension}`;
-    const distPath = `${distDirectory}/${outPath}.${fileExtension}`;
-
-    if (!fileExists(filePath, srcPath)) return;
-
-    assetServices[fileExtension]({ filePath, srcPath, distPath });
+    assetServices[fileExtension]({ filePath: 'main', srcPath, distPath });
   },
 
   pages(assetPaths) {
@@ -127,7 +120,10 @@ module.exports = assetService = {
     const srcFolders = [
       {
         directory: srcDirectory.assets[fileExtension],
-        callback: ({ filePath }) => this.main({ filePath, fileExtension }),
+        callback: () =>
+          this.main({
+            fileExtension,
+          }),
       },
       {
         directory: srcDirectory.templates,

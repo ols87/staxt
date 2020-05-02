@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const sass = require('sass');
 
-const paths = require(`${__staxt}/helpers/paths`);
-const timer = require(`${__staxt}/helpers/timer`);
-const logger = require(`${__staxt}/helpers/logger`);
+const paths = require(`../helpers/paths`);
+const timer = require(`../helpers/timer`);
+const logger = require(`../helpers/logger`);
 
 module.exports = function styleService({ filePath, srcPath, distPath }) {
   timer.start();
