@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const args = require('yargs').argv;
 
 const compileService = require(`${__staxt}/services/compile`);
 
@@ -7,11 +8,12 @@ const timer = require(`../helpers/timer`);
 const paths = require(`../helpers/paths`);
 const config = require(`../helpers/config`);
 
-const template = config.defaultTemplate;
+const defaultTemplate = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
 const fileFunctions = {
   async pages({ srcPath }) {
+    const template = typeof args.t === 'string' ? args.t : defaultTemplate;
     const data = `module.exports = {\r\ntemplate: '${template}'\r\n}`;
 
     if (srcPath.indexOf('/index/index') > -1) {
@@ -54,7 +56,7 @@ module.exports = async function addService({ filePath, directory }) {
   }
 
   if (fs.existsSync(`${srcDirectory}/${filePath}`)) {
-    return logger('red', `${fileName} ${directory.slice(0, -1)} already exists`);
+    return logger('red', `${filePath} ${directory.slice(0, -1)} already exists`);
   }
 
   const srcPath = `${srcDirectory}/${filePath}/${fileName}`;
@@ -64,7 +66,7 @@ module.exports = async function addService({ filePath, directory }) {
   await fileFunctions[directory]({ srcPath });
 
   timer.end().then((seconds) => {
-    logger('green', `${fileName} ${directory.slice(0, -1)} created in ${seconds} seconds`);
+    logger('green', `${filePath} ${directory.slice(0, -1)} created in ${seconds} seconds`);
   });
 
   if (directory === 'pages') {

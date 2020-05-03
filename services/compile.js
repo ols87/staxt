@@ -6,7 +6,6 @@ const templateService = require(`./template`);
 const dot = require(`../helpers/dot`);
 const timer = require(`../helpers/timer`);
 const logger = require('../helpers/logger');
-const fileExists = require('../helpers/file-exists');
 
 const compilePage = async function compilePageHTML({ filePath }) {
   const pageData = pageService.prepareData({ filePath });
@@ -20,7 +19,10 @@ const compilePage = async function compilePageHTML({ filePath }) {
   const distPath = `${pageData.distPath}/index.html`;
   const templatePath = `${pageData.templatePath}.html`;
 
-  if (!fileExists(pageData.templateName, templatePath)) return false;
+  if (!fs.existsSync(templatePath)) {
+    logger('red', `Use a valid template for page: ${pageData.name}, or set defaultTemplate in staxt.config`);
+    process.exit();
+  }
 
   const templateContent = fs.readFileSync(templatePath, 'utf8');
   const compile = dot.template(templateContent, dot.templateSettings, dot.defs);

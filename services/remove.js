@@ -37,8 +37,6 @@ const fileFunctions = {
 };
 
 module.exports = async function removeService({ filePath, directory }) {
-  const fileName = filePath.split('/').pop();
-
   const srcDirectory = paths.src[directory];
 
   if (!filePath) {
@@ -48,7 +46,7 @@ module.exports = async function removeService({ filePath, directory }) {
   const srcPath = `${srcDirectory}/${filePath}`;
 
   if (!fs.existsSync(srcPath)) {
-    return logger('red', `${fileName} ${directory.slice(0, -1)} does not exist`);
+    return logger('red', `${filePath} ${directory.slice(0, -1)} does not exist`);
   }
 
   timer.start();
@@ -56,7 +54,7 @@ module.exports = async function removeService({ filePath, directory }) {
   await fileFunctions[directory]({ filePath, srcPath });
 
   timer.end().then((seconds) => {
-    logger('green', `${fileName} ${directory.slice(0, -1)} removed in ${seconds} seconds`);
+    logger('green', `${filePath} ${directory.slice(0, -1)} removed in ${seconds} seconds`);
   });
 
   return true;

@@ -8,7 +8,6 @@ const paths = require(`../helpers/paths`);
 const timer = require(`../helpers/timer`);
 const config = require(`../helpers/config`);
 const logger = require(`../helpers/logger`);
-const config = require(`../helpers/config`);
 
 const extension = config.dot.templateSettings.varname;
 
@@ -47,13 +46,13 @@ module.exports = async function init() {
 
   await addPage('index');
 
-  return timer.end().then((seconds) => {
+  return timer.end().then(async (seconds) => {
     logger('green', `Project init in ${seconds} seconds`);
 
     if (args.s) {
       await serve();
     }
-    
+
     return await config.hooks.init.after();
   });
 };

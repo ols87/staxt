@@ -6,6 +6,7 @@ const logger = require('../helpers/logger');
 const getFiles = require('../helpers/get-files');
 
 const extension = config.dot.templateSettings.varname;
+const defaultTemplate = config.defaultTemplate;
 
 const srcDirectory = paths.src;
 const distDirectory = paths.dist.base;
@@ -38,7 +39,7 @@ const setPageAssets = function setPageAssetsData({ pageData, srcPath }) {
   return pageData;
 };
 
-const setTemplateAssets = function SetPageTemplateAssets({ pageData }) {
+const setTemplateData = function SetPageTemplateData({ pageData }) {
   let templatePath = `${srcDirectory.templates}/${pageData.template}`;
 
   const templateOut = pageData.template.replace(/\//g, '-');
@@ -50,6 +51,16 @@ const setTemplateAssets = function SetPageTemplateAssets({ pageData }) {
     if (fs.lstatSync(templatePath).isDirectory()) {
       pageData.templatePath = `${templatePath}/${pageData.templateName}`;
     }
+  } else {
+    pageData.templatePath = `${srcDirectory.templates}/${defaultTemplate}/${defaultTemplate}`;
+  }
+
+  if (fs.existsSync(templatePath)) {
+    if (fs.lstatSync(templatePath).isDirectory()) {
+      pageData.templatePath = `${templatePath}/${pageData.templateName}`;
+    }
+  } else {
+    pageData.templatePath = `${srcDirectory.templates}/${defaultTemplate}/${defaultTemplate}`;
   }
 
   let templateScripts, templateStyles;
@@ -139,7 +150,7 @@ module.exports = pageService = {
     }
 
     pageData = setPageAssets({ pageData, srcPath });
-    pageData = setTemplateAssets({ pageData });
+    pageData = setTemplateData({ pageData });
 
     pageData.srcPath = srcPath;
     pageData.distPath = distPath;
