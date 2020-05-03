@@ -123,12 +123,13 @@ module.exports = assetService = {
 
   async includes({ filePath, fileExtension }) {
     const srcDirectory = paths.src;
+    const { main, templates, pages } = this;
 
     const srcFolders = [
       {
         directory: srcDirectory.assets[fileExtension],
         async callback() {
-          return await this.main({
+          return await main({
             fileExtension,
           });
         },
@@ -136,7 +137,7 @@ module.exports = assetService = {
       {
         directory: srcDirectory.templates,
         async callback({ filePath }) {
-          return await this.templates({ filePath, fileExtension });
+          return await templates({ filePath, fileExtension });
         },
       },
       {
@@ -144,7 +145,7 @@ module.exports = assetService = {
         async callback({ filePath }) {
           let distFile = fileExtension === 'js' ? '/scripts.js' : '/styles.css';
 
-          return await this.pages({
+          return await pages({
             filePath,
             fileExtension,
             distFile,
