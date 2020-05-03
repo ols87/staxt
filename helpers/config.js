@@ -61,6 +61,20 @@ module.exports = objectMerge(
       },
     },
     defaultTemplate: 'page',
+    defaultFiles: {
+      pages: {
+        js: false,
+        scss: false,
+      },
+      templates: {
+        js: true,
+        scss: true,
+      },
+      includes: {
+        js: true,
+        scss: true,
+      }
+    },
     hooks: hooks,
   },
 
