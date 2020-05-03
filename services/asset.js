@@ -115,8 +115,10 @@ module.exports = assetService = {
     const templateList = templateService.getAll({ fileExtension });
 
     for (let filePath of templateList) {
-      return await templateAsset({ filePath, fileExtension });
+      await templateAsset({ filePath, fileExtension });
     }
+
+    return true;
   },
 
   async includes({ filePath, fileExtension }) {

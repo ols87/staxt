@@ -6,7 +6,7 @@ module.exports = function getPaths({ fileData, fileExtension, distFile }) {
   const srcPath = `${fileData.srcPath}.${fileExtension}`;
   const distPath = `${fileData.distPath}${distFile}`;
 
-  const hasFile = fileExists(filePath, srcPath);
+  const hasFile = fileExists({ filePath, srcPath });
 
   return hasFile ? { filePath, srcPath, distPath } : false;
 };

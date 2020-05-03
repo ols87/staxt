@@ -11,7 +11,7 @@ const getExtention = function getfileExtension(filePath) {
   return fileExtension.join('.');
 };
 
-module.exports = function fileExists(filePath, srcPath) {
+module.exports = function fileExists({ filePath, srcPath }) {
   let fileExtension = getExtention(srcPath);
 
   if (!fs.existsSync(srcPath)) {

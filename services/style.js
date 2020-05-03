@@ -2,7 +2,7 @@ const sass = require('sass');
 const fs = require('fs-extra');
 const postcss = require('postcss');
 const cssnano = require('cssnano');
-const tailwind = require('tailwindcss')(`../tailwind.config.js`);
+const tailwind = require('tailwindcss')(`${__staxt}/tailwind.config.js`);
 
 const paths = require(`../helpers/paths`);
 const timer = require(`../helpers/timer`);
@@ -26,18 +26,22 @@ module.exports = async function styleService({ filePath, srcPath, distPath }) {
         fs.ensureFileSync(distPath);
         fs.writeFileSync(distPath, result.css);
 
-        fs.readFile(distPath, (err, css) => {
-          postcss([tailwind, cssnano])
-            .process(css, { from: distPath, to: `${__staxt}/tmp/out.css` })
-            .then((result) => {
-              fs.remove(`${paths.base}/tailwind.config.js`);
-              fs.writeFile(distPath, result.css, () => {
-                timer.end().then((seconds) => {
-                  logger('green', `${filePath} scss compiled in ${seconds} seconds`);
-                  resolve();
+        timer.end().then((seconds) => {
+          logger('green', `${filePath} scss compiled in ${seconds} seconds`);
+
+          fs.readFile(distPath, (err, css) => {
+            postcss([tailwind])
+              .process(css, { from: distPath, to: `${__staxt}/tmp/out.css` })
+              .then((result) => {
+                fs.remove(`${paths.base}/tailwind.config.js`);
+                fs.writeFile(distPath, result.css, () => {
+                  timer.end().then((seconds) => {
+                    logger('green', `${filePath} css compiled in ${seconds} seconds`);
+                    resolve();
+                  });
                 });
               });
-            });
+          });
         });
       }
     );

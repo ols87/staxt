@@ -28,6 +28,8 @@ const fileFunctions = {
   },
 
   async templates({ srcPath }) {
+    fs.copySync(`${__staxt}/files/template.html`, `${srcPath}.html`);
+
     fs.ensureFileSync(`${srcPath}.html`);
     fs.ensureFileSync(`${srcPath}.js`);
     fs.ensureFileSync(`${srcPath}.scss`);
