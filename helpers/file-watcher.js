@@ -12,7 +12,7 @@ const watchFolders = Object.entries({
   assets: paths.src.assets.base,
 });
 
-module.exports = function fileWatcher(filePath) {
+module.exports = async function fileWatcher(filePath) {
   const isPage = filePath.indexOf(`.${fileExtension}.js`) > -1;
   const isImage = filePath.indexOf(paths.src.assets.images) > -1;
   const fileType = filePath.slice(((filePath.lastIndexOf('.') - 1) >>> 0) + 2);
@@ -43,7 +43,8 @@ module.exports = function fileWatcher(filePath) {
   const fileName = filePath.split('/').pop().replace(/\.\w+/g, '');
 
   if (fs.existsSync(`${methodPath}.js`)) {
-    require(methodPath)(fileName);
-    // delete require.cache[require.resolve(methodPath)];
+    await require(methodPath)(fileName);
   }
+
+  return true;
 };

@@ -20,9 +20,9 @@ module.exports = async function serve() {
         open: !args.q,
       },
       async () => {
-        server.watch(paths.src.base, { ignoreInitial: true }, (event, path) => {
+        server.watch(paths.src.base, { ignoreInitial: true }, async (event, path) => {
           if (event === 'add' || event === 'change') {
-            fileWatcher(path);
+            await fileWatcher(path);
             server.reload();
           }
         });

@@ -54,6 +54,12 @@ module.exports = objectMerge(
       },
       defs: {},
     },
+    tailwind: {
+      purge: {
+        enabled: true,
+        content: ['./dist/**/*.html', './dist/**/*.js'],
+      },
+    },
     defaultTemplate: 'page',
     hooks: hooks,
   },
