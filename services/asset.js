@@ -18,7 +18,9 @@ const assetServices = {
 
 const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
   const pageData = pageService.prepareData({ filePath });
-
+  
+  if (!fs.existsSync(`${pageData.srcPath}.${assetPaths.fileExtension}`)) return;
+  
   const filePaths = getPaths({
     fileData: pageData,
     fileExtension: assetPaths.fileExtension,

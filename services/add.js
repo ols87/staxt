@@ -11,6 +11,16 @@ const config = require(`../helpers/config`);
 const defaultTemplate = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
+const assetFiles = function addAssetFiles({srcPath, directory}){
+    if(config.defaultFiles[directory].js) {
+      fs.ensureFileSync(`${srcPath}.js`);
+    }
+
+    if(config.defaultFiles[directory].scss) {
+      fs.ensureFileSync(`${srcPath}.scss`);
+    }
+}
+
 const fileFunctions = {
   async pages({ srcPath }) {
     const template = typeof args.t === 'string' ? args.t : defaultTemplate;
@@ -21,8 +31,8 @@ const fileFunctions = {
     }
 
     fs.outputFileSync(`${srcPath}.${extension}.js`, data);
-    fs.ensureFileSync(`${srcPath}.js`);
-    fs.ensureFileSync(`${srcPath}.scss`);
+   
+    assetFiles({ srcPath, directory: 'pages' });
 
     return true;
   },
@@ -31,14 +41,18 @@ const fileFunctions = {
     fs.copySync(`${__staxt}/files/template.html`, `${srcPath}.html`);
 
     fs.ensureFileSync(`${srcPath}.html`);
-    fs.ensureFileSync(`${srcPath}.js`);
-    fs.ensureFileSync(`${srcPath}.scss`);
+
+    assetFiles({ srcPath, directory: 'templates' });
 
     return true;
   },
 
   async includes({ srcPath }) {
-    return await this.templates({ srcPath });
+    fs.ensureFileSync(`${srcPath}.html`);
+
+    assetFiles({ srcPath, directory: 'includes' });
+
+    return true;
   },
 };
 
