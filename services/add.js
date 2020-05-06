@@ -11,15 +11,15 @@ const config = require(`../helpers/config`);
 const defaultTemplate = config.defaultTemplate;
 const extension = config.dot.templateSettings.varname;
 
-const assetFiles = function addAssetFiles({srcPath, directory}){
-    if(config.defaultFiles[directory].js) {
-      fs.ensureFileSync(`${srcPath}.js`);
-    }
+const assetFiles = function addAssetFiles({ srcPath, directory }) {
+  if (config.defaultFiles[directory].js) {
+    fs.ensureFileSync(`${srcPath}.js`);
+  }
 
-    if(config.defaultFiles[directory].scss) {
-      fs.ensureFileSync(`${srcPath}.scss`);
-    }
-}
+  if (config.defaultFiles[directory].scss) {
+    fs.ensureFileSync(`${srcPath}.scss`);
+  }
+};
 
 const fileFunctions = {
   async pages({ srcPath }) {
@@ -31,7 +31,7 @@ const fileFunctions = {
     }
 
     fs.outputFileSync(`${srcPath}.${extension}.js`, data);
-   
+
     assetFiles({ srcPath, directory: 'pages' });
 
     return true;
@@ -63,7 +63,7 @@ module.exports = async function addService({ filePath, directory }) {
     return logger('red', `Provide a ${directory} path e.g. -${directory.charAt(0)}=path`);
   }
 
-  const fileName = filePath.split('/').pop();
+  const fileName = filePath.split(/\/|\\/).pop();
 
   if (fileName === 'index') {
     if (fs.existsSync(`${srcDirectory}/index.${extension}.js`)) {

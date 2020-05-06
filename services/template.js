@@ -13,7 +13,7 @@ module.exports = templateService = {
   sanitizePath({ filePath, fileExtension }) {
     if (filePath.indexOf(`.${fileExtension}`) > -1) {
       filePath = filePath.replace(templatesSrc, '');
-      filePath = filePath.split('/').pop();
+      filePath = filePath.split(/\/|\\/).pop();
       filePath = filePath.replace(`.${fileExtension}`, '');
     }
 
@@ -30,7 +30,7 @@ module.exports = templateService = {
       process.exit();
     }
 
-    const name = filePath.split('/').pop();
+    const name = filePath.split(/\/|\\/).pop();
     const srcPath = `${templatesSrc}/${filePath}/${name}`;
 
     const outName = filePath.replace(templatesSrc, '').replace(/\//g, '-');

@@ -11,6 +11,8 @@ const paths = require('../helpers/paths');
 const getPaths = require('../helpers/get-paths');
 const getFiles = require('../helpers/get-files');
 
+const extension = config.dot.templateSettings.varname;
+
 const assetServices = {
   js: scriptService,
   scss: styleService,
@@ -18,9 +20,9 @@ const assetServices = {
 
 const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
   const pageData = pageService.prepareData({ filePath });
-  
+
   if (!fs.existsSync(`${pageData.srcPath}.${assetPaths.fileExtension}`)) return;
-  
+
   const filePaths = getPaths({
     fileData: pageData,
     fileExtension: assetPaths.fileExtension,
@@ -71,10 +73,17 @@ const includesAsset = async function renderIncludesAsset({ matchFile, directory,
     fileContent = fileContent.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
 
     if (fileContent.indexOf(`${config.paths.src.includes}/${matchFile}`) > -1) {
+      let returnCallback = callback;
+
+      if (filePath.indexOf(`.${extension}.`) > -1) {
+        returnCallback = compileService.pages;
+      }
+
       filePath = filePath.replace(`${directory}/`, '');
       filePath = filePath.split('.')[0];
-      filePath = filePath.split('/').pop();
-      return await callback({ filePath });
+      filePath = filePath.split(/\/|\\/).pop();
+
+      return await returnCallback({ filePath });
     }
   }
 

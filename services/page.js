@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 
 const paths = require('../helpers/paths');
 const config = require('../helpers/config');
@@ -42,7 +43,7 @@ const setPageAssets = function setPageAssetsData({ pageData, srcPath }) {
 const setTemplateData = function SetPageTemplateData({ pageData }) {
   let templatePath = `${srcDirectory.templates}/${pageData.template}`;
 
-  const templateOut = pageData.template.replace(/\//g, '-');
+  const templateOut = pageData.template.replace(/\/|\\/g, '-');
   const templateDist = `template-${templateOut}`;
 
   pageData.templateName = pageData.template.split('/').pop();
@@ -93,7 +94,7 @@ module.exports = pageService = {
     if (filePath.indexOf(`.${fileExtension}`) > -1) {
       filePath = filePath.replace(`${srcDirectory.pages}/`, '');
       filePath = filePath.replace(`.${fileExtension}`, '');
-      filePath = [...new Set(filePath.split('/'))].join('/');
+      filePath = [...new Set(filePath.split(/\/|\\/))].join(path.sep);
     }
 
     return filePath;
@@ -122,7 +123,7 @@ module.exports = pageService = {
       process.exit();
     }
 
-    const pageName = filePath.split('/').pop();
+    const pageName = filePath.split(/\/|\\/).pop();
 
     let srcPath = `${srcDirectory.pages}/${filePath}/${pageName}`;
 

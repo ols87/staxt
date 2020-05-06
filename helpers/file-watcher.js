@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 
 const config = require(`./config`);
 const paths = require(`./paths`);
@@ -20,7 +21,7 @@ module.exports = async function fileWatcher(filePath) {
   let cliMethod, cliMethodType;
 
   for (let [folderName, folderPath] of watchFolders) {
-    cliMethodType = filePath.indexOf(folderPath) > -1 ? folderName : cliMethodType;
+    cliMethodType = filePath.indexOf(path.normalize(folderPath)) > -1 ? folderName : cliMethodType;
   }
 
   if (fileType === 'html' || isPage) {
@@ -40,7 +41,7 @@ module.exports = async function fileWatcher(filePath) {
   }
 
   const methodPath = `${__staxt}/cli/${cliMethod}/${cliMethod}-${cliMethodType}`;
-  const fileName = filePath.split('/').pop().replace(/\.\w+/g, '');
+  const fileName = filePath.split(/\/|\\/).pop().replace(/\.\w+/g, '');
 
   if (fs.existsSync(`${methodPath}.js`)) {
     await require(methodPath)(fileName);

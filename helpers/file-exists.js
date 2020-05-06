@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const logger = require('./logger');
 
 const getExtention = function getfileExtension(filePath) {
-  let fileName = filePath.split('/').pop();
+  let fileName = filePath.split(/\/|\\/).pop();
   let fileExtension = fileName.split(/\.+/);
 
   fileExtension.shift();

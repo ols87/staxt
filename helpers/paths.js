@@ -1,7 +1,8 @@
 const config = require(`./config`);
+const path = require('path');
 
 const paths = config.paths;
-const base = paths.base;
+const base = path.normalize(paths.base);
 
 const src = paths.src;
 const dist = paths.dist;
@@ -17,7 +18,7 @@ const assets = {
 };
 
 module.exports = {
-  base: paths.base,
+  base: path.normalize(paths.base),
   src: {
     base: directory.src,
     templates: `${directory.src}/${src.templates}`,

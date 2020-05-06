@@ -91,15 +91,15 @@ module.exports = compileService = {
 
     const templatesFolder = templateService.getAll({ fileExtension: 'html' });
 
-    for (let filePath of templatesFolder) {
+    for (let templatePath of templatesFolder) {
       let templateContent = fs.readFileSync(templatePath, 'utf8');
       templateContent = templateContent.replace(/\s/g, '');
 
-      if (templateContent.indexOf(`${filePath}')}}`) > -1) {
-        await compileTemplate({ filePath });
+      let includeName = new RegExp('(\'|")' + filePath + '(\'|").}}', 'g');
+
+      if (includeName.test(templateContent)) {
+        return await compileTemplate({ filePath: templatePath });
       }
     }
-
-    return true;
   },
 };
