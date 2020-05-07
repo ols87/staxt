@@ -41,10 +41,9 @@ module.exports = async function fileWatcher(filePath) {
   }
 
   const methodPath = `${__staxt}/cli/${cliMethod}/${cliMethod}-${cliMethodType}`;
-  const fileName = filePath.split(/\/|\\/).pop().replace(/\.\w+/g, '');
 
   if (fs.existsSync(`${methodPath}.js`)) {
-    await require(methodPath)(fileName);
+    await require(methodPath)(filePath);
   }
 
   return true;

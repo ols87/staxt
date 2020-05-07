@@ -80,6 +80,19 @@ const setTemplateData = function SetPageTemplateData({ pageData }) {
   return pageData;
 };
 
+const requireData = function requirePageData({ pageData }) {
+  if (!pageData.hasOwnProperty('requireData')) {
+    return pageData;
+  }
+
+  for (let property in pageData.requireData) {
+    pageData[property] = require(`${paths.src.base}/${pageData.requireData[property]}`);
+    delete require.cache[require.resolve(`${paths.src.base}/${pageData.requireData[property]}`)];
+  }
+
+  return pageData;
+};
+
 module.exports = pageService = {
   parsePath({ filePath }) {
     const hasPath = typeof filePath === 'string';
@@ -152,6 +165,7 @@ module.exports = pageService = {
 
     pageData = setPageAssets({ pageData, srcPath });
     pageData = setTemplateData({ pageData });
+    pageData = requireData({ pageData });
 
     pageData.srcPath = srcPath;
     pageData.distPath = distPath;

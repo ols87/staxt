@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const pageService = require(`./page`);
 const styleService = require(`./style`);
@@ -16,6 +16,14 @@ const extension = config.dot.templateSettings.varname;
 const assetServices = {
   js: scriptService,
   scss: styleService,
+};
+
+const stripContent = function stripFileContent({ filePath }) {
+  let fileContent = fs.readFileSync(filePath, 'utf8');
+  fileContent = fileContent.replace(/\s/g, '');
+  fileContent = fileContent.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
+
+  return fileContent;
 };
 
 const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
@@ -36,7 +44,47 @@ const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
   return await assetServices[assetPaths.fileExtension](filePaths);
 };
 
+const templateIncludes = async function templateIncludesAsset({ filePath, fileExtension }) {
+  let templateName = filePath.split(paths.src.templates)[1];
+  templateName = templateName.split(config.paths.src.includes)[0];
+  templateName = templateName.replace(/\/|\\/g, '');
+
+  let templatePath = `${paths.src.templates}/${templateName}/${templateName}.${fileExtension}`;
+  let templateContent = stripContent({ filePath: templatePath });
+
+  let includeName = templateService.sanitizePath({ filePath, fileExtension });
+  let includePath = `${paths.src.templates}/${templateName}/${config.paths.src.includes}/${includeName}/${includeName}.html`;
+  let includeContent = stripContent({ filePath: includePath });
+
+  let defTest = new RegExp(`def\.${includeName}`, 'g');
+
+  if (defTest.test(includeContent)) {
+    await compileService.includes({ filePath: includeName });
+  }
+
+  if (templateContent.indexOf(`${config.paths.src.includes}/${includeName}`) > -1) {
+    const templateData = templateService.filePaths({
+      filePath: templateName,
+      outDirectory: fileExtension,
+    });
+
+    const distFile = fileExtension === 'scss' ? '.css' : `.${fileExtension}`;
+
+    const filePaths = getPaths({
+      fileData: templateData,
+      fileExtension,
+      distFile,
+    });
+
+    return await assetServices[fileExtension](filePaths);
+  }
+};
+
 const templateAsset = async function renderTemplateAsset({ filePath, fileExtension }) {
+  if (filePath.indexOf(config.paths.src.includes) > -1) {
+    return await templateIncludes({ filePath, fileExtension });
+  }
+
   filePath = templateService.sanitizePath({ filePath, fileExtension });
 
   const templateData = templateService.filePaths({
@@ -52,9 +100,22 @@ const templateAsset = async function renderTemplateAsset({ filePath, fileExtensi
     distFile,
   });
 
-  if (!filePaths) return;
-
   const pageList = templateService.getPages({ filePath });
+
+  if (!filePaths) {
+    let distPath = `${templateData.distPath}${distFile}`;
+
+    if (fs.existsSync(distPath)) {
+      fs.removeSync(distPath);
+
+      for (let filePath of pageList) {
+        let pageData = pageService.prepareData({ filePath });
+        await compileService.pages({ filePath: pageData.filePath });
+      }
+    }
+
+    return;
+  }
 
   for (let filePath of pageList) {
     let pageData = pageService.prepareData({ filePath });
@@ -68,11 +129,17 @@ const includesAsset = async function renderIncludesAsset({ matchFile, directory,
   const checkDirectory = getFiles({ directory });
 
   for (let filePath of checkDirectory) {
-    let fileContent = fs.readFileSync(filePath, 'utf8');
-    fileContent = fileContent.replace(/\s/g, '');
-    fileContent = fileContent.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
+    let templateContent = stripContent({ filePath });
 
-    if (fileContent.indexOf(`${config.paths.src.includes}/${matchFile}`) > -1) {
+    let includeName = matchFile.split(/\/|\\/).pop().split('.')[0];
+
+    let defTest = new RegExp(`def\.${includeName}`, 'g');
+
+    if (defTest.test(templateContent)) {
+      await compileService.includes({ filePath: includeName });
+    }
+
+    if (templateContent.indexOf(`${config.paths.src.includes}/${includeName}`) > -1) {
       let returnCallback = callback;
 
       if (filePath.indexOf(`.${extension}.`) > -1) {

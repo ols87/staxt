@@ -1,4 +1,4 @@
-const fileExists = require('./file-exists');
+const fs = require('fs-extra');
 
 module.exports = function getPaths({ fileData, fileExtension, distFile }) {
   const filePath = fileData.name;
@@ -6,7 +6,13 @@ module.exports = function getPaths({ fileData, fileExtension, distFile }) {
   const srcPath = `${fileData.srcPath}.${fileExtension}`;
   const distPath = `${fileData.distPath}${distFile}`;
 
-  const hasFile = fileExists({ filePath, srcPath });
+  if (!fs.existsSync(srcPath)) {
+    return false;
+  }
 
-  return hasFile ? { filePath, srcPath, distPath } : false;
+  if (!fs.readFileSync(srcPath, 'utf8')) {
+    return false;
+  }
+
+  return { filePath, srcPath, distPath };
 };

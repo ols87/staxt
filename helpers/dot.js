@@ -9,24 +9,48 @@ dot.templateSettings = config.dot.templateSettings;
 
 dot.defs = config.dot.defs;
 
-dot.defs = {
-  include: (fileName) => {
-    let folderPath = `${paths.src.includes}/${fileName}`;
-    let filePath = `${folderPath}.html`;
+const processInclude = function processIncludeData({ fileName }) {
+  let relativePath = `${dot.templatePath}/${config.paths.src.includes}/${fileName}`;
+  let includePath = `${paths.src.includes}/${fileName}`;
 
-    if (fs.existsSync(folderPath)) {
-      if (fs.lstatSync(folderPath).isDirectory()) {
-        filePath = `${folderPath}/${fileName}.html`;
-        return fs.readFileSync(filePath, 'utf8');
-      }
+  let filePath;
+
+  if (fs.existsSync(includePath)) {
+    filePath = `${includePath}.html`;
+    if (fs.lstatSync(includePath).isDirectory()) {
+      filePath = `${includePath}/${fileName}`;
     }
+  }
 
-    if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath, 'utf8');
+  if (fs.existsSync(relativePath)) {
+    filePath = `${relativePath}.html`;
+    if (fs.lstatSync(relativePath).isDirectory()) {
+      filePath = `${relativePath}/${fileName}`;
+    }
+  }
+
+  data = require(`${filePath}.js`);
+  delete require.cache[require.resolve(`${filePath}.js`)];
+  filePath = `${filePath}.html`;
+
+  return { filePath, data };
+};
+
+dot.defs = {
+  include(fileName) {
+    const include = processInclude({ fileName });
+
+    if (fs.existsSync(include.filePath)) {
+      dot.defs[fileName] = include.data || {};
+      return fs.readFileSync(include.filePath, 'utf8');
     } else {
       logger('red', `${fileName} not found`);
-      return '{{fileName not found}}';
+      return `${fileName} not found`;
     }
+  },
+
+  stringify(data) {
+    return JSON.stringify(data);
   },
 };
 

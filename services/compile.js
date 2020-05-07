@@ -5,6 +5,8 @@ const templateService = require(`./template`);
 
 const dot = require(`../helpers/dot`);
 const timer = require(`../helpers/timer`);
+const config = require(`../helpers/config`);
+const paths = require(`../helpers/paths`);
 const logger = require('../helpers/logger');
 
 const compilePage = async function compilePageHTML({ filePath }) {
@@ -18,6 +20,8 @@ const compilePage = async function compilePageHTML({ filePath }) {
 
   const distPath = `${pageData.distPath}/index.html`;
   const templatePath = `${pageData.templatePath}.html`;
+
+  dot.templatePath = templatePath.split(/(\/|\\)(\w+)\.html/g)[0];
 
   if (!fs.existsSync(templatePath)) {
     logger('red', `Use a valid template for page: ${pageData.name}, or set defaultTemplate in staxt.config`);
@@ -75,6 +79,14 @@ module.exports = compileService = {
   },
 
   async templates({ filePath }) {
+    if (filePath.indexOf(config.paths.src.includes) > -1) {
+      let templateName = filePath.split(paths.src.templates)[1];
+      templateName = templateName.split(config.paths.src.includes)[0];
+      templateName = templateName.replace(/\/|\\/g, '');
+
+      return await compileTemplate({ filePath: templateName });
+    }
+
     if (typeof filePath === 'string') return await compileTemplate({ filePath });
 
     const templatesFolder = templateService.getAll({ fileExtension: 'html' });
@@ -87,6 +99,8 @@ module.exports = compileService = {
   },
 
   async includes({ filePath }) {
+    filePath = filePath.split(/\/|\\/).pop().split('.')[0];
+
     if (typeof filePath !== 'string') return await this.templates({ filePath: null });
 
     const templatesFolder = templateService.getAll({ fileExtension: 'html' });
