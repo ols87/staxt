@@ -6,7 +6,6 @@ const templateService = require(`./template`);
 const dot = require(`../helpers/dot`);
 const timer = require(`../helpers/timer`);
 const config = require(`../helpers/config`);
-const paths = require(`../helpers/paths`);
 const logger = require('../helpers/logger');
 
 const compilePage = async function compilePageHTML({ filePath }) {
