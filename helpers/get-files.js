@@ -30,7 +30,7 @@ module.exports = function getFiles({ directory, includes = [], excludes = [], re
       const isIncluded = hasIncludes && testMatch(filePath, includes);
       const isExcluded = hasExcludes && testMatch(filePath, excludes);
 
-      if (!hasIncludes || (isIncluded && !isExcluded)) {
+      if ((!hasIncludes && !isExcluded) || (isIncluded && !isExcluded)) {
         returnFolder.push(filePath);
       }
     }

@@ -6,24 +6,17 @@ const scriptService = require(`./script`);
 const compileService = require('./compile');
 const templateService = require('./template');
 
-const config = require('../helpers/config');
 const paths = require('../helpers/paths');
+const config = require('../helpers/config');
 const getPaths = require('../helpers/get-paths');
 const getFiles = require('../helpers/get-files');
+const fileStrip = require('../helpers/file-strip');
 
 const extension = config.dot.templateSettings.varname;
 
 const assetServices = {
   js: scriptService,
   scss: styleService,
-};
-
-const stripContent = function stripFileContent({ filePath }) {
-  let fileContent = fs.readFileSync(filePath, 'utf8');
-  fileContent = fileContent.replace(/\s/g, '');
-  fileContent = fileContent.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
-
-  return fileContent;
 };
 
 const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
@@ -45,16 +38,11 @@ const pageAsset = async function renderPageAsset({ assetPaths, filePath }) {
 };
 
 const templateIncludes = async function templateIncludesAsset({ filePath, fileExtension }) {
-  let templateName = filePath.split(paths.src.templates)[1];
-  templateName = templateName.split(config.paths.src.includes)[0];
-  templateName = templateName.replace(/\/|\\/g, '');
-
-  let templatePath = `${paths.src.templates}/${templateName}/${templateName}.${fileExtension}`;
-  let templateContent = stripContent({ filePath: templatePath });
+  let templateName = templateService.nameFromInclude({ filePath });
+  let templateContent = templateService.getContent({ templateName, fileExtension });
 
   let includeName = templateService.sanitizePath({ filePath, fileExtension });
-  let includePath = `${paths.src.templates}/${templateName}/${config.paths.src.includes}/${includeName}/${includeName}.html`;
-  let includeContent = stripContent({ filePath: includePath });
+  let includeContent = templateService.nestedIncludeContent({ templateName, includeName });
 
   let defTest = new RegExp(`def\.${includeName}`, 'g');
 
@@ -129,7 +117,7 @@ const includesAsset = async function renderIncludesAsset({ matchFile, directory,
   const checkDirectory = getFiles({ directory });
 
   for (let filePath of checkDirectory) {
-    let templateContent = stripContent({ filePath });
+    let templateContent = fileStrip({ filePath });
 
     let includeName = matchFile.split(/\/|\\/).pop().split('.')[0];
 

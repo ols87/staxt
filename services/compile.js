@@ -80,11 +80,8 @@ module.exports = compileService = {
 
   async templates({ filePath }) {
     if (filePath.indexOf(config.paths.src.includes) > -1) {
-      let templateName = filePath.split(paths.src.templates)[1];
-      templateName = templateName.split(config.paths.src.includes)[0];
-      templateName = templateName.replace(/\/|\\/g, '');
-
-      return await compileTemplate({ filePath: templateName });
+      filePath = templateService.nameFromInclude({ filePath });
+      return await compileTemplate({ filePath });
     }
 
     if (typeof filePath === 'string') return await compileTemplate({ filePath });

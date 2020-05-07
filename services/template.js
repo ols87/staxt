@@ -2,6 +2,7 @@ const paths = require('../helpers/paths');
 const config = require('../helpers/config');
 const logger = require('../helpers/logger');
 const getFiles = require('../helpers/get-files');
+const fileStrip = require('../helpers/file-strip');
 
 const extension = config.dot.templateSettings.varname;
 
@@ -18,6 +19,22 @@ module.exports = templateService = {
     }
 
     return filePath;
+  },
+
+  nameFromInclude({ filePath }) {
+    let templateName = filePath.split(templatesSrc)[1];
+    templateName = templateName.split(config.paths.src.includes)[0];
+    return templateName.replace(/\/|\\/g, '');
+  },
+
+  getContent({ templateName, fileExtension }) {
+    const filePath = `${templatesSrc}/${templateName}/${templateName}.${fileExtension}`;
+    return fileStrip({ filePath });
+  },
+
+  nestedIncludeContent({ templateName, includeName }) {
+    let filePath = `${templatesSrc}/${templateName}/${config.paths.src.includes}/${includeName}/${includeName}.html`;
+    return fileStrip({ filePath });
   },
 
   isInclude({ filePath }) {
