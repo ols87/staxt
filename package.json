@@ -13,8 +13,10 @@
     "@api": "api",
     "@compilers": "dist/compilers",
     "@config": "dist/config",
+    "@files": "dist/files",
     "@helpers": "dist/helpers",
-    "@services": "dist/services"
+    "@services": "dist/services",
+    "@utils": "dist/utils"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,6 @@
 // .npmignore
 node_modules/
-dist
+src/
+docs/
 .git
 .gitignore
