@@ -30,6 +30,8 @@ const compilePage = async function compilePageHTML({ filePath }) {
   const templateContent = fs.readFileSync(templatePath, 'utf8');
   const compile = dot.template(templateContent, dot.templateSettings, dot.defs);
 
+  pageData.defs = dot.defs;
+
   if (fs.existsSync(distPath)) {
     const distContent = fs.readFileSync(distPath, 'utf8');
 

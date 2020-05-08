@@ -36,22 +36,15 @@ const processInclude = function processIncludeData({ fileName }) {
   return { filePath, data };
 };
 
-dot.defs = {
-  include(fileName) {
-    const include = processInclude({ fileName });
+dot.defs.include = (fileName) => {
+  const include = processInclude({ fileName });
 
-    if (fs.existsSync(include.filePath)) {
-      dot.defs[fileName] = include.data || {};
-      return fs.readFileSync(include.filePath, 'utf8');
-    } else {
-      logger('red', `${fileName} not found`);
-      return `${fileName} not found`;
-    }
-  },
-
-  stringify(data) {
-    return JSON.stringify(data);
-  },
+  if (fs.existsSync(include.filePath)) {
+    dot.defs[fileName] = include.data || {};
+    return fs.readFileSync(include.filePath, 'utf8');
+  } else {
+    logger('red', `${fileName} not found`);
+    return `${fileName} not found`;
+  }
 };
-
 module.exports = dot;
