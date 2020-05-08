@@ -3,11 +3,12 @@
   "version": "3.0.0-aplha1",
   "description": "",
   "bin": {
-    "staxt": "dist/staxt/"
+    "staxt": "dist/."
   },
   "scripts": {
-    "dev": "ABC=production tsc -w & nodemon -q -w src dist",
-    "docs": "typedoc --out docs src"
+    "dev": "tsc -w & nodemon -q -w src dist",
+    "docs": "typedoc",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "_moduleAliases": {
     "@api": "api",
@@ -37,6 +38,12 @@
     "module-alias": "^2.2.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2",
+    "nodemon": "^2.0.3",
+    "ts-node": "^8.10.1",
+    "typedoc-neo-theme": "^1.0.8"
   }
 }

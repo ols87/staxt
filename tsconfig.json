@@ -22,7 +22,11 @@
   },
   "include": ["src/**/*"],
   "typedocOptions": {
-    "mode": "files",
-    "out": "docs"
+    "inputFiles": ["./src"],
+    "theme": "node_modules/typedoc-neo-theme/bin/default",
+    "mode": "modules",
+    "out": "docs",
+    "exclude": ["**/src/**/index.ts", "**/*.spec.ts"],
+    "excludeNotExported": true
   }
 }
