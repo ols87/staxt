@@ -36,11 +36,11 @@ module.exports = async function fileWatcher(filePath) {
     cliMethod = 'styles';
   }
 
-  if (isImage) {
-    cliMethod = 'images';
-  }
+  let methodPath = `${__staxt}/cli/${cliMethod}/${cliMethod}-${cliMethodType}`;
 
-  const methodPath = `${__staxt}/cli/${cliMethod}/${cliMethod}-${cliMethodType}`;
+  if (isImage) {
+    methodPath = `${__staxt}/cli/images`;
+  }
 
   if (fs.existsSync(`${methodPath}.js`)) {
     await require(methodPath)(filePath);

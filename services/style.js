@@ -26,23 +26,19 @@ module.exports = async function styleService({ filePath, srcPath, distPath }) {
         fs.ensureFileSync(distPath);
         fs.writeFileSync(distPath, result.css);
 
-        timer.end().then((seconds) => {
-          logger('green', `${filePath} scss compiled in ${seconds} seconds`);
+        const css = fs.readFileSync(distPath, 'utf8');
 
-          fs.readFile(distPath, (err, css) => {
-            postcss([tailwind])
-              .process(css, { from: distPath, to: `${__staxt}/tmp/out.css` })
-              .then((result) => {
-                fs.remove(`${paths.base}/tailwind.config.js`);
-                fs.writeFile(distPath, result.css, () => {
-                  timer.end().then((seconds) => {
-                    logger('green', `${filePath} css compiled in ${seconds} seconds`);
-                    resolve();
-                  });
-                });
+        postcss([tailwind])
+          .process(css, { from: distPath, to: `${__staxt}/tmp/out.css` })
+          .then((result) => {
+            fs.remove(`${paths.base}/tailwind.config.js`);
+            fs.writeFile(distPath, result.css, () => {
+              timer.end().then((seconds) => {
+                logger('green', `${filePath} css compiled in ${seconds} seconds`);
+                resolve();
               });
+            });
           });
-        });
       }
     );
   });

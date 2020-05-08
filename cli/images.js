@@ -13,7 +13,7 @@ module.exports = async function images() {
   fs.copySync(paths.src.assets.images, paths.dist.assets.images);
 
   timer.end().then((seconds) => {
-    logger('green', `Images copied in ${seconds} seconds`);
+    logger('green', `images copied in ${seconds} seconds`);
   });
 
   return await config.hooks.images.after();

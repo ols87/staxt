@@ -1,3 +1,5 @@
+const path = require('path');
+
 const paths = require('../helpers/paths');
 const config = require('../helpers/config');
 const logger = require('../helpers/logger');
@@ -6,9 +8,9 @@ const fileStrip = require('../helpers/file-strip');
 
 const extension = config.dot.templateSettings.varname;
 
-const templatesSrc = paths.src.templates;
-const includesSrc = paths.src.includes;
-const pagesSrc = paths.src.pages;
+const templatesSrc = path.normalize(paths.src.templates);
+const includesSrc = path.normalize(paths.src.includes);
+const pagesSrc = path.normalize(paths.src.pages);
 
 module.exports = templateService = {
   sanitizePath({ filePath, fileExtension }) {
@@ -22,8 +24,9 @@ module.exports = templateService = {
   },
 
   nameFromInclude({ filePath }) {
+    const includesPathName = path.normalize(config.paths.src.includes);
     let templateName = filePath.split(templatesSrc)[1];
-    templateName = templateName.split(config.paths.src.includes)[0];
+    templateName = templateName.split(includesPathName)[0];
     return templateName.replace(/\/|\\/g, '');
   },
 

@@ -3,6 +3,8 @@ const fs = require('fs-extra');
 const assetService = require('../services/asset');
 const compileService = require('../services/compile');
 
+const images = require('../cli/images');
+
 const paths = require(`../helpers/paths`);
 const config = require(`../helpers/config`);
 const getFiles = require(`../helpers/get-files`);
@@ -17,6 +19,8 @@ module.exports = async function bundle() {
     directory: paths.src.templates,
     excludes: ['includes'],
   });
+
+  await images();
 
   for (let filePath of templates) {
     if (filePath.indexOf('.scss') > -1) {
