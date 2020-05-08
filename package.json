@@ -33,10 +33,10 @@
     "sass": "^1.26.3",
     "tailwindcss": "^1.4.4",
     "typescript": "^3.8.3",
-    "yargs": "^15.3.1"
+    "yargs": "^15.3.1",
+    "module-alias": "^2.2.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3",
-    "module-alias": "^2.2.2"
+    "nodemon": "^2.0.3"
   }
 }
