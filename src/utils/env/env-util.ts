@@ -8,46 +8,34 @@ import dotenv from 'dotenv';
  * ```ts
  * import { EnvUtil } from '@utils/env';
  *
- * const node_env = EnvUtil.get('NODE_ENV);
+ * const node_env = EnvUtil.get('NODE_ENV');
  *
  * console.log(node_env);
  * ```
  */
 
-const EnvUtil = new (class {
-  private env: any;
+namespace EnvUtil {
+  const config = dotenv.config();
 
-  constructor() {
-    this.set();
+  if (config.error) {
+    throw config.error;
   }
 
-  private set() {
-    const config = dotenv.config();
+  const env = config.parsed;
 
-    if (config.error) {
-      throw config.error;
-    }
-
-    try {
-      this.env = config.parsed;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  public get(key: string): string {
+  export function get(key: string): string {
     try {
       const has = Object.prototype.hasOwnProperty;
 
-      if (has.call(this.env, key)) {
-        return this.env[key];
+      if (has.call(env, key)) {
+        return env[key];
       }
 
       throw `No env key "${key}"`;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
-})();
+}
 
 export { EnvUtil };
