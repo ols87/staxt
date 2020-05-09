@@ -107,11 +107,13 @@ module.exports = compileService = {
       let templateContent = fs.readFileSync(templatePath, 'utf8');
       templateContent = templateContent.replace(/\s/g, '');
 
-      let includeName = new RegExp('(\'|")' + filePath + '(\'|").}}', 'g');
+      let includeName = new RegExp(`(def.+)(\'|")${filePath}(\'|").}}`, 'g');
 
       if (includeName.test(templateContent)) {
-        return await compileTemplate({ filePath: templatePath });
+        await compileTemplate({ filePath: templatePath });
       }
     }
+
+    return;
   },
 };

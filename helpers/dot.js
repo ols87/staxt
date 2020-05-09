@@ -29,8 +29,13 @@ const processInclude = function processIncludeData({ fileName }) {
     }
   }
 
-  data = require(`${filePath}.js`);
-  delete require.cache[require.resolve(`${filePath}.js`)];
+  let data = {};
+
+  if (fs.existsSync(`${filePath}.js`)) {
+    data = require(`${filePath}.js`);
+    delete require.cache[require.resolve(`${filePath}.js`)];
+  }
+
   filePath = `${filePath}.html`;
 
   return { filePath, data };

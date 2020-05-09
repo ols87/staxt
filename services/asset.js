@@ -44,7 +44,7 @@ const templateIncludes = async function templateIncludesAsset({ filePath, fileEx
   let includeName = templateService.sanitizePath({ filePath, fileExtension });
   let includeContent = templateService.nestedIncludeContent({ templateName, includeName });
 
-  let defTest = new RegExp(`def\.${includeName}`, 'g');
+  let defTest = new RegExp(`(def.+)(\'|")${includeName}(\'|").}}`, 'g');
 
   if (defTest.test(includeContent)) {
     await compileService.includes({ filePath: includeName });
@@ -117,17 +117,17 @@ const includesAsset = async function renderIncludesAsset({ matchFile, directory,
   const checkDirectory = getFiles({ directory });
 
   for (let filePath of checkDirectory) {
-    let templateContent = fileStrip({ filePath });
+    let fileContent = fileStrip({ filePath });
 
     let includeName = matchFile.split(/\/|\\/).pop().split('.')[0];
 
-    let defTest = new RegExp(`def\.${includeName}`, 'g');
+    let defTest = new RegExp(`(def.+)(\'|")${includeName}(\'|").}}`, 'g');
 
-    if (defTest.test(templateContent)) {
+    if (defTest.test(fileContent)) {
       await compileService.includes({ filePath: includeName });
     }
 
-    if (templateContent.indexOf(`${config.paths.src.includes}/${includeName}`) > -1) {
+    if (fileContent.indexOf(`${config.paths.src.includes}/${includeName}`) > -1) {
       let returnCallback = callback;
 
       if (filePath.indexOf(`.${extension}.`) > -1) {
