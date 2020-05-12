@@ -4,7 +4,7 @@ A minimal static site generator.
 
 ## concept
 
-The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with doT.js templates to deliver HTML. Sass is used for compiling css and Browserify is used to compile javascript files.
+The idea behind staxt was to create a fast, lightweight, static site generator. Javascript src page files are combined with doT.js templates to deliver HTML. Sass is used for compiling css, Tailwind is used for custom component creation and Browserify is used to compile javascript files.
 
 ## WARNING
 
