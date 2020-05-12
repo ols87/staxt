@@ -8,7 +8,7 @@ The idea behind staxt was to create a fast, lightweight, static site generator. 
 
 ## WARNING
 
-This was as a personal project to practise NodeJS and morphed into an npm package. It is **NOT RECOMENDED** to use this in production.
+This was as a personal project. It is **NOT RECOMENDED** to use this in production.
 
 ## install
 
