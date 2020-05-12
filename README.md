@@ -8,7 +8,7 @@ The idea behind staxt was to create a fast, lightweight, static site generator. 
 
 ## WARNING
 
-This was as a personal project. It is **NOT RECOMENDED** to use this in production.
+This is a personal project. It is **NOT RECOMENDED** to use this in production.
 
 ## install
 
