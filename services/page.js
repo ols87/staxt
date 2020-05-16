@@ -102,10 +102,11 @@ module.exports = pageService = {
   },
 
   sanitizePath({ filePath, fileExtension }) {
+    filePath = path.normalize(filePath);
     fileExtension = fileExtension || `${extension}.js`;
 
     if (filePath.indexOf(`.${fileExtension}`) > -1) {
-      filePath = filePath.replace(`${path.normalize(srcDirectory.pages)}/`, '');
+      filePath = filePath.replace(`${path.normalize(srcDirectory.pages)}${path.sep}`, '');
       filePath = filePath.replace(`.${fileExtension}`, '');
       filePath = [...new Set(filePath.split(/\/|\\/))].join(path.sep);
     }
