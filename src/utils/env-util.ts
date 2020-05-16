@@ -24,17 +24,13 @@ namespace EnvUtil {
   const env = config.parsed;
 
   export function get(key: string): string {
-    try {
-      const has = Object.prototype.hasOwnProperty;
+    const has = Object.prototype.hasOwnProperty;
 
-      if (has.call(env, key)) {
-        return env[key];
-      }
-
-      throw `No env key "${key}"`;
-    } catch (error) {
-      throw error;
+    if (has.call(env, key)) {
+      return env[key];
     }
+
+    console.error(`No env key "${key}"`);
   }
 }
 
