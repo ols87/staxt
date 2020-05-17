@@ -1,16 +1,11 @@
 import dotenv from 'dotenv';
 
 /**
- * Returns an env object
+ * Utility for working with .env file
  *
- * Basic usage example:
- *
+ * Usage:
  * ```ts
- * import { EnvUtil } from '@utils/env';
- *
- * const node_env = EnvUtil.get('NODE_ENV');
- *
- * console.log(node_env);
+ * import { EnvUtil } from '@utils/env-util';
  * ```
  */
 
@@ -23,6 +18,10 @@ namespace EnvUtil {
 
   const env = config.parsed;
 
+  /**
+   * @param key  Name of .env key.
+   * @returns Value of .env key.
+   */
   export function get(key: string): string {
     const has = Object.prototype.hasOwnProperty;
 
