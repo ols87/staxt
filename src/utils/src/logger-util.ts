@@ -11,7 +11,23 @@ export class LoggerUtil {
   /**
    * @param msg  Message to log.
    */
-  public static message(msg: string) {
-    console.log(msg);
+  public static log(msg: string) {
+
+  }
+
+  public static debug(msg: string) {
+
+  }
+
+  public static warn(msg: string) {
+
+  }
+
+  public static error(msg: string) {
+
+  }
+
+  private static write() {
+    console.log(1);
   }
 }
