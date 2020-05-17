@@ -5,11 +5,11 @@ import dotenv from 'dotenv';
  *
  * Usage:
  * ```ts
- * import { EnvUtil } from '@utils/env-util';
+ * import { EnvUtil } from '@utils';
  * ```
  */
 
-namespace EnvUtil {
+export namespace EnvUtil {
   const config = dotenv.config();
 
   if (config.error) {
@@ -32,5 +32,3 @@ namespace EnvUtil {
     console.error(`No env key "${key}"`);
   }
 }
-
-export { EnvUtil };

@@ -10,7 +10,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
  *
  * Usage:
  * ```ts
- * import { EnvUtil } from '@utils/env-util';
+ * import { EnvUtil } from '@utils';
  * ```
  */
 var EnvUtil;
@@ -32,6 +32,5 @@ var EnvUtil;
         console.error(`No env key "${key}"`);
     }
     EnvUtil.get = get;
-})(EnvUtil || (EnvUtil = {}));
-exports.EnvUtil = EnvUtil;
+})(EnvUtil = exports.EnvUtil || (exports.EnvUtil = {}));
 //# sourceMappingURL=env-util.js.map
