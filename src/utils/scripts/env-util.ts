@@ -1,34 +1,40 @@
-import dotenv from 'dotenv';
-
 /**
  * Utility for working with .env file
  *
  * Usage:
  * ```ts
- * import { EnvUtil } from '@utils';
+ * import { envUtil } from '@utils';
+ *
+ * const nodeEnv envUtil('NODE_ENV')
+ *
+ * console.log(nodeEnv); // development
  * ```
  */
 
-export namespace EnvUtil {
-  const config = dotenv.config();
+import dotenv from 'dotenv';
+
+function getEnv(): any {
+  const config: any = dotenv.config();
 
   if (config.error) {
-    throw config.error;
+    return throw config.error;
+  }
+ 
+  return config.parsed;
+}
+
+
+/**
+ * @param key  Name of .env key.
+ * @returns Value of .env key.
+ */
+export function envUtil(key: string): string {
+  const envFile: any = getEnv();
+  const has = Object.prototype.hasOwnProperty;
+
+  if (has.call(envFile, key)) {
+    return envFile[key];
   }
 
-  const env = config.parsed;
-
-  /**
-   * @param key  Name of .env key.
-   * @returns Value of .env key.
-   */
-  export function get(key: string): string {
-    const has = Object.prototype.hasOwnProperty;
-
-    if (has.call(env, key)) {
-      return env[key];
-    }
-
-    console.error(`No env key "${key}"`);
-  }
+  console.error(`No env key "${key}"`);
 }
