@@ -3,21 +3,21 @@
   "version": "3.0.0-aplha1",
   "description": "",
   "bin": {
-    "staxt": "dist/."
+    "staxt": "app/."
   },
   "scripts": {
-    "dev": "tsc -w & nodemon -q -w src dist",
+    "dev": "tsc -w & nodemon -q -w src app",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "docs": "typedoc"
   },
   "_moduleAliases": {
-    "@api": "dist/api/index.js",
-    "@compilers": "dist/compilers/index.js",
-    "@config": "dist/config/index.js",
-    "@files": "dist/files/index.js",
-    "@helpers": "dist/helpers/index.js",
-    "@services": "dist/services/index.js",
-    "@utils": "dist/utils/index.js"
+    "@api": "app/api/index.js",
+    "@compilers": "app/compilers/index.js",
+    "@config": "app/config/index.js",
+    "@files": "app/files/index.js",
+    "@helpers": "app/helpers/index.js",
+    "@services": "app/services/index.js",
+    "@utils": "app/utils/index.js"
   },
   "keywords": [],
   "author": "",
