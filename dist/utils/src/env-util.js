@@ -6,32 +6,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnvUtil = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 /**
- * Utility for working with .env file
- *
- * Usage:
+ * Utility for working with a .env file
+
  * ```ts
- * import { EnvUtil } from '@utils/env-util';
+ * import { EnvUtil } from '@utils';
  * ```
  */
-var EnvUtil;
-(function (EnvUtil) {
-    const config = dotenv_1.default.config();
-    if (config.error) {
-        throw config.error;
+class EnvUtil {
+    /**
+     * @returns env file as a javascript object.
+     *
+     * ```ts
+     * const envFile: any = this.getEnv();
+     * console.log(nodeEnv); // { NODE_ENV: 'development', ...}
+     * ```
+     */
+    static getEnv() {
+        this.config = dotenv_1.default.config();
+        if (this.config.error) {
+            throw this.config.error;
+        }
+        return this.config.parsed;
     }
-    const env = config.parsed;
     /**
      * @param key  Name of .env key.
      * @returns Value of .env key.
+     *
+     * ```ts
+     * const nodeEnv = EnvUtil.get('NODE_ENV')
+     * console.log(nodeEnv); // 'development'
+     * ```
      */
-    function get(key) {
+    static get(key) {
+        const envFile = this.getEnv();
         const has = Object.prototype.hasOwnProperty;
-        if (has.call(env, key)) {
-            return env[key];
+        if (has.call(envFile, key)) {
+            return envFile[key];
         }
         console.error(`No env key "${key}"`);
     }
-    EnvUtil.get = get;
-})(EnvUtil || (EnvUtil = {}));
+}
 exports.EnvUtil = EnvUtil;
 //# sourceMappingURL=env-util.js.map

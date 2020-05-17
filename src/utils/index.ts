@@ -1,2 +1,2 @@
-export { EnvUtil } from './scripts/env-util';
-export { LoggerUtil } from './scripts/logger-util';
+export { EnvUtil } from './src/env-util';
+export { LoggerUtil } from './src/logger-util';

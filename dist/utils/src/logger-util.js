@@ -1,8 +1,21 @@
 "use strict";
+/**
+ * Utility for logging to Node
+ *
+ * Usage:
+ * ```ts
+ * import { LoggerUtil } from '@utils';
+ * ```
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoggerUtil = void 0;
-const LoggerUtil = new (class {
-    constructor() { }
-})();
+class LoggerUtil {
+    /**
+     * @param msg  Message to log.
+     */
+    static message(msg) {
+        console.log(msg);
+    }
+}
 exports.LoggerUtil = LoggerUtil;
 //# sourceMappingURL=logger-util.js.map
