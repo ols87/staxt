@@ -10,13 +10,13 @@
     "docs": "typedoc"
   },
   "_moduleAliases": {
-    "@api": "api",
-    "@compilers": "dist/compilers",
-    "@config": "dist/config",
-    "@files": "dist/files",
-    "@helpers": "dist/helpers",
-    "@services": "dist/services",
-    "@utils": "dist/utils"
+    "@api": "dist/api/index.js",
+    "@compilers": "dist/compilers/index.js",
+    "@config": "dist/config/index.js",
+    "@files": "dist/files/index.js",
+    "@helpers": "dist/helpers/index.js",
+    "@services": "dist/services/index.js",
+    "@utils": "dist/utils/index.js"
   },
   "keywords": [],
   "author": "",
