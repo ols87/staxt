@@ -1,8 +1,20 @@
 #!/usr/bin/env node
 require('module-alias/register');
 
-import { EnvUtil, LoggerUtil } from '@utils';
+import { EnvUtil } from '@utils';
 
-console.log(EnvUtil.get('NODE_ENV'));
+const test = './test';
 
-console.log(LoggerUtil.message('Hello'));
+import(test).then((Page) => {
+  const page = new Page.default();
+  let { meta, model } = page;
+
+  if (typeof meta === 'function') {
+    meta = meta();
+  }
+
+  if (typeof model === 'function') {
+    model = model();
+  }
+  console.log({ meta, model });
+});

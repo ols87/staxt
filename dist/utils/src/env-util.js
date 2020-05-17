@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnvUtil = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 /**
  * Utility for working with a .env file

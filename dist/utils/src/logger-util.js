@@ -8,7 +8,6 @@
  * ```
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoggerUtil = void 0;
 class LoggerUtil {
     /**
      * @param msg  Message to log.
