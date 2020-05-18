@@ -3,10 +3,12 @@ require('module-alias/register');
 
 import { EnvUtil } from '@utils';
 
-const test = './test';
+(async () => {
+  const test = './test';
 
-import(test).then((Page) => {
+  const Page = await import(test);
   const page = new Page.default();
+
   let { meta, model } = page;
 
   if (typeof meta === 'function') {
@@ -16,5 +18,6 @@ import(test).then((Page) => {
   if (typeof model === 'function') {
     model = model();
   }
+
   console.log({ meta, model });
-});
+})();
