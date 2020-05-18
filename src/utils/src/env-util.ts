@@ -16,7 +16,7 @@ export class EnvUtil {
    *
    * ```ts
    * const envFile: any = this.getEnv();
-   * console.log(nodeEnv); // { NODE_ENV: 'development', ...}
+   * console.log(envFile); // { NODE_ENV: 'development', ...}
    * ```
    */
   private static getEnv(): object {
