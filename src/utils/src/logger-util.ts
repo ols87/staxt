@@ -7,27 +7,109 @@
  * ```
  */
 
+import chalk from 'chalk';
+
+/**
+ * Sets color for each log type.
+ */
+export interface LoggerConfig {
+  message: string;
+  type: 'log' | 'debug' | 'warn' | 'error';
+}
+
+/**
+ * Sets color for each log type.
+ */
+export enum LoggerTypes {
+  log = 'white',
+  debug = 'blueBright',
+  warn = 'yellow',
+  error = 'red',
+}
+
 export class LoggerUtil {
   /**
-   * @param msg  Message to log.
+   * Creates a new instance of Chalk.
    */
-  public static log(msg: string) {
+  private static logger: any = new chalk.Instance({
+    level: 1,
+  });
 
+  /**
+   * @returns Creates a white console log [LOG].
+   * @param message  Message to log.
+   *
+   * ```ts
+   * LoggerUtil.log('Some log here');
+   * ```
+   */
+  public static log(message: string) {
+    return this.write({
+      message,
+      type: 'log',
+    });
   }
 
-  public static debug(msg: string) {
-
+  /**
+   * @returns Creates a blue console log [DEBUG].
+   * @param message  Message to log.
+   *
+   * ```ts
+   * LoggerUtil.log('Some log here');
+   * ```
+   */
+  public static debug(message: string) {
+    return this.write({
+      message,
+      type: 'debug',
+    });
   }
 
-  public static warn(msg: string) {
-
+  /**
+   * @returns Creates a yellow console log [WARN].
+   * @param message  Message to log.
+   *
+   * ```ts
+   * LoggerUtil.log('Some warning here');
+   * ```
+   */
+  public static warn(message: string) {
+    return this.write({
+      message,
+      type: 'warn',
+    });
   }
 
-  public static error(msg: string) {
-
+  /**
+   * @returns Creates a red console log [Error].
+   * @param message  Message to log.
+   *
+   * ```ts
+   * LoggerUtil.error('Some error here');
+   * ```
+   */
+  public static error(message: string) {
+    return this.write({
+      message,
+      type: 'error',
+    });
   }
 
-  private static write() {
-    console.log(1);
+  /**
+   * @returns Writes to the console using chalk.
+   * @param LoggerConfig message and type.
+   *
+   * ```ts
+   * return this.write({
+   *   message,
+   *   type: 'error',
+   * });
+   * ```
+   */
+  private static write({ message, type }: LoggerConfig) {
+    const color = LoggerTypes[type as keyof typeof LoggerTypes];
+    const prefix = this.logger[color].bold(`[${type.toUpperCase()}]`);
+
+    return console.log(`${prefix}: ${this.logger.white(message)}`);
   }
 }

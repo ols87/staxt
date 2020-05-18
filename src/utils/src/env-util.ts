@@ -12,24 +12,6 @@ export class EnvUtil {
   private static config: any;
 
   /**
-   * @returns env file as a javascript object.
-   *
-   * ```ts
-   * const envFile: any = this.getEnv();
-   * console.log(envFile); // { NODE_ENV: 'development', ...}
-   * ```
-   */
-  private static getEnv(): object {
-    this.config = dotenv.config();
-
-    if (this.config.error) {
-      throw this.config.error;
-    }
-
-    return this.config.parsed;
-  }
-
-  /**
    * @param key  Name of .env key.
    * @returns Value of .env key.
    *
@@ -47,5 +29,23 @@ export class EnvUtil {
     }
 
     console.error(`No env key "${key}"`);
+  }
+
+  /**
+   * @returns env file as a javascript object.
+   *
+   * ```ts
+   * const envFile: any = this.getEnv();
+   * console.log(envFile); // { NODE_ENV: 'development', ...}
+   * ```
+   */
+  private static getEnv(): object {
+    this.config = dotenv.config();
+
+    if (this.config.error) {
+      throw this.config.error;
+    }
+
+    return this.config.parsed;
   }
 }

@@ -1,15 +1,4 @@
 export default class {
-  // meta = {
-  //   template: 'default',
-  //   slug: '/',
-  //   title: '',
-  //   keywords: '',
-  //   descripotion: '',
-  // };
-
-  // model = {
-  //   foo: 'bar',
-  // };
   public meta() {
     return {
       template: 'default',

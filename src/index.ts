@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 require('module-alias/register');
 
-import { EnvUtil } from '@utils';
+import { LoggerUtil } from '@utils';
 
 (async () => {
+  LoggerUtil.debug('Testing 123');
+
   const test = './test';
 
   const Page = await import(test);
