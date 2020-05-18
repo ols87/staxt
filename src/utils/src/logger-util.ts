@@ -4,112 +4,151 @@
  * Usage:
  * ```ts
  * import { LoggerUtil } from '@utils';
+ *
+ * LoggerUtil.log('log message');
+ * LoggerUtil.debug('debug message');
+ * LoggerUtil.warn('warn message');
+ * LoggerUtil.error('error message');
+ * LoggerUtil.success('success message');
  * ```
  */
 
 import chalk from 'chalk';
 
 /**
- * Sets color for each log type.
+ * Available log types
  */
-export interface LoggerConfig {
-  message: string;
-  type: 'log' | 'debug' | 'warn' | 'error';
-}
+export type LogType = 'log' | 'debug' | 'warn' | 'error' | 'success';
 
 /**
- * Sets color for each log type.
+ * Available log colors
  */
-export enum LoggerTypes {
-  log = 'white',
-  debug = 'blueBright',
-  warn = 'yellow',
-  error = 'red',
+export type LogColor = 'white' | 'blueBright' | 'yellow' | 'red' | 'green';
+
+/**
+ *  Maps a LogType to a LogColor.
+ *
+ * **Used at**:
+ * - {@link LoggerUtil.colors}
+ */
+export type LogColorMaps = Record<LogType, LogColor>;
+
+/**
+ * Parameters for writing to the console.
+ *
+ * **Used at**:
+ * - {@link LoggerUtil.write}
+ */
+export interface LogParams {
+  /**
+   * e.g. 'Hello World'
+   */
+  message: string;
+  /**
+   * e.g. 'log'
+   */
+  type: LogType;
 }
 
 export class LoggerUtil {
   /**
-   * Creates a new instance of Chalk.
+   * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
   private static logger: any = new chalk.Instance({
     level: 1,
   });
 
   /**
-   * @returns Creates a white console log [LOG].
-   * @param message  Message to log.
+   * Maps a color to each log type.
    *
+   * **Type**: {@link LogColorMaps}
+   */
+  private static colors: LogColorMaps = {
+    log: 'white',
+    debug: 'blueBright',
+    warn: 'yellow',
+    error: 'red',
+    success: 'green',
+  };
+
+  /**
    * ```ts
-   * LoggerUtil.log('Some log here');
+   * LoggerUtil.log('log message');
    * ```
    */
   public static log(message: string) {
-    return this.write({
+    this.write({
       message,
       type: 'log',
     });
   }
 
   /**
-   * @returns Creates a blue console log [DEBUG].
-   * @param message  Message to log.
-   *
    * ```ts
-   * LoggerUtil.log('Some log here');
+   * LoggerUtil.debug('log message');
    * ```
    */
   public static debug(message: string) {
-    return this.write({
+    this.write({
       message,
       type: 'debug',
     });
   }
 
   /**
-   * @returns Creates a yellow console log [WARN].
-   * @param message  Message to log.
+   * @param
    *
    * ```ts
-   * LoggerUtil.log('Some warning here');
+   * LoggerUtil.warn('warning message');
    * ```
    */
   public static warn(message: string) {
-    return this.write({
+    this.write({
       message,
       type: 'warn',
     });
   }
 
   /**
-   * @returns Creates a red console log [Error].
-   * @param message  Message to log.
-   *
    * ```ts
-   * LoggerUtil.error('Some error here');
+   * LoggerUtil.error('error message');
    * ```
    */
   public static error(message: string) {
-    return this.write({
+    this.write({
       message,
       type: 'error',
     });
   }
 
   /**
-   * @returns Writes to the console using chalk.
-   * @param LoggerConfig message and type.
-   *
    * ```ts
-   * return this.write({
+   * LoggerUtil.success('success message');
+   * ```
+   */
+  public static success(message: string) {
+    this.write({
+      message,
+      type: 'success',
+    });
+  }
+
+  /**
+   * ```ts
+   * this.write({
    *   message,
-   *   type: 'error',
+   *   type: 'log',
    * });
    * ```
    */
-  private static write({ message, type }: LoggerConfig) {
-    const color = LoggerTypes[type as keyof typeof LoggerTypes];
-    const prefix = this.logger[color].bold(`[${type.toUpperCase()}]`);
+  private static write({ message, type }: LogParams) {
+    try {
+      const color = this.colors[type];
+      const prefix = this.logger[color].bold(`[${type.toUpperCase()}]`);
 
-    return console.log(`${prefix}: ${this.logger.white(message)}`);
+      console.log(`${prefix}: ${this.logger.white(message)}`);
+    } catch {
+      this.error(`incorrect color mapping for '${type}'`);
+    }
   }
 }
