@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-
+import { LoggerUtil } from '../';
 /**
  * Utility for working with a .env file
 
@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
  */
 export class EnvUtil {
   /** used to store dontenv.config() */
-  private static config: any;
+  public static config: any = dotenv.config();
 
   /**
    * @param key  Name of .env key.
@@ -21,7 +21,7 @@ export class EnvUtil {
    * ```
    */
   public static get(key: string): string {
-    const envFile: any = this.getEnv();
+    const envFile: any = this.getFile();
     const has = Object.prototype.hasOwnProperty;
 
     if (has.call(envFile, key)) {
@@ -35,17 +35,17 @@ export class EnvUtil {
    * @returns env file as a javascript object.
    *
    * ```ts
-   * const envFile: any = this.getEnv();
+   * const envFile: any = this.getFile();
    * console.log(envFile); // { NODE_ENV: 'development', ...}
    * ```
    */
-  private static getEnv(): object {
+  private static getFile(): object {
     this.config = dotenv.config();
 
-    if (this.config.error) {
-      throw this.config.error;
+    try {
+      return this.config.parsed;
+    } catch {
+      LoggerUtil.error(this.config.error);
     }
-
-    return this.config.parsed;
   }
 }

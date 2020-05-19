@@ -1,18 +1,3 @@
-/**
- * Utility for logging to Node
- *
- * Usage:
- * ```ts
- * import { LoggerUtil } from '@utils';
- *
- * LoggerUtil.log('log message');
- * LoggerUtil.debug('debug message');
- * LoggerUtil.warn('warn message');
- * LoggerUtil.error('error message');
- * LoggerUtil.success('success message');
- * ```
- */
-
 import chalk from 'chalk';
 
 /**
@@ -50,11 +35,26 @@ export interface LogParams {
   type: LogType;
 }
 
+/**
+ * Utility for logging to Node
+ *
+ * Usage:
+ * ```ts
+ * import { LoggerUtil } from '@utils';
+ *
+ * LoggerUtil.log('log message');
+ * LoggerUtil.debug('debug message');
+ * LoggerUtil.warn('warn message');
+ * LoggerUtil.error('error message');
+ * LoggerUtil.success('success message');
+ * ```
+ */
+
 export class LoggerUtil {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
-  private static logger: any = new chalk.Instance({
+  public static logger: any = new chalk.Instance({
     level: 1,
   });
 
@@ -63,9 +63,9 @@ export class LoggerUtil {
    *
    * **Type**: {@link LogColorMaps}
    */
-  private static colors: LogColorMaps = {
+  public static colors: LogColorMaps = {
     log: 'white',
-    debug: 'blueBright',
+    debug: 'white',
     warn: 'yellow',
     error: 'red',
     success: 'green',
@@ -77,7 +77,7 @@ export class LoggerUtil {
    * ```
    */
   public static log(message: string) {
-    this.write({
+    return this.write({
       message,
       type: 'log',
     });
@@ -89,7 +89,7 @@ export class LoggerUtil {
    * ```
    */
   public static debug(message: string) {
-    this.write({
+    return this.write({
       message,
       type: 'debug',
     });
@@ -103,7 +103,7 @@ export class LoggerUtil {
    * ```
    */
   public static warn(message: string) {
-    this.write({
+    return this.write({
       message,
       type: 'warn',
     });
@@ -115,7 +115,7 @@ export class LoggerUtil {
    * ```
    */
   public static error(message: string) {
-    this.write({
+    return this.write({
       message,
       type: 'error',
     });
@@ -127,7 +127,7 @@ export class LoggerUtil {
    * ```
    */
   public static success(message: string) {
-    this.write({
+    return this.write({
       message,
       type: 'success',
     });
@@ -141,14 +141,14 @@ export class LoggerUtil {
    * });
    * ```
    */
-  private static write({ message, type }: LogParams) {
+  private static write({ message, type }: LogParams): void {
     try {
       const color = this.colors[type];
       const prefix = this.logger[color].bold(`[${type.toUpperCase()}]`);
 
-      console.log(`${prefix}: ${this.logger.white(message)}`);
+      return console.log(`${prefix}: ${this.logger.white(message)}`);
     } catch {
-      this.error(`incorrect color mapping for '${type}'`);
+      return this.error(`incorrect color mapping for '${type}'`);
     }
   }
 }
