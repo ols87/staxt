@@ -65,7 +65,7 @@ export class LoggerUtil {
    */
   public static colors: LogColorMaps = {
     log: 'white',
-    debug: 'white',
+    debug: 'blueBright',
     warn: 'yellow',
     error: 'red',
     success: 'green',
