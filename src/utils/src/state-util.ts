@@ -35,12 +35,8 @@ export class StateUtil {
     }
 
     let newValue: any = this.write({ key, value });
-    const typeofValue = typeof newValue;
 
-    if (type && typeofValue !== type) {
-      LoggerUtil.warn(`add state - typeof ${key} !== '${type}'`);
-      LoggerUtil.warn(`add state - typeof ${key} === '${typeofValue}'`);
-    }
+    this.typeCheck('add', { key, value: newValue, type });
 
     return value;
   }
@@ -196,7 +192,7 @@ export class StateUtil {
 
     if (type && typeofValue !== type) {
       LoggerUtil.warn(`${action} state - typeof ${key} !== '${type}'`);
-      LoggerUtil.warn(`${action} state - typeof ${key} === '${typeofValue}'`);
+      LoggerUtil.debug(`${action} state - typeof ${key} === '${typeofValue}'`);
     }
   }
 }
