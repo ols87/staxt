@@ -1,6 +1,6 @@
 import { LoggerUtil } from '../';
 
-export interface StateConfig {
+export interface StateParams {
   keyMap: string;
   keyData?: any;
   keyType?: string;
@@ -13,51 +13,79 @@ export interface StateResponse {
   keyList: Array<string>;
 }
 
+export interface StateWriteOptions {
+  response: StateResponse;
+  keyData: any;
+}
+
 export class StateUtil {
   private static state: any = { test: 1 };
 
-  public static add({ keyMap, keyData }: StateConfig): any {
-    let request: StateResponse = this.request(keyMap);
+  public static add({ keyMap, keyData, keyType }: StateParams): any {
+    let response: StateResponse = this.request(keyMap);
 
-    if (request.data) {
-      return LoggerUtil.error(`${request.key} already exists. Use StateUtil.edit()`);
+    if (response.data) {
+      return LoggerUtil.error(`${response.key} already exists. Use StateUtil.edit()`);
     }
 
-    const keyList: IterableIterator<[number, string]> = request.keyList.entries();
-    const keyListLength: number = request.keyList.length;
-    let data: any = this.state;
+    let data: any = this.write({ response, keyData });
+    const typeofData = typeof data;
 
-    for (let [keyIndex, keyName] of keyList) {
-      if (keyIndex === keyListLength - 1) {
-        data[keyName] = keyData;
-      } else {
-        data[keyName] = data[keyName] || {};
-      }
-
-      data = data[keyName];
+    if (keyType && typeofData !== keyType) {
+      LoggerUtil.warn(`add state - typeof ${keyMap} !== '${keyType}'`);
+      LoggerUtil.warn(`add state - typeof ${keyMap} === '${typeofData}'`);
     }
 
     return keyData;
   }
 
-  public static get({ keyMap, keyType }: StateConfig): any {
-    let request: StateResponse = this.request(keyMap);
+  public static get({ keyMap, keyType }: StateParams): any {
+    let response: StateResponse = this.request(keyMap);
 
-    if (!request.data) {
-      return LoggerUtil.error(`${request.key} does not exist`);
+    if (!response.data) {
+      return LoggerUtil.error(`${response.key} does not exist`);
     }
 
-    if (keyType && typeof request.data !== keyType) {
-      LoggerUtil.warn(`typeof ${keyMap} !== '${keyType}'`);
-      LoggerUtil.warn(`typeof ${keyMap} === '${typeof keyMap}'`);
+    const typeofData = typeof response.data;
+    const typeofKeyMap = typeof keyMap;
+
+    if (keyType && typeof typeofData !== typeofKeyMap) {
+      LoggerUtil.warn(`get state - typeof ${keyMap} !== '${keyType}'`);
+      LoggerUtil.warn(`get state - typeof ${keyMap} === '${typeofKeyMap}'`);
     }
 
-    return request.data;
+    return response.data;
   }
 
-  public static edit({ keyMap, keyType, merge }: StateConfig): any {}
+  public static edit({ keyMap, keyData, keyType, merge }: StateParams): any {
+    let response: StateResponse = this.request(keyMap);
 
-  public static remove({ keyMap, keyType }: StateConfig): any {}
+    if (!response.data) {
+      return LoggerUtil.error(`${response.key} does not exist`);
+    }
+
+    const typeofResponseData = typeof response.data;
+    const typeofKeyData = typeof keyData;
+
+    if (typeofResponseData !== typeofKeyData) {
+      LoggerUtil.warn(`edit state - changing ${keyMap} from type '${typeofResponseData}' to type ${keyType}`);
+    }
+
+    if (keyType && typeofKeyData !== keyType) {
+      LoggerUtil.warn(`edit state - typeof ${keyMap} !== '${keyType}'`);
+      LoggerUtil.warn(`edit state - typeof ${keyMap} === '${typeofKeyData}'`);
+    }
+
+    let data: any = this.write({ response, keyData });
+    const typeofData = typeof data;
+
+    if (keyType && typeofData !== keyType) {
+      LoggerUtil.warn(`edit state - typeof ${keyMap} !== '${keyType}'`);
+      LoggerUtil.warn(`edit state - typeof ${keyMap} === '${typeofData}'`);
+    }
+  }
+
+  public static remove({ keyMap, keyType }: StateParams): any {}
 
   public static clear(): any {}
 
@@ -86,5 +114,24 @@ export class StateUtil {
     key = key.replace(/.\s*$/, '');
 
     return { data, key, keyList };
+  }
+
+  public static write({ response, keyData }: StateWriteOptions): any {
+    const keyList: IterableIterator<[number, string]> = response.keyList.entries();
+    const keyListLength: number = response.keyList.length;
+
+    let data = this.state;
+
+    for (let [keyIndex, keyName] of keyList) {
+      if (keyIndex === keyListLength - 1) {
+        data[keyName] = keyData;
+      } else {
+        data[keyName] = data[keyName] || {};
+      }
+
+      data = data[keyName];
+    }
+
+    return data;
   }
 }
