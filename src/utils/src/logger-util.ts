@@ -1,24 +1,6 @@
 import chalk from 'chalk';
 
 /**
- * Available log types
- */
-export type LogType = 'log' | 'debug' | 'warn' | 'error' | 'success';
-
-/**
- * Available log colors
- */
-export type LogColor = 'white' | 'blueBright' | 'yellow' | 'red' | 'green';
-
-/**
- *  Maps a LogType to a LogColor.
- *
- * **Used at**:
- * - {@link LoggerUtil.colors}
- */
-export type LogColorMaps = Record<LogType, LogColor>;
-
-/**
  * Parameters for writing to the console.
  *
  * **Used at**:
@@ -32,7 +14,7 @@ export interface LogParams {
   /**
    * e.g. 'log'
    */
-  type: LogType;
+  type: string;
 }
 
 /**
@@ -54,16 +36,11 @@ export class LoggerUtil {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
-  public static logger: any = new chalk.Instance({
+  public static chalk: any = new chalk.Instance({
     level: 1,
   });
 
-  /**
-   * Maps a color to each log type.
-   *
-   * **Type**: {@link LogColorMaps}
-   */
-  public static colors: LogColorMaps = {
+  public static colors: any = {
     log: 'white',
     debug: 'blueBright',
     warn: 'yellow',
@@ -141,12 +118,12 @@ export class LoggerUtil {
    * });
    * ```
    */
-  private static write({ message, type }: LogParams): void {
+  public static write({ message, type }: LogParams): void {
     try {
       const color = this.colors[type];
-      const prefix = this.logger[color].bold(`[${type.toUpperCase()}]`);
+      const prefix = this.chalk[color].bold(`[${type.toUpperCase()}]`);
 
-      return console.log(`${prefix}: ${this.logger.white(message)}`);
+      return console.log(`${prefix}: ${this.chalk.white(message)}`);
     } catch {
       return this.error(`incorrect color mapping for '${type}'`);
     }

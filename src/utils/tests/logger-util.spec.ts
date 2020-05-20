@@ -1,4 +1,4 @@
-import { LoggerUtil, LogType } from '../';
+import { LoggerUtil } from '../';
 import { expect } from 'chai';
 
 describe('LoggerUtil', () => {
@@ -7,7 +7,7 @@ describe('LoggerUtil', () => {
   });
 
   it('Creates a Chalk instance', () => {
-    expect(LoggerUtil.logger).to.be.a('function').that.has.property('Instance');
+    expect(LoggerUtil.chalk).to.be.a('function').that.has.property('Instance');
   });
 
   it('Maps colors to log types', () => {

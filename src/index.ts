@@ -5,9 +5,16 @@ import { EnvUtil, LoggerUtil, StateUtil } from '@utils';
 
 (async () => {
   EnvUtil.get('NODE_ENV');
-  StateUtil.add({ keyMap: 'foo.bar.fizz.buzz', keyData: 1, keyType: 'number' });
 
-  var a = StateUtil.get({ keyMap: 'foo.bar.fizz.buzz', keyType: 'number' });
+  StateUtil.get('foo.bar');
 
-  StateUtil.edit({ keyMap: 'foo.bar.fizz.buzz', keyData: (a + 1).toString(), keyType: 'string' });
+  StateUtil.add('foo.bar.fizz.buzz', { value: 1 });
+
+  var a = StateUtil.get('foo.bar.fizz.buzz');
+
+  StateUtil.edit('foo.bar.fizz.buzz', { value: a + 1 });
+
+  StateUtil.remove('foo.bar.fizz', { type: 'object' });
+
+  LoggerUtil.debug(StateUtil.get('foo.bar', { stringify: true }));
 })();

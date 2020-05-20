@@ -1,137 +1,202 @@
 import { LoggerUtil } from '../';
+import { type } from 'os';
 
 export interface StateParams {
-  keyMap: string;
-  keyData?: any;
-  keyType?: string;
+  value?: any;
+  type?: string;
+  stringify?: boolean;
   merge?: boolean;
 }
 
 export interface StateResponse {
-  data: any;
   key: string;
-  keyList: Array<string>;
+  value: any;
 }
 
 export interface StateWriteOptions {
-  response: StateResponse;
-  keyData: any;
+  key: string;
+  value: any;
+}
+
+export interface StateTypeCheck {
+  key: string;
+  value: any;
+  type: string;
 }
 
 export class StateUtil {
-  private static state: any = { test: 1 };
+  private static state: any = { test: 1, foo: { bar: 1 } };
 
-  public static add({ keyMap, keyData, keyType }: StateParams): any {
-    let response: StateResponse = this.request(keyMap);
+  public static add(key: string, { value, type }: StateParams): any {
+    let response: StateResponse = this.request(key);
 
-    if (response.data) {
+    if (response.value) {
       return LoggerUtil.error(`${response.key} already exists. Use StateUtil.edit()`);
     }
 
-    let data: any = this.write({ response, keyData });
-    const typeofData = typeof data;
+    let newValue: any = this.write({ key, value });
+    const typeofValue = typeof newValue;
 
-    if (keyType && typeofData !== keyType) {
-      LoggerUtil.warn(`add state - typeof ${keyMap} !== '${keyType}'`);
-      LoggerUtil.warn(`add state - typeof ${keyMap} === '${typeofData}'`);
+    if (type && typeofValue !== type) {
+      LoggerUtil.warn(`add state - typeof ${key} !== '${type}'`);
+      LoggerUtil.warn(`add state - typeof ${key} === '${typeofValue}'`);
     }
 
-    return keyData;
+    return value;
   }
 
-  public static get({ keyMap, keyType }: StateParams): any {
-    let response: StateResponse = this.request(keyMap);
+  public static get(key: string, { type, stringify }: StateParams = {}): any {
+    let response: StateResponse = this.request(key);
 
-    if (!response.data) {
+    if (!response.value) {
       return LoggerUtil.error(`${response.key} does not exist`);
     }
 
-    const typeofData = typeof response.data;
-    const typeofKeyMap = typeof keyMap;
+    this.typeCheck('get', { key, value: response.value, type });
 
-    if (keyType && typeof typeofData !== typeofKeyMap) {
-      LoggerUtil.warn(`get state - typeof ${keyMap} !== '${keyType}'`);
-      LoggerUtil.warn(`get state - typeof ${keyMap} === '${typeofKeyMap}'`);
+    if (stringify) {
+      response.value = JSON.stringify(response.value);
     }
 
-    return response.data;
+    return response.value;
   }
 
-  public static edit({ keyMap, keyData, keyType, merge }: StateParams): any {
-    let response: StateResponse = this.request(keyMap);
+  public static edit(key: string, { value, type, merge }: StateParams): any {
+    let response: StateResponse = this.request(key);
 
-    if (!response.data) {
+    if (!response.value) {
       return LoggerUtil.error(`${response.key} does not exist`);
     }
 
-    const typeofResponseData = typeof response.data;
-    const typeofKeyData = typeof keyData;
+    const typeofResponse = typeof response.value;
+    const typeofValue = typeof value;
 
-    if (typeofResponseData !== typeofKeyData) {
-      LoggerUtil.warn(`edit state - changing ${keyMap} from type '${typeofResponseData}' to type ${keyType}`);
+    if (typeofResponse !== typeofValue) {
+      LoggerUtil.warn(`edit state - changing ${key} from type '${typeofResponse}' to type '${typeofValue}'`);
     }
 
-    if (keyType && typeofKeyData !== keyType) {
-      LoggerUtil.warn(`edit state - typeof ${keyMap} !== '${keyType}'`);
-      LoggerUtil.warn(`edit state - typeof ${keyMap} === '${typeofKeyData}'`);
-    }
+    this.typeCheck('edit', { key, value, type });
 
-    let data: any = this.write({ response, keyData });
-    const typeofData = typeof data;
+    let newValue: any = this.write({ key, value });
 
-    if (keyType && typeofData !== keyType) {
-      LoggerUtil.warn(`edit state - typeof ${keyMap} !== '${keyType}'`);
-      LoggerUtil.warn(`edit state - typeof ${keyMap} === '${typeofData}'`);
-    }
+    this.typeCheck('edit', { key, value: newValue, type });
   }
 
-  public static remove({ keyMap, keyType }: StateParams): any {}
-
-  public static clear(): any {}
-
-  public static request(keyMap: string): StateResponse {
-    let keyList: Array<string> = [];
+  public static remove(key: string, { type }: StateParams): any {
+    let response: StateResponse = this.request(key);
+    let keys: Array<string> = [];
+    let keyMap: string;
+    let keyLength: number;
+    let data: any = {};
 
     try {
-      keyList = keyMap.split('.');
+      keys = key.split('.');
+      keyMap = `['${keys.join("']['")}']`;
+      keyLength = keys.length;
+      data = this.state;
     } catch {
-      LoggerUtil.error(`keymap must be a string e.g 'foo.bar' ${keyMap}`);
+      return LoggerUtil.error(`key must be a string e.g 'foo.bar' ${key}`);
     }
 
-    let data: any = this.state;
-    let key: string = '';
+    if (!response.value) {
+      return LoggerUtil.error(`${response.key} does not exist`);
+    }
 
-    for (let [, keyName] of keyList.entries()) {
-      key += `${keyName}.`;
+    for (let [keyIndex, keyName] of keys.entries()) {
+      const isLast = keyIndex === keyLength - 1;
 
+      data = data[keyName];
+
+      if (isLast) {
+        const removeValue = new Function(`return (state) => { delete state${keyMap}; }`)();
+        removeValue(this.state);
+      }
+    }
+  }
+
+  public static clear(): object {
+    this.state = {};
+    return this.state;
+  }
+
+  public static request(key: string): StateResponse {
+    let keys: Array<string> = [];
+    let keyMap: string;
+    let data: any = {};
+
+    try {
+      keys = key.split('.');
+      keyMap = `['${keys.join("']['")}']`;
+      data = this.state;
+    } catch {
+      LoggerUtil.error(`key must be a string e.g 'foo.bar' ${key}`);
+    }
+
+    let keyChain: string = '';
+
+    for (let [, keyName] of keys.entries()) {
+      keyChain += `${keyName}.`;
       try {
         data = data[keyName];
       } catch {
+        data = null;
         break;
       }
     }
 
-    key = key.replace(/.\s*$/, '');
+    keyChain = keyChain.replace(/.\s*$/, '');
 
-    return { data, key, keyList };
+    if (data) {
+      const findValue = new Function(`return (state) => state${keyMap}`)();
+      data = findValue(this.state);
+    }
+
+    return {
+      value: data,
+      key: keyChain,
+    };
   }
 
-  public static write({ response, keyData }: StateWriteOptions): any {
-    const keyList: IterableIterator<[number, string]> = response.keyList.entries();
-    const keyListLength: number = response.keyList.length;
+  public static write({ key, value }: StateWriteOptions): any {
+    let keyMap: Array<string> = [];
+    let keyEntries: IterableIterator<[number, string]>;
+    let keyLength: number;
+    let data: any = {};
 
-    let data = this.state;
+    try {
+      keyMap = key.split('.');
+      keyEntries = keyMap.entries();
+      keyLength = keyMap.length;
+      data = this.state;
+    } catch {
+      return LoggerUtil.error(`keymap must be a string e.g 'foo.bar' ${key}`);
+    }
 
-    for (let [keyIndex, keyName] of keyList) {
-      if (keyIndex === keyListLength - 1) {
-        data[keyName] = keyData;
+    for (let [keyIndex, keyName] of keyEntries) {
+      let isLast = keyIndex === keyLength - 1;
+
+      if (isLast) {
+        data[keyName] = value;
       } else {
-        data[keyName] = data[keyName] || {};
+        if (typeof data[keyName] !== 'object') {
+          data[keyName] = {};
+        } else {
+          data[keyName] = data[keyName];
+        }
       }
 
       data = data[keyName];
     }
 
     return data;
+  }
+
+  public static typeCheck(action: string, { key, value, type }: StateTypeCheck) {
+    const typeofValue = typeof value;
+
+    if (type && typeofValue !== type) {
+      LoggerUtil.warn(`${action} state - typeof ${key} !== '${type}'`);
+      LoggerUtil.warn(`${action} state - typeof ${key} === '${typeofValue}'`);
+    }
   }
 }
