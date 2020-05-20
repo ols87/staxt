@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "tsc -w & nodemon -q -w src app",
+    "start": "node app/.",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "docs": "typedoc"
   },
