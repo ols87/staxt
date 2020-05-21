@@ -1,17 +1,20 @@
-import { LoggerUtil } from '../';
+import { Logger } from '../';
 import { expect } from 'chai';
+
+const logger = new Logger('test');
 
 describe('LoggerUtil', () => {
   it('Creates a class', () => {
-    expect(LoggerUtil).to.be.a('function');
+    expect(logger).to.be.an('object');
+    expect(logger.caller).to.equal('test');
   });
 
   it('Creates a Chalk instance', () => {
-    expect(LoggerUtil.chalk).to.be.a('function').that.has.property('Instance');
+    expect(logger.chalk).to.be.a('function').that.has.property('Instance');
   });
 
   it('Maps colors to log types', () => {
-    expect(LoggerUtil.colorMap).to.be.an('object').and.to.have.all.keys({
+    expect(logger.colorMap).to.be.an('object').and.to.have.all.keys({
       log: 'white',
       debug: 'blueBright',
       warn: 'yellow',
@@ -21,10 +24,10 @@ describe('LoggerUtil', () => {
   });
 
   it('Has methods: log, debug, warn, error, success', () => {
-    expect(LoggerUtil.log).to.be.a('function');
-    expect(LoggerUtil.debug).to.be.a('function');
-    expect(LoggerUtil.warn).to.be.a('function');
-    expect(LoggerUtil.error).to.be.a('function');
-    expect(LoggerUtil.success).to.be.a('function');
+    expect(logger.log).to.be.a('function');
+    expect(logger.debug).to.be.a('function');
+    expect(logger.warn).to.be.a('function');
+    expect(logger.error).to.be.a('function');
+    expect(logger.success).to.be.a('function');
   });
 });

@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 import 'module-alias/register';
 
-import { EnvUtil, LoggerUtil, StateUtil } from '@utils';
+import { Logger, Env } from '@utils';
 
-export class Staxt {
-  public static init() {
-    LoggerUtil.write('hello');
-  }
-}
+const logger = new Logger('index');
 
-Staxt.init();
+Env.get('NODE_ENV');
+
+logger.log('hello');

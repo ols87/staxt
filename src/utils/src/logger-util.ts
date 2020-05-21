@@ -9,38 +9,46 @@ export interface LoggerWriteOptions {
 }
 
 /**
- * Utility for logging to Node
+ * Stores unique caller names.
+ */
+export const loggerStack: Array<string> = [];
+
+/**
+ * Utility for logging to Node.
  *
  * Usage:
  * ```ts
- * import { LoggerUtil } from '@utils';
+ * import { Logger } from '@utils';
  *
- * LoggerUtil.log('log message');
- * LoggerUtil.debug('debug message');
- * LoggerUtil.warn('warn message');
- * LoggerUtil.error('error message');
- * LoggerUtil.success('success message');
+ * const logger = new Logger('test');
  *
- * LoggerUtil.write({
- *   message,
+ * logger.log('log message'); // [TEST-LOG]: log message
+ * logger.debug('debug message'); // [TEST-DEBUG]: debug message
+ * logger.warn('warn message'); // [TEST-WARN]: warn message
+ * logger.error('error message'); // [TEST-ERROR]: error message
+ * logger.success('success message'); // [TEST-SUCCESS]: success message
+ *
+ * //or
+ * logger.write({
+ *   message: 'foo bar',
  *   type: 'log',
  *   color: 'cyan',
  * });
+ *  // [TEST-LOG]: log message
  * ```
  */
-
-export class LoggerUtil {
+export class Logger {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
-  public static chalk: any = new chalk.Instance({
+  public chalk: any = new chalk.Instance({
     level: 1,
   });
 
   /**
-   * Maps method names to Chalk colorMap
+   * Maps method names to Chalk colorMap.
    */
-  public static colorMap: any = {
+  public colorMap: any = {
     log: 'white',
     debug: 'blueBright',
     warn: 'yellow',
@@ -49,78 +57,59 @@ export class LoggerUtil {
   };
 
   /**
-   * ```ts
-   * LoggerUtil.log('log message');
-   * ```
+   * Checks if caller exists in the loggerStack.
+   * @param caller Unique name of calling file/reference.
    */
-  public static log(message: string) {
+  constructor(public caller: string) {
+    if (loggerStack.indexOf(caller) < 0) {
+      this.caller = caller;
+      loggerStack.push(caller);
+    } else {
+      this.error(`${caller} is already in the stack. Please choose a unique name`);
+    }
+  }
+
+  public log(message: string) {
     return this.write(message, {
       type: 'log',
     });
   }
 
-  /**
-   * ```ts
-   * LoggerUtil.debug('log message');
-   * ```
-   */
-  public static debug(message: string) {
+  public debug(message: string) {
     return this.write(message, {
       type: 'debug',
     });
   }
 
-  /**
-   * ```ts
-   * LoggerUtil.warn('warning message');
-   * ```
-   */
-  public static warn(message: string) {
+  public warn(message: string) {
     return this.write(message, {
       type: 'warn',
     });
   }
 
-  /**
-   * ```ts
-   * LoggerUtil.error('error message');
-   * ```
-   */
-  public static error(message: string) {
+  public error(message: string) {
     return this.write(message, {
       type: 'error',
     });
   }
 
-  /**
-   * ```ts
-   * LoggerUtil.success('success message');
-   * ```
-   */
-  public static success(message: string) {
+  public success(message: string) {
     return this.write(message, {
       type: 'success',
     });
   }
 
-  /**
-   * ```ts
-   * LoggerUtil.write({
-   *   message,
-   *   type: 'log',
-   *   color: 'magenta'
-   * });
-   * ```
-   */
-  public static write(message: string, { type, color }: LoggerWriteOptions = {}): void {
+  public write(message: string, { type, color }: LoggerWriteOptions = {}): void {
     try {
       type = type || 'log';
       const chalkColor = color || this.colorMap[type];
-      const prefix = this.chalk[chalkColor].bold(`[${type.toUpperCase()}]`);
+      const caller = this.caller.toUpperCase();
+      const logType = type.toUpperCase();
+      const prefix = this.chalk[chalkColor].bold(`[${caller}-${logType}]`);
 
       return console.log(`${prefix}: ${this.chalk.white(message)}`);
     } catch {
-      return this.error(`bad chalk color mapping: ${message}`);
+      return this.write(`bad chalk color mapping: ${message}`, { type: 'error' });
     }
   }
 }
