@@ -12,12 +12,12 @@
     "paths": {
       "*": ["node_modules/*", "src/types/*"],
       "@api": ["api"],
-      "@compilers": ["compilers"],
-      "@configs": ["configs"],
+      "@compilers": ["compilers/compilers.module"],
+      "@configs": ["configs/configs.module"],
       "@files": ["files"],
-      "@helpers": ["helpers"],
-      "@services": ["services"],
-      "@utils": ["utils"]
+      "@helpers": ["helpers/helpers.module"],
+      "@services": ["services/services.module"],
+      "@utils": ["utils/utils.module"]
     }
   },
   "include": ["src/**/*"],

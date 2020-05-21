@@ -1,4 +1,4 @@
-import { Logger } from '../';
+import { Logger } from '../utils.module';
 import { expect } from 'chai';
 
 const logger = new Logger('test');

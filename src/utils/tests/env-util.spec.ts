@@ -1,4 +1,4 @@
-import { Env } from '../src/env-util';
+import { Env } from '../utils.module';
 import { expect } from 'chai';
 
 describe('EnvUtil', () => {

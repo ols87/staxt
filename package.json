@@ -3,7 +3,7 @@
   "version": "3.0.0-aplha1",
   "description": "",
   "bin": {
-    "staxt": "app/."
+    "staxt": "app/staxt.module"
   },
   "scripts": {
     "dev": "tsc -w & nodemon -q -w src app",
@@ -13,12 +13,12 @@
   },
   "_moduleAliases": {
     "@api": "app/api/index.js",
-    "@compilers": "app/compilers/index.js",
-    "@configs": "app/config/index.js",
-    "@files": "app/files/index.js",
-    "@helpers": "app/helpers/index.js",
-    "@services": "app/services/index.js",
-    "@utils": "app/utils/index.js"
+    "@compilers": "app/compilers/compilers.module.js",
+    "@configs": "app/config/configs.module.js",
+    "@files": "app/files",
+    "@helpers": "app/helpers/helpers.module.js",
+    "@services": "app/services/services.module.js",
+    "@utils": "app/utils/utils.module.js"
   },
   "keywords": [],
   "author": "",
@@ -29,11 +29,9 @@
     "chalk": "3.0.0",
     "cssnano": "4.1.10",
     "dot": "1.1.3",
-    "dotenv": "8.2.0",
     "fs-extra": "8.1.0",
     "postcss": "7.0.28",
     "sass": "1.26.3",
-    "tailwindcss": "1.4.4",
     "typescript": "3.8.3",
     "yargs": "15.3.1",
     "module-alias": "2.2.2"

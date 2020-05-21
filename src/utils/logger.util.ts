@@ -1,26 +1,21 @@
 import chalk from 'chalk';
 
-/**
- * Parameters for writing to the console.
- */
 export interface LoggerWriteOptions {
   type?: string;
   color?: string;
 }
 
-/**
- * Stores unique caller names.
- */
 export const loggerStack: Array<string> = [];
 
 /**
- * Utility for logging to Node.
- *
- * Usage:
+ * **Utility for logging to console.**
+ * Example Usage:
  * ```ts
  * import { Logger } from '@utils';
- *
  * const logger = new Logger('test');
+ * //or
+ * import { Utils } from '@utils';
+ * const logger = Utils.logger;
  *
  * logger.log('log message'); // [TEST-LOG]: log message
  * logger.debug('debug message'); // [TEST-DEBUG]: debug message
