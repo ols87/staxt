@@ -1,4 +1,4 @@
-import { Logger } from './logger.util';
+import { Logger } from './logger.utility';
 
 export interface StateParams {
   value?: any;
@@ -34,10 +34,11 @@ const logger = new Logger('state');
 
 /**
  * **Utility for managing state.**
+ *
  * Example Usage:
  * ```ts
  * import { State } from '@utils';
- * const state = State;
+ * const state = new State();
  * //or
  * import { Utils } from '@utils';
  * const state = Utils.state;
@@ -50,14 +51,20 @@ const logger = new Logger('state');
  * ```
  */
 
-export const State = new (class {
+export class State {
+  /**
+   * Stores the current state
+   */
   private state: any = { test: 1, foo: { bar: 1 } };
 
+  /**
+   * Add a new state value if none exists
+   */
   public add(key: string, { value, type }: StateParams): any {
     let response: StateResponse = this.request(key);
 
     if (response.value) {
-      return logger.error(`${response.key} already exists. Use StateUtil.edit()`);
+      return logger.error(`${response.key} already exists. Use edit()`);
     }
 
     let newValue: any = this.write({ key, value });
@@ -67,6 +74,9 @@ export const State = new (class {
     return newValue;
   }
 
+  /**
+   * Get a state value if exists
+   */
   public get(key: string, { type, stringify }: StateParams = {}): any {
     let response: StateResponse = this.request(key);
 
@@ -83,11 +93,14 @@ export const State = new (class {
     return response.value;
   }
 
+  /**
+   * Edit a state value if it exists
+   */
   public edit(key: string, { value, type, merge }: StateParams): any {
     let response: StateResponse = this.request(key);
 
     if (!response.value) {
-      return logger.error(`${response.key} does not exist`);
+      return logger.error(`${response.key} does not exist, use add()`);
     }
 
     const typeofResponse = typeof response.value;
@@ -102,8 +115,13 @@ export const State = new (class {
     let newValue: any = this.write({ key, value });
 
     this.typeCheck('EDIT', { key, value: newValue, type });
+
+    return newValue;
   }
 
+  /**
+   * Remove a state value if exists
+   */
   public remove(key: string, { type }: StateParams): any {
     try {
       const response: StateResponse = this.request(key);
@@ -128,11 +146,17 @@ export const State = new (class {
     }
   }
 
+  /**
+   * Clear the state
+   */
   public clear(): object {
     this.state = {};
     return this.state;
   }
 
+  /**
+   * Request a value byt key
+   */
   private request(key: string): StateResponse {
     try {
       let { keys, data } = this.keyConfig(key);
@@ -166,6 +190,9 @@ export const State = new (class {
     }
   }
 
+  /**
+   * Write a value to the matching key
+   */
   private write({ key, value }: StateWriteOptions): any {
     try {
       let { keyLength, keyEntries, data } = this.keyConfig(key);
@@ -189,6 +216,9 @@ export const State = new (class {
     }
   }
 
+  /**
+   * Creates a config object to work with the nested state
+   */
   private keyConfig(key: string): SateKeyConfig {
     let keys: Array<string> = [];
     let keyLength: number;
@@ -214,4 +244,4 @@ export const State = new (class {
       logger.debug(`${action} - typeof ${key} === '${typeofValue}'`);
     }
   }
-})();
+}

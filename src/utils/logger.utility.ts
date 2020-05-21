@@ -9,6 +9,7 @@ export const loggerStack: Array<string> = [];
 
 /**
  * **Utility for logging to console.**
+ *
  * Example Usage:
  * ```ts
  * import { Logger } from '@utils';
@@ -29,7 +30,7 @@ export const loggerStack: Array<string> = [];
  *   type: 'log',
  *   color: 'cyan',
  * });
- *  // [TEST-LOG]: log message
+ * // [TEST-LOG]: log message
  * ```
  */
 export class Logger {

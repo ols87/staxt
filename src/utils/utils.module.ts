@@ -1,7 +1,7 @@
-import { State } from './state.util';
-import { Logger } from './logger.util';
+import { State } from './state.utility';
+import { Logger } from './logger.utility';
 
-export class Utils {
+class Utils {
   public state = State;
 
   public logger(caller: string) {
@@ -9,5 +9,5 @@ export class Utils {
   }
 }
 
-export * from './state.util';
-export * from './logger.util';
+export * from './state.utility';
+export * from './logger.utility';
