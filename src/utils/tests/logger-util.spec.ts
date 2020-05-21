@@ -11,7 +11,7 @@ describe('LoggerUtil', () => {
   });
 
   it('Maps colors to log types', () => {
-    expect(LoggerUtil.colors).to.be.an('object').and.to.have.all.keys({
+    expect(LoggerUtil.colorMap).to.be.an('object').and.to.have.all.keys({
       log: 'white',
       debug: 'blueBright',
       warn: 'yellow',

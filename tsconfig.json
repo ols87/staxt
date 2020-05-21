@@ -13,7 +13,7 @@
       "*": ["node_modules/*", "src/types/*"],
       "@api": ["api"],
       "@compilers": ["compilers"],
-      "@config": ["config"],
+      "@configs": ["configs"],
       "@files": ["files"],
       "@helpers": ["helpers"],
       "@services": ["services"],

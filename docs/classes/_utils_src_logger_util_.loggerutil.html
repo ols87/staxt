@@ -67,6 +67,27 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Utility for logging to Node</p>
+					</div>
+					<p>Usage:</p>
+					<pre><code class="language-ts"><span class="hljs-keyword">import</span> { LoggerUtil } <span class="hljs-keyword">from</span> <span class="hljs-string">'@utils'</span>;
+
+LoggerUtil.log(<span class="hljs-string">'log message'</span>);
+LoggerUtil.debug(<span class="hljs-string">'debug message'</span>);
+LoggerUtil.warn(<span class="hljs-string">'warn message'</span>);
+LoggerUtil.error(<span class="hljs-string">'error message'</span>);
+LoggerUtil.success(<span class="hljs-string">'success message'</span>);
+
+LoggerUtil.write({
+  message,
+  <span class="hljs-keyword">type</span>: <span class="hljs-string">'log'</span>,
+  color: <span class="hljs-string">'cyan'</span>,
+});</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -79,10 +100,10 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#logger" class="tsd-kind-icon">logger</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#chalk" class="tsd-kind-icon">chalk</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -93,27 +114,27 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#log" class="tsd-kind-icon">log</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#success" class="tsd-kind-icon">success</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#warn" class="tsd-kind-icon">warn</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#write" class="tsd-kind-icon">write</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#write" class="tsd-kind-icon">write</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Object literals</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#colors" class="tsd-kind-icon">colors</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-static"><a href="_utils_src_logger_util_.loggerutil.html#colormap" class="tsd-kind-icon">color<wbr>Map</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
-					<a name="logger" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> logger</h3>
-					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;new chalk.Instance({level: 1,})</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="chalk" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> chalk</h3>
+					<div class="tsd-signature tsd-kind-icon">chalk<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;new chalk.Instance({level: 1,})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L57">utils/src/logger-util.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L43">utils/src/logger-util.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -135,7 +156,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L91">utils/src/logger-util.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L75">utils/src/logger-util.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -163,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L117">utils/src/logger-util.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L99">utils/src/logger-util.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -191,7 +212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L79">utils/src/logger-util.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L63">utils/src/logger-util.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -219,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L129">utils/src/logger-util.ts:129</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L111">utils/src/logger-util.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -247,10 +268,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L105">utils/src/logger-util.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L87">utils/src/logger-util.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<pre><code class="language-ts">LoggerUtil.warn(<span class="hljs-string">'warning message'</span>);</code></pre>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -262,22 +286,22 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="write" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> write</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">write<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"log"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"debug"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"warn"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"success"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> write</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">write<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L144">utils/src/logger-util.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L126">utils/src/logger-util.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<pre><code class="language-ts"><span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.write({
+									<pre><code class="language-ts">LoggerUtil.write({
   message,
   <span class="hljs-keyword">type</span>: <span class="hljs-string">'log'</span>,
 });</code></pre>
@@ -286,13 +310,16 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"log"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"debug"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"warn"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"success"</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
 										<li class="tsd-parameter">
 											<h5>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
 										<li class="tsd-parameter">
-											<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"log"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"debug"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"warn"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"success"</span></h5>
+											<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
 									</ul>
 								</li>
@@ -302,70 +329,69 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Object literals</h2>
-				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class tsd-is-private tsd-is-static">
-					<a name="colors" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> colors</h3>
-					<div class="tsd-signature tsd-kind-icon">colors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class tsd-is-static">
+					<a name="colormap" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> color<wbr>Map</h3>
+					<div class="tsd-signature tsd-kind-icon">color<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L66">utils/src/logger-util.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L50">utils/src/logger-util.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Maps a color to each log type.</p>
+							<p>Maps method names to Chalk colorMap</p>
 						</div>
-						<p><strong>Type</strong>: <a href="../modules/_utils_src_logger_util_.html#logcolormaps">LogColorMaps</a></p>
 					</div>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-						<a name="colors.debug-1" class="tsd-anchor"></a>
+						<a name="colormap.debug-1" class="tsd-anchor"></a>
 						<h3>debug</h3>
-						<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"blueBright"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;blueBright&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;blueBright&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L68">utils/src/logger-util.ts:68</a></li>
+								<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L52">utils/src/logger-util.ts:52</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-						<a name="colors.error-1" class="tsd-anchor"></a>
+						<a name="colormap.error-1" class="tsd-anchor"></a>
 						<h3>error</h3>
-						<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"red"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;red&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;red&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L70">utils/src/logger-util.ts:70</a></li>
+								<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L54">utils/src/logger-util.ts:54</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-						<a name="colors.log-1" class="tsd-anchor"></a>
+						<a name="colormap.log-1" class="tsd-anchor"></a>
 						<h3>log</h3>
-						<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"white"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;white&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;white&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L67">utils/src/logger-util.ts:67</a></li>
+								<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L51">utils/src/logger-util.ts:51</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-						<a name="colors.success-1" class="tsd-anchor"></a>
+						<a name="colormap.success-1" class="tsd-anchor"></a>
 						<h3>success</h3>
-						<div class="tsd-signature tsd-kind-icon">success<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"green"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;green&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">success<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;green&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L71">utils/src/logger-util.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L55">utils/src/logger-util.ts:55</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
-						<a name="colors.warn-1" class="tsd-anchor"></a>
+						<a name="colormap.warn-1" class="tsd-anchor"></a>
 						<h3>warn</h3>
-						<div class="tsd-signature tsd-kind-icon">warn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"yellow"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;yellow&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">warn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;yellow&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ols87/staxt/blob/edb2956/src/utils/src/logger-util.ts#L69">utils/src/logger-util.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/ols87/staxt/blob/0267a14/src/utils/src/logger-util.ts#L53">utils/src/logger-util.ts:53</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -390,8 +416,8 @@
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_utils_src_logger_util_.loggerutil.html" class="tsd-kind-icon">Logger<wbr>Util</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
-								<a href="_utils_src_logger_util_.loggerutil.html#logger" class="tsd-kind-icon">logger</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="_utils_src_logger_util_.loggerutil.html#chalk" class="tsd-kind-icon">chalk</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_utils_src_logger_util_.loggerutil.html#debug" class="tsd-kind-icon">debug</a>
@@ -408,27 +434,18 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_utils_src_logger_util_.loggerutil.html#warn" class="tsd-kind-icon">warn</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_utils_src_logger_util_.loggerutil.html#write" class="tsd-kind-icon">write</a>
 							</li>
-							<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-private tsd-is-static">
-								<a href="_utils_src_logger_util_.loggerutil.html#colors" class="tsd-kind-icon">colors</a>
+							<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-static">
+								<a href="_utils_src_logger_util_.loggerutil.html#colormap" class="tsd-kind-icon">color<wbr>Map</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_utils_src_logger_util_.logparams.html" class="tsd-kind-icon">Log<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_utils_src_logger_util_.html#logcolor" class="tsd-kind-icon">Log<wbr>Color</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_utils_src_logger_util_.html#logcolormaps" class="tsd-kind-icon">Log<wbr>Color<wbr>Maps</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_utils_src_logger_util_.html#logtype" class="tsd-kind-icon">Log<wbr>Type</a>
+						<a href="../interfaces/_utils_src_logger_util_.loggerwriteparams.html" class="tsd-kind-icon">Logger<wbr>Write<wbr>Params</a>
 					</li>
 				</ul>
 			</nav>

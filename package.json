@@ -14,7 +14,7 @@
   "_moduleAliases": {
     "@api": "app/api/index.js",
     "@compilers": "app/compilers/index.js",
-    "@config": "app/config/index.js",
+    "@configs": "app/config/index.js",
     "@files": "app/files/index.js",
     "@helpers": "app/helpers/index.js",
     "@services": "app/services/index.js",

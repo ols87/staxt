@@ -2,19 +2,10 @@ import chalk from 'chalk';
 
 /**
  * Parameters for writing to the console.
- *
- * **Used at**:
- * - {@link LoggerUtil.write}
  */
-export interface LogParams {
-  /**
-   * e.g. 'Hello World'
-   */
-  message: string;
-  /**
-   * e.g. 'log'
-   */
-  type: string;
+export interface LoggerWriteOptions {
+  type?: string;
+  color?: string;
 }
 
 /**
@@ -29,6 +20,12 @@ export interface LogParams {
  * LoggerUtil.warn('warn message');
  * LoggerUtil.error('error message');
  * LoggerUtil.success('success message');
+ *
+ * LoggerUtil.write({
+ *   message,
+ *   type: 'log',
+ *   color: 'cyan',
+ * });
  * ```
  */
 
@@ -40,7 +37,10 @@ export class LoggerUtil {
     level: 1,
   });
 
-  public static colors: any = {
+  /**
+   * Maps method names to Chalk colorMap
+   */
+  public static colorMap: any = {
     log: 'white',
     debug: 'blueBright',
     warn: 'yellow',
@@ -54,8 +54,7 @@ export class LoggerUtil {
    * ```
    */
   public static log(message: string) {
-    return this.write({
-      message,
+    return this.write(message, {
       type: 'log',
     });
   }
@@ -66,22 +65,18 @@ export class LoggerUtil {
    * ```
    */
   public static debug(message: string) {
-    return this.write({
-      message,
+    return this.write(message, {
       type: 'debug',
     });
   }
 
   /**
-   * @param
-   *
    * ```ts
    * LoggerUtil.warn('warning message');
    * ```
    */
   public static warn(message: string) {
-    return this.write({
-      message,
+    return this.write(message, {
       type: 'warn',
     });
   }
@@ -92,8 +87,7 @@ export class LoggerUtil {
    * ```
    */
   public static error(message: string) {
-    return this.write({
-      message,
+    return this.write(message, {
       type: 'error',
     });
   }
@@ -104,28 +98,29 @@ export class LoggerUtil {
    * ```
    */
   public static success(message: string) {
-    return this.write({
-      message,
+    return this.write(message, {
       type: 'success',
     });
   }
 
   /**
    * ```ts
-   * this.write({
+   * LoggerUtil.write({
    *   message,
    *   type: 'log',
+   *   color: 'magenta'
    * });
    * ```
    */
-  public static write({ message, type }: LogParams): void {
+  public static write(message: string, { type, color }: LoggerWriteOptions = {}): void {
     try {
-      const color = this.colors[type];
-      const prefix = this.chalk[color].bold(`[${type.toUpperCase()}]`);
+      type = type || 'log';
+      const chalkColor = color || this.colorMap[type];
+      const prefix = this.chalk[chalkColor].bold(`[${type.toUpperCase()}]`);
 
       return console.log(`${prefix}: ${this.chalk.white(message)}`);
     } catch {
-      return this.error(`incorrect color mapping for '${type}'`);
+      return this.error(`bad chalk color mapping: ${message}`);
     }
   }
 }
