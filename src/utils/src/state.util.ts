@@ -1,4 +1,4 @@
-import { Logger } from './logger.utility';
+import { LoggerUtil } from './logger.util';
 
 export interface StateParams {
   value?: any;
@@ -30,7 +30,7 @@ export interface StateTypeCheck {
   type: string;
 }
 
-const logger = new Logger('state');
+const logger = new LoggerUtil('state');
 
 /**
  * **Utility for managing state.**
@@ -51,16 +51,12 @@ const logger = new Logger('state');
  * ```
  */
 
-export class State {
-  /**
-   * Stores the current state
-   */
-  private state: any = { test: 1, foo: { bar: 1 } };
-
+export class StateUtil {
+  private static state: any = {};
   /**
    * Add a new state value if none exists
    */
-  public add(key: string, { value, type }: StateParams): any {
+  public static add(key: string, { value, type }: StateParams): any {
     let response: StateResponse = this.request(key);
 
     if (response.value) {
@@ -77,7 +73,7 @@ export class State {
   /**
    * Get a state value if exists
    */
-  public get(key: string, { type, stringify }: StateParams = {}): any {
+  public static get(key: string, { type, stringify }: StateParams = {}): any {
     let response: StateResponse = this.request(key);
 
     if (!response.value) {
@@ -96,7 +92,7 @@ export class State {
   /**
    * Edit a state value if it exists
    */
-  public edit(key: string, { value, type, merge }: StateParams): any {
+  public static edit(key: string, { value, type, merge }: StateParams): any {
     let response: StateResponse = this.request(key);
 
     if (!response.value) {
@@ -122,7 +118,7 @@ export class State {
   /**
    * Remove a state value if exists
    */
-  public remove(key: string, { type }: StateParams): any {
+  public static remove(key: string, { type }: StateParams): any {
     try {
       const response: StateResponse = this.request(key);
       let { data, keys, keyLength } = this.keyConfig(key);
@@ -149,7 +145,7 @@ export class State {
   /**
    * Clear the state
    */
-  public clear(): object {
+  public static clear(): object {
     this.state = {};
     return this.state;
   }
@@ -157,7 +153,7 @@ export class State {
   /**
    * Request a value byt key
    */
-  private request(key: string): StateResponse {
+  private static request(key: string): StateResponse {
     try {
       let { keys, data } = this.keyConfig(key);
 
@@ -193,14 +189,12 @@ export class State {
   /**
    * Write a value to the matching key
    */
-  private write({ key, value }: StateWriteOptions): any {
+  private static write({ key, value }: StateWriteOptions): any {
     try {
       let { keyLength, keyEntries, data } = this.keyConfig(key);
-
       for (let [keyIndex, keyName] of keyEntries) {
         const isLast = keyIndex === keyLength - 1;
         const isObject = !isLast && typeof data[keyName] !== 'object';
-
         data[keyName] = isObject ? {} : data[keyName];
 
         if (isLast) {
@@ -212,14 +206,14 @@ export class State {
 
       return data;
     } catch {
-      logger.error(`Write - ${key} failed`);
+      logger.error(`WRITE - ${key} failed`);
     }
   }
 
   /**
    * Creates a config object to work with the nested state
    */
-  private keyConfig(key: string): SateKeyConfig {
+  private static keyConfig(key: string): SateKeyConfig {
     let keys: Array<string> = [];
     let keyLength: number;
     let keyEntries: IterableIterator<[number, string]>;
@@ -228,6 +222,7 @@ export class State {
     try {
       keys = key.split('.');
       keyLength = keys.length;
+      keyEntries = keys.entries();
       data = this.state;
     } catch {
       logger.error(`key must be a string e.g 'foo.bar' ${key}`);
@@ -236,7 +231,7 @@ export class State {
     return { keys, keyLength, keyEntries, data };
   }
 
-  private typeCheck(action: string, { key, value, type }: StateTypeCheck) {
+  private static typeCheck(action: string, { key, value, type }: StateTypeCheck) {
     const typeofValue = typeof value;
 
     if (type && typeofValue !== type) {

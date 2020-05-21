@@ -1,7 +1,7 @@
-import { Logger } from '../utils.module';
+import { LoggerUtil } from '..';
 import { expect } from 'chai';
 
-const logger = new Logger('test');
+const logger = new LoggerUtil('test');
 
 describe('LoggerUtil', () => {
   it('Creates a class', () => {

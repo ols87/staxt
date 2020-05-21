@@ -3,7 +3,7 @@
   "version": "3.0.0-aplha1",
   "description": "",
   "bin": {
-    "staxt": "app/staxt.module"
+    "staxt": "app/."
   },
   "scripts": {
     "dev": "tsc -w & nodemon -q -w src app",
@@ -13,12 +13,12 @@
   },
   "_moduleAliases": {
     "@api": "app/api/index.js",
-    "@compilers": "app/compilers/compilers.module.js",
-    "@configs": "app/config/configs.module.js",
+    "@compilers": "app/compilers/index.js",
+    "@configs": "app/config/index.js",
     "@files": "app/files",
-    "@helpers": "app/helpers/helpers.module.js",
-    "@services": "app/services/services.module.js",
-    "@utils": "app/utils/utils.module.js"
+    "@helpers": "app/helpers/index.js",
+    "@services": "app/services/index.js",
+    "@utils": "app/utils/index.js"
   },
   "keywords": [],
   "author": "",

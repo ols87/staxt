@@ -5,15 +5,15 @@ export interface LoggerWriteOptions {
   color?: string;
 }
 
-export const loggerStack: Array<string> = [];
+const loggerStack: Array<string> = [];
 
 /**
  * **Utility for logging to console.**
  *
  * Example Usage:
  * ```ts
- * import { Logger } from '@utils';
- * const logger = new Logger('test');
+ * import { LoggerUtil } from '@utils';
+ * const logger = new LoggerUtil('test');
  * //or
  * import { Utils } from '@utils';
  * const logger = Utils.logger;
@@ -33,7 +33,7 @@ export const loggerStack: Array<string> = [];
  * // [TEST-LOG]: log message
  * ```
  */
-export class Logger {
+export class LoggerUtil {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
@@ -61,35 +61,36 @@ export class Logger {
       this.caller = caller;
       loggerStack.push(caller);
     } else {
-      this.error(`${caller} is already in the stack. Please choose a unique name`);
+      this.caller = 'logger';
+      this.error(`'${caller}' is already in the stack. Please choose a unique name`);
     }
   }
 
-  public log(message: string) {
+  public log(message: any) {
     return this.write(message, {
       type: 'log',
     });
   }
 
-  public debug(message: string) {
+  public debug(message: any) {
     return this.write(message, {
       type: 'debug',
     });
   }
 
-  public warn(message: string) {
+  public warn(message: any) {
     return this.write(message, {
       type: 'warn',
     });
   }
 
-  public error(message: string) {
+  public error(message: any) {
     return this.write(message, {
       type: 'error',
     });
   }
 
-  public success(message: string) {
+  public success(message: any) {
     return this.write(message, {
       type: 'success',
     });
