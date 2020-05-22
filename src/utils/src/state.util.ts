@@ -7,12 +7,12 @@ export interface StateParams {
   merge?: boolean;
 }
 
-export interface StateResponse {
+export interface StateItem {
   key: string;
   value: any;
 }
 
-export interface SateKeyConfig {
+export interface StateParsedKey {
   keys: Array<string>;
   data: any;
   keyLength?: number;
@@ -20,13 +20,10 @@ export interface SateKeyConfig {
 }
 
 export interface StateWriteOptions {
-  key: string;
-  value: any;
+  stringify?: boolean;
 }
 
 export interface StateTypeCheck {
-  key: string;
-  value: any;
   type: string;
 }
 
@@ -56,63 +53,74 @@ export class StateUtil {
   /**
    * Add a new state value if none exists
    */
-  public static add(key: string, { value, type }: StateParams): any {
-    let response: StateResponse = this.request(key);
+  public static add(key: string, { value, type, stringify }: StateParams): any {
+    try {
+      let item: any = this.requestItem(key, { stringify });
 
-    if (response.value) {
-      return logger.error(`${response.key} already exists. Use edit()`);
+      if (item) {
+        return logger.error(`${key} already exists. Use edit()`);
+      }
+
+      this.validateType('ADD', { key, value, type });
+
+      value = this.writeItem({ key, value, stringify });
+
+      return value;
+    } catch (error) {
+      logger.error(`ADD - ${key} failed`);
+      logger.debug(error);
     }
-
-    let newValue: any = this.write({ key, value });
-
-    this.typeCheck('ADD', { key, value: newValue, type });
-
-    return newValue;
   }
 
   /**
    * Get a state value if exists
    */
   public static get(key: string, { type, stringify }: StateParams = {}): any {
-    let response: StateResponse = this.request(key);
+    try {
+      const value = this.requestItem(key, { stringify });
 
-    if (!response.value) {
-      return logger.error(`GET - ${response.key} does not exist`);
+      if (!value) {
+        return logger.error(`GET - ${key} does not exist`);
+      }
+
+      this.validateType('GET', { key, value, type });
+
+      return value;
+    } catch (error) {
+      logger.error(`GET - ${key} failed`);
+      logger.debug(error);
     }
-
-    this.typeCheck('GET', { key, value: response.value, type });
-
-    if (stringify) {
-      response.value = JSON.stringify(response.value);
-    }
-
-    return response.value;
   }
 
   /**
    * Edit a state value if it exists
    */
-  public static edit(key: string, { value, type, merge }: StateParams): any {
-    let response: StateResponse = this.request(key);
+  public static edit(key: string, { value, type, merge, stringify }: StateParams): any {
+    try {
+      const item: StateItem = this.requestItem(key, { stringify });
 
-    if (!response.value) {
-      return logger.error(`${response.key} does not exist, use add()`);
+      if (!item) {
+        return logger.error(`${key} does not exist, use add()`);
+      }
+
+      const typeofItem = typeof item;
+      const typeofValue = typeof value;
+
+      if (typeofItem !== typeofValue) {
+        logger.warn(`EDIT - changing ${key} from type '${typeofItem}' to type '${typeofValue}'`);
+      }
+
+      this.validateType('EDIT', { key, value, type });
+
+      value = this.writeItem({ key, value, stringify });
+
+      this.validateType('EDIT', { key, value, type });
+
+      return value;
+    } catch (error) {
+      logger.error(`EDIT - ${key} failed`);
+      logger.debug(error);
     }
-
-    const typeofResponse = typeof response.value;
-    const typeofValue = typeof value;
-
-    if (typeofResponse !== typeofValue) {
-      logger.warn(`EDIT - changing ${key} from type '${typeofResponse}' to type '${typeofValue}'`);
-    }
-
-    this.typeCheck('EDIT', { key, value, type });
-
-    let newValue: any = this.write({ key, value });
-
-    this.typeCheck('EDIT', { key, value: newValue, type });
-
-    return newValue;
   }
 
   /**
@@ -120,25 +128,18 @@ export class StateUtil {
    */
   public static remove(key: string, { type }: StateParams): any {
     try {
-      const response: StateResponse = this.request(key);
-      let { data, keys, keyLength } = this.keyConfig(key);
+      const item: StateItem = this.requestItem(key);
 
-      if (!response.value) {
-        return logger.error(`REMOVE - ${response.key} does not exist`);
+      if (!item.value) {
+        return logger.error(`REMOVE - ${item.key} does not exist`);
       }
 
-      for (let [keyIndex, keyName] of keys.entries()) {
-        const isLast = keyIndex === keyLength - 1;
+      this.validateType('REMOVE', { key, value: item.value, type });
 
-        data = data[keyName];
-
-        if (isLast) {
-          const removeValue = new Function(`return (state) => { delete state.${key}; }`)();
-          removeValue(this.state);
-        }
-      }
-    } catch {
+      new Function(`return (state) => { delete state.${key}; }`)()(this.state);
+    } catch (error) {
       logger.error(`REMOVE - ${key} failed`);
+      logger.debug(error);
     }
   }
 
@@ -151,87 +152,49 @@ export class StateUtil {
   }
 
   /**
-   * Request a value byt key
+   * Request a value by key
    */
-  private static request(key: string): StateResponse {
+  private static requestItem(key: string, { stringify }: StateParams = {}): any {
     try {
-      let { keys, data } = this.keyConfig(key);
+      let value = new Function(`return (state) => state.${key}`)()(this.state);
 
-      let keyChain: string = '';
+      const isObject = typeof value === 'object';
 
-      for (let [, keyName] of keys.entries()) {
-        keyChain += `${keyName}.`;
-
-        try {
-          data = data[keyName];
-        } catch {
-          data = null;
-          break;
-        }
+      if (stringify) {
+        value = isObject ? JSON.stringify(value) : String(value);
       }
 
-      keyChain = keyChain.replace(/.\s*$/, '');
-
-      if (data) {
-        const findValue = new Function(`return (state) => state.${key}`)();
-        data = findValue(this.state);
-      }
-
-      return {
-        value: data,
-        key: keyChain,
-      };
-    } catch {
+      return value;
+    } catch (error) {
       logger.error(`REQUEST - ${key} failed`);
+      logger.debug(error);
     }
   }
 
   /**
    * Write a value to the matching key
    */
-  private static write({ key, value }: StateWriteOptions): any {
+  private static writeItem({ key, value, stringify }: StateItem & StateWriteOptions): any {
     try {
-      let { keyLength, keyEntries, data } = this.keyConfig(key);
-      for (let [keyIndex, keyName] of keyEntries) {
-        const isLast = keyIndex === keyLength - 1;
-        const isObject = !isLast && typeof data[keyName] !== 'object';
-        data[keyName] = isObject ? {} : data[keyName];
+      const isObject = value !== 'object';
 
-        if (isLast) {
-          data[keyName] = value;
-        }
-
-        data = data[keyName];
+      if (stringify) {
+        value = isObject ? JSON.stringify(value) : String(value);
       }
 
-      return data;
-    } catch {
-      logger.error(`WRITE - ${key} failed`);
+      value = new Function(`return (state, value) => state.${key} = ${value}`)()(this.state, value);
+
+      return value;
+    } catch (error) {
+      logger.error(`WRITE - ${key} failed:`);
+      logger.debug(error);
     }
   }
 
   /**
-   * Creates a config object to work with the nested state
+   * Checks that the requested value has the same type as provided in the arguement
    */
-  private static keyConfig(key: string): SateKeyConfig {
-    let keys: Array<string> = [];
-    let keyLength: number;
-    let keyEntries: IterableIterator<[number, string]>;
-    let data: any = {};
-
-    try {
-      keys = key.split('.');
-      keyLength = keys.length;
-      keyEntries = keys.entries();
-      data = this.state;
-    } catch {
-      logger.error(`key must be a string e.g 'foo.bar' ${key}`);
-    }
-
-    return { keys, keyLength, keyEntries, data };
-  }
-
-  private static typeCheck(action: string, { key, value, type }: StateTypeCheck) {
+  private static validateType(action: string, { key, value, type }: StateItem & StateTypeCheck) {
     const typeofValue = typeof value;
 
     if (type && typeofValue !== type) {

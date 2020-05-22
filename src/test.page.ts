@@ -5,7 +5,7 @@ export default class {
       slug: '/',
       title: '',
       keywords: '',
-      descripotion: '',
+      description: '',
     };
   }
 

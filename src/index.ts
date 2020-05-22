@@ -8,8 +8,8 @@ export const Staxt = new (class {
     const timer = new TimerUtil('index');
     const logger = new LoggerUtil('index');
 
-    timer.start();
-
     StateUtil.add('foo', { value: 1 });
+
+    logger.debug(StateUtil.get('foo'));
   }
 })();
