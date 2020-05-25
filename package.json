@@ -9,7 +9,7 @@
     "dev": "tsc -w & nodemon -q -w src app",
     "start": "node app/.",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "docs": "typedoc"
+    "docs": "typedoc --plugin typedoc-plugin-markdown"
   },
   "_moduleAliases": {
     "@api": "app/api/index.js",
@@ -42,9 +42,11 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
+    "jsdoc": "^3.6.4",
     "mocha": "^7.1.2",
     "nodemon": "^2.0.3",
     "ts-node": "^8.10.1",
-    "typedoc": "^0.17.7"
+    "typedoc": "^0.17.7",
+    "typedoc-plugin-markdown": "^2.2.17"
   }
 }

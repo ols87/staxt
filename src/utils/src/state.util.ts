@@ -179,7 +179,7 @@ export class StateUtil {
   /**
    * Request a value by key.
    */
-  private static requestItem(key: string, options: StateOptions = {}): any {
+  public static requestItem(key: string, options: StateOptions = {}): any {
     try {
       let { stringify } = options;
 
@@ -201,7 +201,7 @@ export class StateUtil {
   /**
    * Write a value to the matching key.
    */
-  private static writeItem(options: StateItem & StateOptions): any {
+  public static writeItem(options: StateItem & StateOptions): any {
     let { key } = options;
 
     try {
@@ -225,7 +225,7 @@ export class StateUtil {
   /**
    * Checks that the requested value has the same type as provided in the arguement.
    */
-  private static validateType(action: string, options: StateItem & StateOptions) {
+  public static validateType(action: string, options: StateItem & StateOptions) {
     try {
       let { key, value, type } = options;
 
