@@ -55,6 +55,8 @@ const logger = new LoggerUtil('StateUtil');
  * StateUtil.remove('foo');
  * StateUtil.clear();
  * ```
+ *
+ * @category Utils
  */
 
 export class StateUtil {

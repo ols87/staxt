@@ -1,0 +1,29 @@
+{
+  "opts": {
+    "template": "node_modules/better-docs",
+    "destination": "./docs/",
+    "recurse": true,
+    "sort": false
+  },
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "plugins": ["node_modules/better-docs/typescript", "plugins/markdown", "node_modules/better-docs/category"],
+  "source": {
+    "include": ["./src"],
+    "includePattern": "\\.ts$",
+    "excludePattern": "\\index|spec.ts$"
+  },
+  "templates": {
+    "better-docs": {
+      "name": "Staxt v3.0.0 Docs",
+      "title": "Staxt v3.0.0 Docs",
+      "navLinks": [
+        {
+          "label": "Github",
+          "href": "https://github.com/ols87/staxt"
+        }
+      ]
+    }
+  }
+}

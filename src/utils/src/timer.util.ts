@@ -2,7 +2,7 @@ import { LoggerUtil } from './logger.util';
 
 import _includes from 'lodash/includes';
 
-const logger = new LoggerUtil('timer');
+const logger = new LoggerUtil('TimerUtil');
 
 const timerStack: Array<string> = [];
 
@@ -18,6 +18,8 @@ const timerStack: Array<string> = [];
  * time.start();
  * timer.end();
  * ```
+ *
+ * @category Utils
  */
 export class TimerUtil {
   /**

@@ -27,6 +27,7 @@ export type LoggerChalkColors =
 
 /**
  * Maps a key to a [Chalk](https://www.npmjs.com/package/chalk) color.
+ * @category Utils
  */
 export interface LoggerColorMap {
   [key: string]: LoggerChalkColors;
@@ -46,14 +47,13 @@ export interface LoggerOptions {
 const loggerStack: Array<string> = [];
 
 /**
+ *
  * **Utility for logging to console.**
  *
- *
  * Example Usage:
- * ```ts
+ * ```
  * import { LoggerUtil } from '@utils';
  * const logger = new LoggerUtil('test');
- * //or
  *
  * logger.log('log message'); // [TEST-LOG]: log message
  * logger.debug('debug message'); // [TEST-DEBUG]: debug message
@@ -75,25 +75,18 @@ const loggerStack: Array<string> = [];
  * logger.foo('foo message') // [TEST-FOO]: foo message
  * ```
  *
+ * @category Utils
  */
 export class LoggerUtil {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
-  public readonly chalk: any = new chalk.Instance({
-    level: 1,
-  });
+  public chalk: any;
 
   /**
    * Maps method names to Chalk colorMap.
    */
-  public colorMap: LoggerColorMap = {
-    log: 'white',
-    debug: 'blueBright',
-    warn: 'yellow',
-    error: 'red',
-    success: 'green',
-  };
+  public colorMap: LoggerColorMap;
 
   /**
    * Checks if caller exists in the loggerStack.
@@ -103,10 +96,28 @@ export class LoggerUtil {
     if (!_includes(loggerStack, caller)) {
       this.caller = caller;
       loggerStack.push(caller);
+      this.init();
     } else {
       this.caller = 'logger';
       this.error(`'${caller}' is already in the stack. Please choose a unique name`);
     }
+  }
+
+  /**
+   * Sets the defaults. Can be used to reset an instance.
+   */
+  public init() {
+    this.chalk = new chalk.Instance({
+      level: 1,
+    });
+
+    this.colorMap = {
+      log: 'white',
+      debug: 'blueBright',
+      warn: 'yellow',
+      error: 'red',
+      success: 'green',
+    };
   }
 
   public log(message: any) {
