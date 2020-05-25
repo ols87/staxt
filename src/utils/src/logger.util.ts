@@ -48,6 +48,7 @@ const loggerStack: Array<string> = [];
 /**
  * **Utility for logging to console.**
  *
+ *
  * Example Usage:
  * ```ts
  * import { LoggerUtil } from '@utils';

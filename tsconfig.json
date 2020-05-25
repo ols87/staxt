@@ -23,7 +23,7 @@
   "include": ["src/**/*"],
   "typedocOptions": {
     "inputFiles": ["./src"],
-    "mode": "modules",
+    "mode": "files",
     "out": "docs",
     "exclude": ["**/src/**/index.ts", "**/*.spec.ts"],
     "excludeNotExported": true
