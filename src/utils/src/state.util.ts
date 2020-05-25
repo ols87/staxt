@@ -1,60 +1,75 @@
 import { LoggerUtil } from './logger.util';
 
-export interface StateParams {
-  value?: any;
-  type?: string;
-  stringify?: boolean;
-  merge?: boolean;
-}
+import _set from 'lodash/set';
+import _unset from 'lodash/unset';
+import _merge from 'lodash/merge';
 
+/**
+ * A state item.
+ */
 export interface StateItem {
+  /**
+   * Item key.
+   */
   key: string;
+  /**
+   * Item value.
+   */
   value: any;
 }
 
-export interface StateParsedKey {
-  keys: Array<string>;
-  data: any;
-  keyLength?: number;
-  keyEntries?: IterableIterator<[number, string]>;
-}
-
-export interface StateWriteOptions {
+/**
+ * Options for dealing with state.
+ */
+export interface StateOptions {
+  /**
+   * Item value.
+   */
+  value?: any;
+  /**
+   * Item type (typeof).
+   */
+  type?: string;
+  /**
+   * Stringify item JSON.stringify() or String().
+   */
   stringify?: boolean;
+  /**
+   * Merge new value with old value.
+   */
+  merge?: boolean;
 }
 
-export interface StateTypeCheck {
-  type: string;
-}
-
-const logger = new LoggerUtil('state');
+const logger = new LoggerUtil('StateUtil');
 
 /**
  * **Utility for managing state.**
  *
  * Example Usage:
  * ```ts
- * import { State } from '@utils';
- * const state = new State();
- * //or
- * import { Utils } from '@utils';
- * const state = Utils.state;
+ * import { StateUtil } from '@utils';
  *
- * state.add('foo', { value: 'bar', type: 'string' });
- * state.edit('foo', { value: 1, type: 'number' });
- * state.get('foo'); // returns 1
- * state.remove('foo');
- * state.clear();
+ * StateUtil.add('foo', { value: 'bar', type: 'string' });
+ * StateUtil.edit('foo', { value: 1, type: 'number' });
+ * StateUtil.get('foo'); // returns 1
+ * StateUtil.remove('foo');
+ * StateUtil.clear();
  * ```
  */
 
 export class StateUtil {
-  private static state: any = {};
   /**
-   * Add a new state value if none exists
+   * Object for storing state.
    */
-  public static add(key: string, { value, type, stringify }: StateParams): any {
+  private static state: any = {};
+
+  /**
+   * Add a new state value if none exists.
+   */
+  public static add(key: string, options: StateOptions): any {
     try {
+      let { value, type, stringify } = options;
+
       let item: any = this.requestItem(key, { stringify });
 
       if (item) {
@@ -73,10 +88,12 @@ export class StateUtil {
   }
 
   /**
-   * Get a state value if exists
+   * Get a state value if exists.
    */
-  public static get(key: string, { type, stringify }: StateParams = {}): any {
+  public static get(key: string, options: StateOptions = {}): any {
     try {
+      let { type, stringify } = options;
+
       const value = this.requestItem(key, { stringify });
 
       if (!value) {
@@ -93,10 +110,12 @@ export class StateUtil {
   }
 
   /**
-   * Edit a state value if it exists
+   * Edit a state value if it exists.
    */
-  public static edit(key: string, { value, type, merge, stringify }: StateParams): any {
+  public static edit(key: string, options: StateOptions): any {
     try {
+      let { value, type, merge, stringify } = options;
+
       const item: StateItem = this.requestItem(key, { stringify });
 
       if (!item) {
@@ -112,6 +131,10 @@ export class StateUtil {
 
       this.validateType('EDIT', { key, value, type });
 
+      if (merge && typeofItem === 'object' && typeofValue === 'object') {
+        value = _merge(item, value);
+      }
+
       value = this.writeItem({ key, value, stringify });
 
       this.validateType('EDIT', { key, value, type });
@@ -124,10 +147,12 @@ export class StateUtil {
   }
 
   /**
-   * Remove a state value if exists
+   * Remove a state value if exists.
    */
-  public static remove(key: string, { type }: StateParams): any {
+  public static remove(key: string, options: StateOptions = {}): any {
     try {
+      let { type } = options;
+
       const item: StateItem = this.requestItem(key);
 
       if (!item.value) {
@@ -136,7 +161,7 @@ export class StateUtil {
 
       this.validateType('REMOVE', { key, value: item.value, type });
 
-      new Function(`return (state) => { delete state.${key}; }`)()(this.state);
+      _unset(this.state, key);
     } catch (error) {
       logger.error(`REMOVE - ${key} failed`);
       logger.debug(error);
@@ -144,7 +169,7 @@ export class StateUtil {
   }
 
   /**
-   * Clear the state
+   * Clear the state.
    */
   public static clear(): object {
     this.state = {};
@@ -152,10 +177,12 @@ export class StateUtil {
   }
 
   /**
-   * Request a value by key
+   * Request a value by key.
    */
-  private static requestItem(key: string, { stringify }: StateParams = {}): any {
+  private static requestItem(key: string, options: StateOptions = {}): any {
     try {
+      let { stringify } = options;
+
       let value = new Function(`return (state) => state.${key}`)()(this.state);
 
       const isObject = typeof value === 'object';
@@ -172,34 +199,45 @@ export class StateUtil {
   }
 
   /**
-   * Write a value to the matching key
+   * Write a value to the matching key.
    */
-  private static writeItem({ key, value, stringify }: StateItem & StateWriteOptions): any {
+  private static writeItem(options: StateItem & StateOptions): any {
+    let { key } = options;
+
     try {
+      let { value, stringify } = options;
+
       const isObject = value !== 'object';
 
       if (stringify) {
         value = isObject ? JSON.stringify(value) : String(value);
       }
 
-      value = new Function(`return (state, value) => state.${key} = ${value}`)()(this.state, value);
+      _set(this.state, key, value);
 
       return value;
     } catch (error) {
-      logger.error(`WRITE - ${key} failed:`);
+      logger.error(`WRITE - ${key} failed`);
       logger.debug(error);
     }
   }
 
   /**
-   * Checks that the requested value has the same type as provided in the arguement
+   * Checks that the requested value has the same type as provided in the arguement.
    */
-  private static validateType(action: string, { key, value, type }: StateItem & StateTypeCheck) {
-    const typeofValue = typeof value;
+  private static validateType(action: string, options: StateItem & StateOptions) {
+    try {
+      let { key, value, type } = options;
 
-    if (type && typeofValue !== type) {
-      logger.warn(`${action} - typeof ${key} !== '${type}'`);
-      logger.debug(`${action} - typeof ${key} === '${typeofValue}'`);
+      const typeofValue = typeof value;
+
+      if (type && typeofValue !== type) {
+        logger.warn(`${action} - typeof ${key} !== '${type}'`);
+        logger.debug(`${action} - typeof ${key} === '${typeofValue}'`);
+      }
+    } catch (error) {
+      logger.error(`TYPECHECK - couldn't check types`);
+      logger.debug(error);
     }
   }
 }

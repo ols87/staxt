@@ -1,5 +1,9 @@
 import chalk from 'chalk';
 
+import _has from 'lodash/has';
+import _set from 'lodash/set';
+import _includes from 'lodash/includes';
+
 /**
  * [Chalk](https://www.npmjs.com/package/chalk) colors.
  */
@@ -95,7 +99,7 @@ export class LoggerUtil {
    * @param caller Unique name of calling file/reference.
    */
   constructor(public caller: string) {
-    if (loggerStack.indexOf(caller) < 0) {
+    if (!_includes(loggerStack, caller)) {
       this.caller = caller;
       loggerStack.push(caller);
     } else {
@@ -160,20 +164,18 @@ export class LoggerUtil {
   public add(options: LoggerOptions) {
     let { type, color } = options;
 
-    const has = Object.prototype.hasOwnProperty;
-
-    if (has.call(this, type)) {
+    if (_has(this, type)) {
       return this.error(`method ${type} already exists`);
     }
 
-    if (has.call(this.colorMap, type)) {
+    if (_has(this.colorMap, type)) {
       this.colorMap[type] = color;
       return this.error(`color map ${type} already exists`);
     }
 
-    Object.defineProperty(LoggerUtil.prototype, type, (message: string) => {
+    _set(this, type, (message: string) => {
       return this.write(message, {
-        type: 'success',
+        type: type,
       });
     });
   }
