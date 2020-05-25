@@ -1,8 +1,42 @@
 import chalk from 'chalk';
 
-export interface LoggerWriteOptions {
+/**
+ * [Chalk](https://www.npmjs.com/package/chalk) colors.
+ */
+export type LoggerChalkColors =
+  | 'black'
+  | 'red'
+  | 'green'
+  | 'yellow'
+  | 'blue'
+  | 'magenta'
+  | 'cyan'
+  | 'white'
+  | 'blackBright'
+  | 'redBright'
+  | 'greenBright'
+  | 'yellowBright'
+  | 'blueBright'
+  | 'magentaBright'
+  | 'cyanBright'
+  | 'whiteBright';
+
+/**
+ * Maps a key to a [Chalk](https://www.npmjs.com/package/chalk) color.
+ */
+export interface LoggerColorMap {
+  [key: string]: LoggerChalkColors;
+}
+
+export interface LoggerOptions {
+  /**
+   * Any valid key from {@link colorMap} that has a matching method.
+   */
   type?: string;
-  color?: string;
+  /**
+   * Any valid [Chalk](https://www.npmjs.com/package/chalk) color.
+   */
+  color?: LoggerChalkColors;
 }
 
 const loggerStack: Array<string> = [];
@@ -15,8 +49,6 @@ const loggerStack: Array<string> = [];
  * import { LoggerUtil } from '@utils';
  * const logger = new LoggerUtil('test');
  * //or
- * import { Utils } from '@utils';
- * const logger = Utils.logger;
  *
  * logger.log('log message'); // [TEST-LOG]: log message
  * logger.debug('debug message'); // [TEST-DEBUG]: debug message
@@ -24,27 +56,33 @@ const loggerStack: Array<string> = [];
  * logger.error('error message'); // [TEST-ERROR]: error message
  * logger.success('success message'); // [TEST-SUCCESS]: success message
  *
- * //or
  * logger.write({
  *   message: 'foo bar',
  *   type: 'log',
  *   color: 'cyan',
  * });
- * // [TEST-LOG]: log message
+ *
+ * logger.add({
+ *   type: 'foo',
+ *   color: 'magenta',
+ * });
+ *
+ * logger.foo('foo message') // [TEST-FOO]: foo message
  * ```
+ *
  */
 export class LoggerUtil {
   /**
    * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
    */
-  public chalk: any = new chalk.Instance({
+  public readonly chalk: any = new chalk.Instance({
     level: 1,
   });
 
   /**
    * Maps method names to Chalk colorMap.
    */
-  public colorMap: any = {
+  public colorMap: LoggerColorMap = {
     log: 'white',
     debug: 'blueBright',
     warn: 'yellow',
@@ -96,7 +134,13 @@ export class LoggerUtil {
     });
   }
 
-  public write(message: string, { type, color }: LoggerWriteOptions = {}): void {
+  /**
+   * Writes a message to the console
+   */
+
+  public write(message: string, options: LoggerOptions = {}): void {
+    let { type, color } = options;
+
     try {
       type = type || 'log';
       const chalkColor = color || this.colorMap[type];
@@ -108,5 +152,29 @@ export class LoggerUtil {
     } catch {
       return this.write(`bad chalk color mapping: ${message}`, { type: 'error' });
     }
+  }
+
+  /**
+   * Adds a new log method and {@link colorMap}
+   */
+  public add(options: LoggerOptions) {
+    let { type, color } = options;
+
+    const has = Object.prototype.hasOwnProperty;
+
+    if (has.call(this, type)) {
+      return this.error(`method ${type} already exists`);
+    }
+
+    if (has.call(this.colorMap, type)) {
+      this.colorMap[type] = color;
+      return this.error(`color map ${type} already exists`);
+    }
+
+    Object.defineProperty(LoggerUtil.prototype, type, (message: string) => {
+      return this.write(message, {
+        type: 'success',
+      });
+    });
   }
 }

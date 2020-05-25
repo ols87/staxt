@@ -9,7 +9,7 @@
     "dev": "tsc -w & nodemon -q -w src app",
     "start": "node app/.",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "docs": "typedoc --theme ./node_modules/typedoc-neo-theme/bin/default"
+    "docs": "typedoc"
   },
   "_moduleAliases": {
     "@api": "app/api/index.js",
@@ -33,7 +33,6 @@
     "module-alias": "2.2.2",
     "postcss": "7.0.28",
     "sass": "1.26.3",
-    "typedoc-neo-theme": "^1.0.8",
     "typescript": "3.8.3",
     "yargs": "15.3.1"
   },
