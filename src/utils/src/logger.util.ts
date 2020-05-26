@@ -5,43 +5,55 @@ import _set from 'lodash/set';
 import _includes from 'lodash/includes';
 
 /**
- * [Chalk](https://www.npmjs.com/package/chalk) colors.
+ * [Chalk](https://www.npmjs.com/package/chalk) config.
+ * @category Utils
  */
-export type LoggerChalkColors =
-  | 'black'
-  | 'red'
-  | 'green'
-  | 'yellow'
-  | 'blue'
-  | 'magenta'
-  | 'cyan'
-  | 'white'
-  | 'blackBright'
-  | 'redBright'
-  | 'greenBright'
-  | 'yellowBright'
-  | 'blueBright'
-  | 'magentaBright'
-  | 'cyanBright'
-  | 'whiteBright';
-
+export interface LoggerChalkConfig {
+  /**
+   * Valid Chalk colors
+   */
+  colors:
+    | 'black'
+    | 'red'
+    | 'green'
+    | 'yellow'
+    | 'blue'
+    | 'magenta'
+    | 'cyan'
+    | 'white'
+    | 'blackBright'
+    | 'redBright'
+    | 'greenBright'
+    | 'yellowBright'
+    | 'blueBright'
+    | 'magentaBright'
+    | 'cyanBright'
+    | 'whiteBright';
+}
 /**
  * Maps a key to a [Chalk](https://www.npmjs.com/package/chalk) color.
  * @category Utils
  */
 export interface LoggerColorMap {
-  [key: string]: LoggerChalkColors;
+  /**
+   * Method key. value must be typeof {@link LoggerChalkConfig#colors}
+   */
+  [method: string]: LoggerChalkConfig['colors'];
 }
 
-export interface LoggerOptions {
+/**
+ * Options for Logger add & write methods
+ * @category Utils
+ */
+export interface LoggerWriteOptions {
   /**
-   * Any valid key from {@link colorMap} that has a matching method.
+   * Any valid key from [colorMap]{@link LoggerUtil#colorMap} that has a matching method.
    */
   type?: string;
   /**
    * Any valid [Chalk](https://www.npmjs.com/package/chalk) color.
    */
-  color?: LoggerChalkColors;
+  color?: LoggerChalkConfig['colors'];
 }
 
 const loggerStack: Array<string> = [];
@@ -53,6 +65,7 @@ const loggerStack: Array<string> = [];
  * Example Usage:
  * ```
  * import { LoggerUtil } from '@utils';
+ *
  * const logger = new LoggerUtil('test');
  *
  * logger.log('log message'); // [TEST-LOG]: log message
@@ -76,10 +89,11 @@ const loggerStack: Array<string> = [];
  * ```
  *
  * @category Utils
+ * @subcategory Logger
  */
 export class LoggerUtil {
   /**
-   * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
+   * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance. Use this to access the Chalk package directly if needed.
    */
   public chalk: any;
 
@@ -90,7 +104,7 @@ export class LoggerUtil {
 
   /**
    * Checks if caller exists in the loggerStack.
-   * @param caller Unique name of calling file/reference.
+   * @param caller Unique name of calling file or reference.
    */
   constructor(public caller: string) {
     if (!_includes(loggerStack, caller)) {
@@ -104,7 +118,7 @@ export class LoggerUtil {
   }
 
   /**
-   * Sets the defaults. Can be used to reset an instance.
+   * Sets the defaults during costructor initiation. Can be used to reset an instance. Removing any added loggers.
    */
   public init() {
     this.chalk = new chalk.Instance({
@@ -150,11 +164,7 @@ export class LoggerUtil {
     });
   }
 
-  /**
-   * Writes a message to the console
-   */
-
-  public write(message: string, options: LoggerOptions = {}): void {
+  public write(message: string, options: LoggerWriteOptions = {}): void {
     let { type, color } = options;
 
     try {
@@ -171,9 +181,10 @@ export class LoggerUtil {
   }
 
   /**
-   * Adds a new log method and {@link colorMap}
+   * Adds a new log method and [colorMap]{@link LoggerUtil#colorMap}.
+   * @param options {@link LoggerWriteOptions}.
    */
-  public add(options: LoggerOptions) {
+  public add(options: LoggerWriteOptions) {
     let { type, color } = options;
 
     if (_has(this, type)) {
