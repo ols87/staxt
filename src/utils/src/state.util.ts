@@ -9,11 +9,11 @@ import _merge from 'lodash/merge';
  */
 export interface StateItem {
   /**
-   * Item key.
+   * Name of item key e.g. 'foo.bar.fizz'
    */
   key: string;
   /**
-   * Item value.
+   * Any value.
    */
   value: any;
 }
@@ -23,19 +23,19 @@ export interface StateItem {
  */
 export interface StateOptions {
   /**
-   * Item value.
+   * Any value.
    */
   value?: any;
   /**
-   * Item type (typeof).
+   * Type of item.
    */
   type?: string;
   /**
-   * Stringify item JSON.stringify() or String().
+   * Stringify item? Uses JSON.stringify() or String() depending on type.
    */
   stringify?: boolean;
   /**
-   * Merge new value with old value.
+   * Merge new value with old value?
    */
   merge?: boolean;
 }
@@ -43,7 +43,7 @@ export interface StateOptions {
 const logger = new LoggerUtil('StateUtil');
 
 /**
- * **Utility for managing state.**
+ * **Utility for managing state. Supports optional type warnings.**
  *
  * Example Usage:
  * ```ts
@@ -63,7 +63,7 @@ export class StateUtil {
   /**
    * Object for storing state.
    */
-  private static state: any = {};
+  public static state: any = {};
 
   /**
    * Add a new state value if none exists.
@@ -123,7 +123,6 @@ export class StateUtil {
       if (!item) {
         return logger.error(`${key} does not exist, use add()`);
       }
-
       const typeofItem = typeof item;
       const typeofValue = typeof value;
 

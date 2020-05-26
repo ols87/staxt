@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Staxt v3.0.0 Docs logger.util.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Staxt v3.0.0 Docs</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                        </div>
+                    </div>
+                </div>
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/ols87/staxt"
+                        >
+                            Github
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="StateItem.html">StateItem</a></li><li><a href="StateOptions.html">StateOptions</a></li></ul></div><div class="category"><h2>Utils</h2><h3>Classes</h3><ul><li><a href="LoggerUtil.html">LoggerUtil</a></li><li><a href="StateUtil.html">StateUtil</a></li><li><a href="TimerUtil.html">TimerUtil</a></li></ul><h3>Interfaces</h3><ul><li><a href="LoggerChalkConfig.html">LoggerChalkConfig</a></li><li><a href="LoggerColorMap.html">LoggerColorMap</a></li><li><a href="LoggerWriteOptions.html">LoggerWriteOptions</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>logger.util.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import chalk from 'chalk';
+
+import _has from 'lodash/has';
+import _set from 'lodash/set';
+import _includes from 'lodash/includes';
+
+/**
+ * [Chalk](https://www.npmjs.com/package/chalk) config.
+ * @category Utils
+ */
+export interface LoggerChalkConfig {
+  /**
+   * Valid Chalk colors
+   */
+  colors:
+    | 'black'
+    | 'red'
+    | 'green'
+    | 'yellow'
+    | 'blue'
+    | 'magenta'
+    | 'cyan'
+    | 'white'
+    | 'blackBright'
+    | 'redBright'
+    | 'greenBright'
+    | 'yellowBright'
+    | 'blueBright'
+    | 'magentaBright'
+    | 'cyanBright'
+    | 'whiteBright';
+}
+
+/**
+ * Maps a key to a [Chalk](https://www.npmjs.com/package/chalk) color.
+ * @category Utils
+ */
+export interface LoggerColorMap {
+  /**
+   * Method key. value must be typeof {@link LoggerChalkConfig}
+   */
+  [method: string]: LoggerChalkConfig['colors'];
+}
+
+/**
+ * Options for Logger add &amp; write methods
+ * @category Utils
+ */
+export interface LoggerWriteOptions {
+  /**
+   * Any valid key from [colorMap]{@link LoggerUtil#colorMap} that has a matching method.
+   */
+  type?: string;
+  /**
+   * Any valid [Chalk](https://www.npmjs.com/package/chalk) color.
+   */
+  color?: LoggerChalkConfig['colors'];
+}
+
+const loggerStack: Array&lt;string> = [];
+
+/**
+ *
+ * **Utility for logging to console.**
+ *
+ * Example Usage:
+ * ```
+ * import { LoggerUtil } from '@utils';
+ *
+ * const logger = new LoggerUtil('test');
+ *
+ * logger.log('log message'); // [TEST-LOG]: log message
+ * logger.debug('debug message'); // [TEST-DEBUG]: debug message
+ * logger.warn('warn message'); // [TEST-WARN]: warn message
+ * logger.error('error message'); // [TEST-ERROR]: error message
+ * logger.success('success message'); // [TEST-SUCCESS]: success message
+ *
+ * logger.write({
+ *   message: 'foo bar',
+ *   type: 'log',
+ *   color: 'cyan',
+ * });
+ *
+ * logger.add({
+ *   type: 'foo',
+ *   color: 'magenta',
+ * });
+ *
+ * logger.foo('foo message') // [TEST-FOO]: foo message
+ * ```
+ *
+ * @category Utils
+ */
+export class LoggerUtil {
+  /**
+   * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance. Use this to access the Chalk package directly if needed.
+   */
+  public chalk: any;
+
+  /**
+   * Maps method names to Chalk colorMap.
+   */
+  public colorMap: LoggerColorMap;
+
+  /**
+   * Checks if caller exists in the loggerStack.
+   * @param caller Unique name of calling file or reference.
+   */
+  constructor(public caller: string) {
+    if (!_includes(loggerStack, caller)) {
+      this.caller = caller;
+      loggerStack.push(caller);
+      this.init();
+    } else {
+      this.caller = 'logger';
+      this.error(`'${caller}' is already in the stack. Please choose a unique name`);
+    }
+  }
+
+  /**
+   * Sets the defaults during costructor initiation. Can be used to reset an instance. Removing any added loggers.
+   */
+  public init() {
+    this.chalk = new chalk.Instance({
+      level: 1,
+    });
+
+    this.colorMap = {
+      log: 'white',
+      debug: 'blueBright',
+      warn: 'yellow',
+      error: 'red',
+      success: 'green',
+    };
+  }
+
+  public log(message: any) {
+    return this.write(message, {
+      type: 'log',
+    });
+  }
+
+  public debug(message: any) {
+    return this.write(message, {
+      type: 'debug',
+    });
+  }
+
+  public warn(message: any) {
+    return this.write(message, {
+      type: 'warn',
+    });
+  }
+
+  public error(message: any) {
+    return this.write(message, {
+      type: 'error',
+    });
+  }
+
+  public success(message: any) {
+    return this.write(message, {
+      type: 'success',
+    });
+  }
+
+  public write(message: string, options: LoggerWriteOptions = {}): void {
+    let { type, color } = options;
+
+    try {
+      type = type || 'log';
+      const chalkColor = color || this.colorMap[type];
+      const caller = this.caller.toUpperCase();
+      const logType = type.toUpperCase();
+      const prefix = this.chalk[chalkColor].bold(`[${caller}-${logType}]`);
+
+      return console.log(`${prefix}: ${this.chalk.white(message)}`);
+    } catch {
+      return this.write(`bad chalk color mapping: ${message}`, { type: 'error' });
+    }
+  }
+
+  /**
+   * Adds a new log method and [colorMap]{@link LoggerUtil#colorMap}.
+   * @param options {@link LoggerWriteOptions}.
+   */
+  public add(options: LoggerWriteOptions) {
+    let { type, color } = options;
+
+    if (_has(this, type)) {
+      return this.error(`method ${type} already exists`);
+    }
+
+    if (_has(this.colorMap, type)) {
+      this.colorMap[type] = color;
+      return this.error(`color map ${type} already exists`);
+    }
+
+    _set(this, type, (message: string) => {
+      return this.write(message, {
+        type: type,
+      });
+    });
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

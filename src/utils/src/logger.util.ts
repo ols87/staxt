@@ -30,13 +30,14 @@ export interface LoggerChalkConfig {
     | 'cyanBright'
     | 'whiteBright';
 }
+
 /**
  * Maps a key to a [Chalk](https://www.npmjs.com/package/chalk) color.
  * @category Utils
  */
 export interface LoggerColorMap {
   /**
-   * Method key. value must be typeof {@link LoggerChalkConfig#colors}
+   * Method key. value must be typeof {@link LoggerChalkConfig}
    */
   [method: string]: LoggerChalkConfig['colors'];
 }
@@ -89,7 +90,6 @@ const loggerStack: Array<string> = [];
  * ```
  *
  * @category Utils
- * @subcategory Logger
  */
 export class LoggerUtil {
   /**
