@@ -244,36 +244,61 @@ export class LoggerUtil {
     };
   }
 
+  /**
+   * Log message.
+   * @param message Message to write.
+   */
   public log(message: any) {
     return this.write(message, {
       type: 'log',
     });
   }
 
+  /**
+   * Debug message.
+   * @param message Message to write.
+   */
   public debug(message: any) {
     return this.write(message, {
       type: 'debug',
     });
   }
 
+  /**
+   * Warn message.
+   * @param message Message to write.
+   */
   public warn(message: any) {
     return this.write(message, {
       type: 'warn',
     });
   }
 
+  /**
+   * Error message.
+   * @param message Message to write.
+   */
   public error(message: any) {
     return this.write(message, {
       type: 'error',
     });
   }
 
+  /**
+   * Success message.
+   * @param message Message to write.
+   */
   public success(message: any) {
     return this.write(message, {
       type: 'success',
     });
   }
 
+  /**
+   * Writes a messaqge to console.
+   * @param message Message to write.
+   * @param options {@link LoggerWriteOptions}.
+   */
   public write(message: string, options: LoggerWriteOptions = {}): void {
     let { type, color } = options;
 

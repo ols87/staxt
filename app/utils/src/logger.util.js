@@ -9,13 +9,14 @@ const set_1 = __importDefault(require("lodash/set"));
 const includes_1 = __importDefault(require("lodash/includes"));
 const loggerStack = [];
 /**
+ *
  * **Utility for logging to console.**
  *
  * Example Usage:
- * ```ts
+ * ```
  * import { LoggerUtil } from '@utils';
+ *
  * const logger = new LoggerUtil('test');
- * //or
  *
  * logger.log('log message'); // [TEST-LOG]: log message
  * logger.debug('debug message'); // [TEST-DEBUG]: debug message
@@ -37,23 +38,32 @@ const loggerStack = [];
  * logger.foo('foo message') // [TEST-FOO]: foo message
  * ```
  *
+ * @category Utils
  */
 class LoggerUtil {
     /**
      * Checks if caller exists in the loggerStack.
-     * @param caller Unique name of calling file/reference.
+     * @param caller Unique name of calling file or reference.
      */
     constructor(caller) {
         this.caller = caller;
-        /**
-         * Creates a new [Chalk](https://www.npmjs.com/package/chalk) instance.
-         */
+        if (!includes_1.default(loggerStack, caller)) {
+            this.caller = caller;
+            loggerStack.push(caller);
+            this.init();
+        }
+        else {
+            this.caller = 'logger';
+            this.error(`'${caller}' is already in the stack. Please choose a unique name`);
+        }
+    }
+    /**
+     * Sets the defaults during costructor initiation. Can be used to reset an instance. Removing any added loggers.
+     */
+    init() {
         this.chalk = new chalk_1.default.Instance({
             level: 1,
         });
-        /**
-         * Maps method names to Chalk colorMap.
-         */
         this.colorMap = {
             log: 'white',
             debug: 'blueBright',
@@ -61,42 +71,56 @@ class LoggerUtil {
             error: 'red',
             success: 'green',
         };
-        if (!includes_1.default(loggerStack, caller)) {
-            this.caller = caller;
-            loggerStack.push(caller);
-        }
-        else {
-            this.caller = 'logger';
-            this.error(`'${caller}' is already in the stack. Please choose a unique name`);
-        }
     }
+    /**
+     * Log message.
+     * @param message Message to write.
+     */
     log(message) {
         return this.write(message, {
             type: 'log',
         });
     }
+    /**
+     * Debug message.
+     * @param message Message to write.
+     */
     debug(message) {
         return this.write(message, {
             type: 'debug',
         });
     }
+    /**
+     * Warn message.
+     * @param message Message to write.
+     */
     warn(message) {
         return this.write(message, {
             type: 'warn',
         });
     }
+    /**
+     * Error message.
+     * @param message Message to write.
+     */
     error(message) {
         return this.write(message, {
             type: 'error',
         });
     }
+    /**
+     * Success message.
+     * @param message Message to write.
+     */
     success(message) {
         return this.write(message, {
             type: 'success',
         });
     }
     /**
-     * Writes a message to the console
+     * Writes a messaqge to console.
+     * @param message Message to write.
+     * @param options {@link LoggerWriteOptions}.
      */
     write(message, options = {}) {
         let { type, color } = options;
@@ -113,7 +137,8 @@ class LoggerUtil {
         }
     }
     /**
-     * Adds a new log method and {@link colorMap}
+     * Adds a new log method and [colorMap]{@link LoggerUtil#colorMap}.
+     * @param options {@link LoggerWriteOptions}.
      */
     add(options) {
         let { type, color } = options;

@@ -5,7 +5,7 @@ import _unset from 'lodash/unset';
 import _merge from 'lodash/merge';
 
 /**
- * A state item.
+ * A state item, key & value.
  */
 export interface StateItem {
   /**
@@ -13,7 +13,7 @@ export interface StateItem {
    */
   key: string;
   /**
-   * Any value.
+   * Any type of value.
    */
   value: any;
 }
@@ -60,14 +60,14 @@ const logger = new LoggerUtil('StateUtil');
  */
 
 export class StateUtil {
-  /**
-   * Object for storing state.
-   */
-  public static state: any = {};
+  private static state: any = {};
 
   /**
    * Add a new state value if none exists.
+   * @param key Name of item key e.g. 'foo.bar.fizz'
+   * @param options {@link StateOptions}.
    */
+
   public static add(key: string, options: StateOptions): any {
     try {
       let { value, type, stringify } = options;
@@ -91,6 +91,8 @@ export class StateUtil {
 
   /**
    * Get a state value if exists.
+   * @param key Name of item key e.g. 'foo.bar.fizz'
+   * @param options {@link StateOptions}.
    */
   public static get(key: string, options: StateOptions = {}): any {
     try {
@@ -113,6 +115,8 @@ export class StateUtil {
 
   /**
    * Edit a state value if it exists.
+   * @param key Name of item key e.g. 'foo.bar.fizz'
+   * @param options {@link StateOptions}.
    */
   public static edit(key: string, options: StateOptions): any {
     try {
@@ -149,6 +153,8 @@ export class StateUtil {
 
   /**
    * Remove a state value if exists.
+   * @param key Name of item key e.g. 'foo.bar.fizz'
+   * @param options {@link StateOptions}.
    */
   public static remove(key: string, options: StateOptions = {}): any {
     try {
@@ -179,8 +185,10 @@ export class StateUtil {
 
   /**
    * Request a value by key.
+   * @param key Name of item key e.g. 'foo.bar.fizz'
+   * @param options {@link StateOptions}.
    */
-  public static requestItem(key: string, options: StateOptions = {}): any {
+  private static requestItem(key: string, options: StateOptions = {}): any {
     try {
       let { stringify } = options;
 
@@ -201,8 +209,9 @@ export class StateUtil {
 
   /**
    * Write a value to the matching key.
+   * @param options {@link StateItem} & {@link StateOptions}.
    */
-  public static writeItem(options: StateItem & StateOptions): any {
+  private static writeItem(options: StateItem & StateOptions): any {
     let { key } = options;
 
     try {
@@ -225,8 +234,10 @@ export class StateUtil {
 
   /**
    * Checks that the requested value has the same type as provided in the arguement.
+   * @param action Method type e.g "GET".
+   * @param options {@link StateItem} & {@link StateOptions}.
    */
-  public static validateType(action: string, options: StateItem & StateOptions) {
+  private static validateType(action: string, options: StateItem & StateOptions) {
     try {
       let { key, value, type } = options;
 

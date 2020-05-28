@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_util_1 = require("./logger.util");
 const includes_1 = __importDefault(require("lodash/includes"));
-const logger = new logger_util_1.LoggerUtil('timer');
+const logger = new logger_util_1.LoggerUtil('TimerUtil');
 const timerStack = [];
 /**
  * **Utility for timing operations.**
@@ -19,6 +19,8 @@ const timerStack = [];
  * time.start();
  * timer.end();
  * ```
+ *
+ * @category Utils
  */
 class TimerUtil {
     /**

@@ -9,7 +9,7 @@ const unset_1 = __importDefault(require("lodash/unset"));
 const merge_1 = __importDefault(require("lodash/merge"));
 const logger = new logger_util_1.LoggerUtil('StateUtil');
 /**
- * **Utility for managing state.**
+ * **Utility for managing state. Supports optional type warnings.**
  *
  * Example Usage:
  * ```ts
@@ -21,10 +21,14 @@ const logger = new logger_util_1.LoggerUtil('StateUtil');
  * StateUtil.remove('foo');
  * StateUtil.clear();
  * ```
+ *
+ * @category Utils
  */
 class StateUtil {
     /**
      * Add a new state value if none exists.
+     * @param key Name of item key e.g. 'foo.bar.fizz'
+     * @param options {@link StateOptions}.
      */
     static add(key, options) {
         try {
@@ -44,6 +48,8 @@ class StateUtil {
     }
     /**
      * Get a state value if exists.
+     * @param key Name of item key e.g. 'foo.bar.fizz'
+     * @param options {@link StateOptions}.
      */
     static get(key, options = {}) {
         try {
@@ -62,6 +68,8 @@ class StateUtil {
     }
     /**
      * Edit a state value if it exists.
+     * @param key Name of item key e.g. 'foo.bar.fizz'
+     * @param options {@link StateOptions}.
      */
     static edit(key, options) {
         try {
@@ -90,6 +98,8 @@ class StateUtil {
     }
     /**
      * Remove a state value if exists.
+     * @param key Name of item key e.g. 'foo.bar.fizz'
+     * @param options {@link StateOptions}.
      */
     static remove(key, options = {}) {
         try {
@@ -115,6 +125,8 @@ class StateUtil {
     }
     /**
      * Request a value by key.
+     * @param key Name of item key e.g. 'foo.bar.fizz'
+     * @param options {@link StateOptions}.
      */
     static requestItem(key, options = {}) {
         try {
@@ -133,6 +145,7 @@ class StateUtil {
     }
     /**
      * Write a value to the matching key.
+     * @param options {@link StateItem} & {@link StateOptions}.
      */
     static writeItem(options) {
         let { key } = options;
@@ -152,6 +165,8 @@ class StateUtil {
     }
     /**
      * Checks that the requested value has the same type as provided in the arguement.
+     * @param action Method type e.g "GET".
+     * @param options {@link StateItem} & {@link StateOptions}.
      */
     static validateType(action, options) {
         try {
@@ -169,8 +184,5 @@ class StateUtil {
     }
 }
 exports.StateUtil = StateUtil;
-/**
- * Object for storing state.
- */
 StateUtil.state = {};
 //# sourceMappingURL=state.util.js.map
