@@ -1,8 +1,10 @@
 import { LoggerUtil } from './logger.util';
 
+import _get from 'lodash/get';
 import _set from 'lodash/set';
 import _unset from 'lodash/unset';
 import _merge from 'lodash/merge';
+import _isUndefined from 'lodash/isUndefined';
 
 /**
  * A state item, key & value.
@@ -156,19 +158,22 @@ export class StateUtil {
    * @param key Name of item key e.g. 'foo.bar.fizz'
    * @param options {@link StateOptions}.
    */
-  public static remove(key: string, options: StateOptions = {}): any {
+  public static remove(key: string, options: StateOptions = {}): boolean {
     try {
       let { type } = options;
 
       const item: StateItem = this.requestItem(key);
 
-      if (!item.value) {
-        return logger.error(`REMOVE - ${item.key} does not exist`);
+      if (!item) {
+        logger.error(`REMOVE - ${item.key} does not exist`);
+        return false;
       }
 
       this.validateType('REMOVE', { key, value: item.value, type });
 
       _unset(this.state, key);
+
+      return _isUndefined(_get(this.state, key));
     } catch (error) {
       logger.error(`REMOVE - ${key} failed`);
       logger.debug(error);
@@ -178,9 +183,14 @@ export class StateUtil {
   /**
    * Clear the state.
    */
-  public static clear(): object {
-    this.state = {};
-    return this.state;
+  public static clear(): boolean {
+    try {
+      this.state = {};
+      return true;
+    } catch (error) {
+      logger.error(`CLEAR - failed`);
+      logger.debug(error);
+    }
   }
 
   /**
@@ -192,7 +202,7 @@ export class StateUtil {
     try {
       let { stringify } = options;
 
-      let value = new Function(`return (state) => state.${key}`)()(this.state);
+      let value = _get(this.state, key);
 
       const isObject = typeof value === 'object';
 

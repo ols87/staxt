@@ -7,8 +7,8 @@ exports.Staxt = new (class {
     constructor() {
         const timer = new _utils_1.TimerUtil('index');
         const logger = new _utils_1.LoggerUtil('index');
-        _utils_1.StateUtil.add('foo', { value: 1 });
-        logger.debug(_utils_1.StateUtil.get('foo'));
+        _utils_1.StateUtil.add('foo.bar', { value: 1 });
+        logger.debug(_utils_1.StateUtil.get('foo', { stringify: true }));
     }
 })();
 //# sourceMappingURL=index.js.map

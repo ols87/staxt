@@ -4,9 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_util_1 = require("./logger.util");
+const get_1 = __importDefault(require("lodash/get"));
 const set_1 = __importDefault(require("lodash/set"));
 const unset_1 = __importDefault(require("lodash/unset"));
 const merge_1 = __importDefault(require("lodash/merge"));
+const isUndefined_1 = __importDefault(require("lodash/isUndefined"));
 const logger = new logger_util_1.LoggerUtil('StateUtil');
 /**
  * **Utility for managing state. Supports optional type warnings.**
@@ -105,11 +107,13 @@ class StateUtil {
         try {
             let { type } = options;
             const item = this.requestItem(key);
-            if (!item.value) {
-                return logger.error(`REMOVE - ${item.key} does not exist`);
+            if (!item) {
+                logger.error(`REMOVE - ${item.key} does not exist`);
+                return false;
             }
             this.validateType('REMOVE', { key, value: item.value, type });
             unset_1.default(this.state, key);
+            return isUndefined_1.default(get_1.default(this.state, key));
         }
         catch (error) {
             logger.error(`REMOVE - ${key} failed`);
@@ -120,8 +124,14 @@ class StateUtil {
      * Clear the state.
      */
     static clear() {
-        this.state = {};
-        return this.state;
+        try {
+            this.state = {};
+            return true;
+        }
+        catch (error) {
+            logger.error(`CLEAR - failed`);
+            logger.debug(error);
+        }
     }
     /**
      * Request a value by key.
@@ -131,7 +141,7 @@ class StateUtil {
     static requestItem(key, options = {}) {
         try {
             let { stringify } = options;
-            let value = new Function(`return (state) => state.${key}`)()(this.state);
+            let value = get_1.default(this.state, key);
             const isObject = typeof value === 'object';
             if (stringify) {
                 value = isObject ? JSON.stringify(value) : String(value);
